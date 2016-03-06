@@ -1,5 +1,5 @@
 {
-  "authors": [ "Rolf Veinø Sørensen" ],
+  "authors": [ "Rolf Veinï¿½ Sï¿½rensen" ],
   "commands": {
     "web": "Microsoft.AspNet.Server.Kestrel"
   },
@@ -7,8 +7,11 @@
     "emitEntryPoint": true
   },
   "dependencies": {
+    "Microsoft.AspNet.FileProviders.Embedded": "1.0.0-rc1-final",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
+    "Microsoft.AspNet.Session": "1.0.0-rc1-final",
+    "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
     "MoM.Module": "1.0.0-*"
   },
   "exclude": [
