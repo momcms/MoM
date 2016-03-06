@@ -21,6 +21,7 @@ namespace MoM.Web
         protected IConfigurationRoot ConfigurationRoot;
 
         private string ApplicationBasePath;
+        private string ModulePath;
 
         private IHostingEnvironment HostingEnvironment;
         private IAssemblyLoaderContainer AssemblyLoaderContainer;
@@ -31,6 +32,7 @@ namespace MoM.Web
         {
             HostingEnvironment = hostingEnvironment;
             ApplicationBasePath = applicationEnvironment.ApplicationBasePath;
+            ModulePath = ApplicationBasePath.Substring(0, ApplicationBasePath.LastIndexOf("MoM")) + "artifacts\\bin\\Modules";
             AssemblyLoaderContainer = assemblyLoaderContainer;
             AssemblyLoadContextAccessor = assemblyLoadContextAccessor;
             LibraryManager = libraryManager;
@@ -39,7 +41,7 @@ namespace MoM.Web
         public virtual void ConfigureServices(IServiceCollection services)
         {
             IEnumerable<Assembly> assemblies = AssemblyManager.GetAssemblies(
-              ApplicationBasePath.Substring(0, ApplicationBasePath.LastIndexOf("src")) + "artifacts\\bin\\Extensions",
+              ModulePath,
               AssemblyLoaderContainer,
               AssemblyLoadContextAccessor,
               LibraryManager

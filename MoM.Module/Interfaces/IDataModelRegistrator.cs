@@ -2,7 +2,7 @@
 
 namespace MoM.Module.Interfaces
 {
-    public interface IDataModelRegistrar
+    public interface IDataModelRegistrator
     {
         void RegisterModels(ModelBuilder modelbuilder);
     }
