@@ -30,7 +30,7 @@ namespace MoM.Module.Managers
 
                 if (Modules == null)
                 {
-                    List<IModule> extensions = new List<IModule>();
+                    List<IModule> modules = new List<IModule>();
 
                     foreach (Assembly assembly in Assemblies)
                     {
@@ -38,14 +38,14 @@ namespace MoM.Module.Managers
                         {
                             if (typeof(IModule).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
                             {
-                                IModule extension = (IModule)Activator.CreateInstance(type);
+                                IModule module = (IModule)Activator.CreateInstance(type);
 
-                                extensions.Add(extension);
+                                modules.Add(module);
                             }
                         }
                     }
 
-                    Modules = extensions;
+                    Modules = modules;
                 }
 
                 return Modules;

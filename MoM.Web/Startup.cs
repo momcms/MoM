@@ -36,6 +36,16 @@ namespace MoM.Web
             AssemblyLoaderContainer = assemblyLoaderContainer;
             AssemblyLoadContextAccessor = assemblyLoadContextAccessor;
             LibraryManager = libraryManager;
+
+            var builder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
+
+
+
+            builder.AddEnvironmentVariables();
+            ConfigurationRoot = builder.Build();
+
         }
 
         public virtual void ConfigureServices(IServiceCollection services)

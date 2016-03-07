@@ -40,7 +40,7 @@ namespace MoM.Module.Managers
         {
             base.OnModelCreating(modelBuilder);
 
-            foreach (Assembly assembly in DataStorageManager.Assemblies)
+            foreach (Assembly assembly in DataStorageManager.Assemblies.Where(a => !a.FullName.Contains("Reflection")))
             {
                 foreach (Type type in assembly.GetTypes())
                 {

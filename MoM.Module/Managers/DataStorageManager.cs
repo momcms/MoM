@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace MoM.Module.Managers
 {
-    public class DataStorageManager
+    public class DataStorageManager : IDataStorage
     {
         public static string ConnectionString { get; set; }
         public static IEnumerable<Assembly> Assemblies { get; set; }
@@ -16,11 +16,12 @@ namespace MoM.Module.Managers
         public DataStorageManager()
         {
             StorageContext = new DataStorageContextManager(ConnectionString, Assemblies);
+            StorageContext.Database.EnsureCreatedAsync();
         }
 
         public TRepository GetRepository<TRepository>() where TRepository : IDataRepository
         {
-            foreach (Assembly assembly in Assemblies.Where(a => a.FullName.Contains("EntityFramework.SqlServer")))
+            foreach (Assembly assembly in Assemblies.Where(a => !a.FullName.Contains("Reflection")))
             {
                 foreach (Type type in assembly.GetTypes())
                 {

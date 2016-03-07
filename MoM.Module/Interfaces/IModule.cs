@@ -10,6 +10,7 @@ namespace MoM.Module.Interfaces
         string Name { get; }
 
         void SetConfigurationRoot(IConfigurationRoot configurationRoot);
+
         void ConfigureServices(IServiceCollection services);
         void Configure(IApplicationBuilder applicationBuilder);
         void RegisterRoutes(IRouteBuilder routeBuilder);

@@ -56,7 +56,7 @@ namespace MoM.Module.Managers
 
         private Type GetIStorageImplementationType()
         {
-            foreach (Assembly assembly in ModuleManager.GetAssemblies.Where(a => a.FullName.Contains("Data")))
+            foreach (Assembly assembly in ModuleManager.GetAssemblies.Where(a => !a.FullName.Contains("Reflection")))
                 foreach (Type type in assembly.GetTypes())
                     if (typeof(IDataStorage).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
                         return type;
