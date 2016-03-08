@@ -6,13 +6,13 @@ namespace MoM.Module.Base
 {
     public abstract class RepositoryBase<TEntity> : IDataRepository where TEntity : class, IDataEntity
     {
-        protected DataStorageContextManager dbContext;
-        protected DbSet<TEntity> dbSet;
+        protected DataStorageContextManager DatabaseContext;
+        protected DbSet<TEntity> DatabaseSet;
 
         public void SetStorageContext(IDataStorageContext dbContext)
         {
-            this.dbContext = dbContext as DataStorageContextManager;
-            this.dbSet = this.dbContext.Set<TEntity>();
+            DatabaseContext = dbContext as DataStorageContextManager;
+            DatabaseSet = DatabaseContext.Set<TEntity>();
         }
     }
 }

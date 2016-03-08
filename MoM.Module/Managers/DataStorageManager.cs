@@ -16,7 +16,7 @@ namespace MoM.Module.Managers
         public DataStorageManager()
         {
             StorageContext = new DataStorageContextManager(ConnectionString, Assemblies);
-            StorageContext.Database.EnsureCreatedAsync();
+            //StorageContext.Database.EnsureCreatedAsync();
         }
 
         public TRepository GetRepository<TRepository>() where TRepository : IDataRepository

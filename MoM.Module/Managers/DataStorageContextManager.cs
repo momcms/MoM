@@ -12,22 +12,23 @@ namespace MoM.Module.Managers
         private string ConnectionString { get; set; }
         private IEnumerable<Assembly> Assemblies { get; set; }
 
-        private static bool _created = false;
 
-        //enable automigrations
+        //enable automigrations 
         public DataStorageContextManager()
         {
-            if (!_created)
-            {
-                _created = true;
-                Database.MigrateAsync();
-            }
+                //Database.MigrateAsync();
         }
 
         public DataStorageContextManager(string connectionString, IEnumerable<Assembly> assemblies)
         {
             ConnectionString = connectionString;
             Assemblies = assemblies;
+            Database.EnsureCreated();
+            //if (!_created)
+            //{
+                //Database.MigrateAsync();
+            //}
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
