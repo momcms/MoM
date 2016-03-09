@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 using System.Linq;
+using Microsoft.AspNet.Hosting;
 
 namespace MoM.Module.Managers
 {
@@ -46,7 +47,7 @@ namespace MoM.Module.Managers
             }
         }
 
-        public void Configure(IApplicationBuilder applicationBuilder)
+        public void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment)
         {
         }
 

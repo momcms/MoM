@@ -13,6 +13,9 @@ using MoM.Web.Providers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNet.StaticFiles;
+using Microsoft.AspNet.Http;
 
 namespace MoM.Web
 {
@@ -42,7 +45,7 @@ namespace MoM.Web
                 .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
 
 
-
+            builder.SetBasePath(hostingEnvironment.WebRootPath);
             builder.AddEnvironmentVariables();
             ConfigurationRoot = builder.Build();
 
@@ -50,6 +53,9 @@ namespace MoM.Web
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
+            // Add framework services.
+            services.AddApplicationInsightsTelemetry(ConfigurationRoot);
+
             IEnumerable<Assembly> assemblies = AssemblyManager.GetAssemblies(
               ModulePath,
               AssemblyLoaderContainer,
@@ -63,7 +69,7 @@ namespace MoM.Web
 
             HostingEnvironment.WebRootFileProvider = fileProvider;
             services.AddCaching();
-            services.AddSession();
+
             services.AddMvc().AddPrecompiledRazorViews(ModuleManager.GetAssemblies.ToArray());
             services.Configure<RazorViewEngineOptions>(options =>
             {
@@ -81,22 +87,48 @@ namespace MoM.Web
             services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
         }
 
-        public virtual void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment)
+        public virtual void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
         {
-            applicationBuilder.UseSession();
+            loggerFactory.AddConsole(ConfigurationRoot.GetSection("Logging"));
+            loggerFactory.AddDebug();
+
+            applicationBuilder.UseApplicationInsightsRequestTelemetry();
+
+            if (hostingEnvironment.IsDevelopment())
+            {
+                applicationBuilder.UseBrowserLink();
+                applicationBuilder.UseDeveloperExceptionPage();
+                applicationBuilder.UseDatabaseErrorPage();
+            }
+            else
+            {
+                applicationBuilder.UseExceptionHandler("/Error/Index");
+            }
+
+            applicationBuilder.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+
+            applicationBuilder.UseApplicationInsightsExceptionTelemetry();
+            applicationBuilder.UseDefaultFiles();
             applicationBuilder.UseStaticFiles();
 
             foreach (IModule modules in ModuleManager.GetModules)
-                modules.Configure(applicationBuilder);
+                modules.Configure(applicationBuilder, hostingEnvironment);
+
+
 
             applicationBuilder.UseMvc(routeBuilder =>
             {
-                routeBuilder.MapRoute(name: "Resource", template: "resource", defaults: new { controller = "Resource", action = "Index" });
+                //routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
+                //routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
+                //routeBuilder.MapRoute(name: "Resource", template: "resource", defaults: new { controller = "Resource", action = "Index" });
 
                 foreach (IModule modules in ModuleManager.GetModules)
                     modules.RegisterRoutes(routeBuilder);
             }
             );
+
+
         }
 
         public IFileProvider GetFileProvider(string path)
