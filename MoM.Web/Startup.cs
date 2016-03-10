@@ -40,14 +40,14 @@ namespace MoM.Web
             AssemblyLoadContextAccessor = assemblyLoadContextAccessor;
             LibraryManager = libraryManager;
 
-            var builder = new ConfigurationBuilder()
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
 
 
-            builder.SetBasePath(hostingEnvironment.WebRootPath);
-            builder.AddEnvironmentVariables();
-            ConfigurationRoot = builder.Build();
+            //builder.SetBasePath(hostingEnvironment.WebRootPath);
+            //builder.AddEnvironmentVariables();
+            ConfigurationRoot = configurationBuilder.Build();
 
         }
 
@@ -65,15 +65,16 @@ namespace MoM.Web
 
             ModuleManager.SetAssemblies(assemblies);
 
-            IFileProvider fileProvider = GetFileProvider(ApplicationBasePath);
+            //IFileProvider fileProvider = HostingEnvironment.WebRootFileProvider;//GetFileProvider(ApplicationBasePath);
 
-            HostingEnvironment.WebRootFileProvider = fileProvider;
+            //HostingEnvironment.WebRootFileProvider = fileProvider;
+            //HostingEnvironment.WebRootPath = ApplicationBasePath + "\\wwwroot";
             services.AddCaching();
 
             services.AddMvc().AddPrecompiledRazorViews(ModuleManager.GetAssemblies.ToArray());
             services.Configure<RazorViewEngineOptions>(options =>
             {
-                options.FileProvider = fileProvider;
+                options.FileProvider = GetFileProvider(ApplicationBasePath);
             }
             );
 
