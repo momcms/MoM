@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta content="EasyModules.NET" name="application-name" />
+    <meta content="#FFFFFF" name="msapplication-TileColor" />
+    <meta content="~/media/images/favicon/mstile-144x144.png" name="msapplication-TileImage" />
+    <meta content="~/media/images/favicon/mstile-70x70.png" name="msapplication-square70x70logo" />
+    <meta content="~/media/images/favicon/mstile-150x150.png" name="msapplication-square150x150logo" />
+    <meta content="~/media/images/favicon/mstile-310x150.png" name="msapplication-wide310x150logo" />
+    <meta content="~/media/images/favicon/mstile-310x310.png" name="msapplication-square310x310logo" />
+    <link href="~/media/images/favicon/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/media/images/favicon/apple-touch-icon-57x57.png" rel="apple-touch-icon-precomposed" sizes="57x57" />
+    <link href="~/media/images/favicon/apple-touch-icon-114x114.png" rel="apple-touch-icon-precomposed" sizes="114x114" />
+    <link href="~/media/images/favicon/apple-touch-icon-72x72.png" rel="apple-touch-icon-precomposed" sizes="72x72" />
+    <link href="~/media/images/favicon/apple-touch-icon-144x144.png" rel="apple-touch-icon-precomposed" sizes="144x144" />
+    <link href="~/media/images/favicon/apple-touch-icon-60x60.png" rel="apple-touch-icon-precomposed" sizes="60x60" />
+    <link href="~/media/images/favicon/apple-touch-icon-120x120.png" rel="apple-touch-icon-precomposed" sizes="120x120" />
+    <link href="~/media/images/favicon/apple-touch-icon-76x76.png" rel="apple-touch-icon-precomposed" sizes="76x76" />
+    <link href="~/media/images/favicon/apple-touch-icon-152x152.png" rel="apple-touch-icon-precomposed" sizes="152x152" />
+    <link href="~/media/images/favicon/favicon-196x196.png" rel="apple-touch-icon-precomposed" sizes="196x196" type="image/png" />
+    <link href="~/media/images/favicon/favicon-96x96.png" rel="apple-touch-icon-precomposed" sizes="96x96" type="image/png" />
+    <link href="~/media/images/favicon/favicon-32x32.png" rel="apple-touch-icon-precomposed" sizes="32x32" type="image/png" />
+    <link href="~/media/images/favicon/favicon-16x16.png" rel="apple-touch-icon-precomposed" sizes="16x16" type="image/png" />
+    <link href="~/media/images/favicon/favicon-128.png" rel="apple-touch-icon-precomposed" sizes="128x128" type="image/png" />
+
+    <title>EasyModules.NET - @ViewData["Title"]</title>
+    <environment names="Development">
+        <link rel="stylesheet" href="~/css/app.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="~/css/app.min.css" asp-append-version="true" />
+    </environment>
+    @Html.ApplicationInsightsJavaScript(TelemetryConfiguration)
+    @RenderSection("head", required: false)
+</head>
+<body>
+    <div id="wrapper">
+
+        <div class="header">
+        </div><!-- #header -->
+
+        <div id="content">
+            @RenderBody()
+        </div><!-- #content -->
+
+        <footer class="footer" id="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <p><span class="footer-headline"><i class="fa fa-home fa-2x"></i>&nbsp;Address</span></p>
+                        <p>Klostermarksvej 6</p>
+                        <p>2700 Brønshøj</p>
+                        <p>Denmark</p>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <p><span class="footer-headline"><i class="fa fa-envelope-o fa-2x"></i>&nbsp;Contact</span></p>
+                        <p><a href="mailto:info@easymodules.net">info@easymodules.net</a></p>
+                        <p>Mobile: +45 61 62 99 99</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <p><span class="footer-headline"><i class="fa fa-university fa-2x"></i>&nbsp;Legal</span></p>
+                        <p>VAT Registration No:&nbsp;&nbsp;&nbsp;DK37043133</p>
+                        <p>Production Unit No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DK1020680705</p>
+                        <p>Bank Department No:&nbsp;&nbsp;7436</p>
+                        <p>Bank Account No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0001115673</p>
+                    </div>
+                </div>
+            </div>
+            <article class="footer-copyright">
+                <span>Copyright&nbsp;<i class="fa fa-copyright"></i>&nbsp;2015-2016&nbsp;by&nbsp;EasyModules.NET</span>
+            </article>
+        </footer>
+
+    </div><!-- #wrapper -->
+
+    
+    @RenderSection("scripts", required: false)
+</body>
+</html>

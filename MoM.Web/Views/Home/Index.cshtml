@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Welcome";
+}
+
+<app>
+    <div class="spinner-outer">
+        <div class="spinner-inner">
+            <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+    </div>
+</app>
+
+@section head{
+    <base href="~/" />
+}
+
+@section scripts {
+<environment names="Development">
+    <!-- Load libraries -->
+    <!-- IE required polyfills, in this exact order -->
+    <script src="lib/es6-shim.js"></script>
+    <script src="lib/system-polyfills.js"></script>
+    <script src="lib/angular2-polyfills.js"></script>
+    <script src="lib/system.js"></script>
+    <script src="lib/rxjs/bundles/Rx.js"></script>
+    <script src="lib/moment.js"></script>
+
+    <script>
+    System.config({
+        defaultJSExtensions: true,
+        map: {
+            'rxjs': 'lib/rxjs',
+            'moment': 'lib/moment'
+        }
+    });
+    </script>
+    <script src="lib/angular2.dev.js"></script>
+    <script src="lib/http.dev.js"></script>
+    <script src="lib/router.dev.js"></script>
+    <script>
+        System.import('app/main.dev')
+            .then(null, console.error.bind(console));
+    </script>
+</environment>
+<!-- TODO: Libraries should be the minified versions but not all frameworks are working with min files -->
+<environment names="Staging,Production">
+    <!-- Load libraries -->
+    <!-- IE required polyfills, in this exact order -->
+    <script src="lib/es6-shim.min.js"></script>
+    <script src="lib/system-polyfills.js"></script>
+    <script src="lib/angular2-polyfills.min.js"></script>
+    <script src="lib/system.js"></script>
+    <script src="lib/rxjs/bundles/Rx.min.js"></script>
+    <script src="lib/moment.min.js"></script>
+
+    <script>
+    System.config({
+        defaultJSExtensions: true,
+        map: {
+            'rxjs': 'lib/rxjs',
+            'moment': 'lib/moment'
+        }
+    });
+    </script>
+    <script src="lib/angular2.min.js"></script>
+    <script src="lib/http.min.js"></script>
+    <script src="lib/router.min.js"></script>
+    <script>
+        System.import('app/main')
+            .then(null, console.error.bind(console));
+    </script>
+</environment>
+
+
+}

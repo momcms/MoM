@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MoM.Module.Managers
 {
@@ -11,11 +13,11 @@ namespace MoM.Module.Managers
         public static string ConnectionString { get; set; }
         public static IEnumerable<Assembly> Assemblies { get; set; }
 
-        public DataStorageContextManager StorageContext { get; private set; }
+        public ApplicationDbContext StorageContext { get; private set; }
 
         public DataStorageManager()
         {
-            StorageContext = new DataStorageContextManager(ConnectionString, Assemblies);
+            StorageContext = new ApplicationDbContext(ConnectionString, Assemblies);
             //StorageContext.Database.EnsureCreatedAsync();
         }
 
@@ -28,7 +30,6 @@ namespace MoM.Module.Managers
                     if (typeof(TRepository).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
                     {
                         TRepository repository = (TRepository)Activator.CreateInstance(type);
-
                         repository.SetStorageContext(StorageContext);
                         return repository;
                     }
@@ -38,9 +39,21 @@ namespace MoM.Module.Managers
             throw new ArgumentException("Implementation of " + typeof(TRepository) + " not found");
         }
 
-        public void Save()
+        public void SaveChanges()
         {
             StorageContext.SaveChanges();
+        }
+
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            return await StorageContext.SaveChangesAsync(cancellationToken);
+        }
+
+        public void Dispose()
+        {
+            if (StorageContext != null)
+                StorageContext.Dispose();
         }
     }
 }

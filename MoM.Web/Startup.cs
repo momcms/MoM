@@ -14,14 +14,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using Microsoft.AspNet.StaticFiles;
-using Microsoft.AspNet.Http;
+using Microsoft.Data.Entity;
+using MoM.Module.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using MoM.Module.Services;
 
 namespace MoM.Web
 {
     public class Startup
     {
-        protected IConfigurationRoot ConfigurationRoot;
+        protected IConfigurationRoot Configuration;
 
         private string ApplicationBasePath;
         private string ModulePath;
@@ -45,44 +47,68 @@ namespace MoM.Web
                 .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
 
 
-            //builder.SetBasePath(hostingEnvironment.WebRootPath);
-            //builder.AddEnvironmentVariables();
-            ConfigurationRoot = configurationBuilder.Build();
+            if (hostingEnvironment.IsDevelopment())
+            {
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                //configurationBuilder.AddUserSecrets();
+
+                // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
+                configurationBuilder.AddApplicationInsightsSettings(developerMode: true);
+            }
+
+            configurationBuilder.AddEnvironmentVariables();
+
+            Configuration = configurationBuilder.Build();
 
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddApplicationInsightsTelemetry(ConfigurationRoot);
+            services.AddApplicationInsightsTelemetry(Configuration);
 
+            // Get assemblies to load as modules
             IEnumerable<Assembly> assemblies = AssemblyManager.GetAssemblies(
               ModulePath,
               AssemblyLoaderContainer,
               AssemblyLoadContextAccessor,
               LibraryManager
             );
-
             ModuleManager.SetAssemblies(assemblies);
 
-            //IFileProvider fileProvider = HostingEnvironment.WebRootFileProvider;//GetFileProvider(ApplicationBasePath);
-
-            //HostingEnvironment.WebRootFileProvider = fileProvider;
-            //HostingEnvironment.WebRootPath = ApplicationBasePath + "\\wwwroot";
             services.AddCaching();
 
-            services.AddMvc().AddPrecompiledRazorViews(ModuleManager.GetAssemblies.ToArray());
-            services.Configure<RazorViewEngineOptions>(options =>
-            {
-                options.FileProvider = GetFileProvider(ApplicationBasePath);
-            }
-            );
+            //services.AddGlimpse();
 
+            // Load MVC and add precompiled views to mvc from the modules
+            services.AddMvc().AddPrecompiledRazorViews(ModuleManager.GetAssemblies.ToArray());
+            services.Configure<RazorViewEngineOptions>(options => {
+                options.FileProvider = GetFileProvider(ApplicationBasePath);
+            });
+
+            // Add application services.
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
+
+            // Inject each module service methods and database items
             foreach (IModule modules in ModuleManager.GetModules)
             {
-                modules.SetConfigurationRoot(ConfigurationRoot);
+                modules.SetConfigurationRoot(Configuration);
                 modules.ConfigureServices(services);
             }
+
+            //Identity
+            services.AddEntityFramework()
+                .AddSqlServer()
+                .AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+            services.AddIdentity<ApplicationUser, IdentityRole>(options => {
+                options.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
+                options.Cookies.ApplicationCookie.AutomaticChallenge = false;
+                //options.Cookies.ApplicationCookieAuthenticationScheme = "ApplicationCookie";
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             services.AddTransient<DefaultAssemblyProvider>();
             services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
@@ -90,7 +116,7 @@ namespace MoM.Web
 
         public virtual void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(ConfigurationRoot.GetSection("Logging"));
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
             applicationBuilder.UseApplicationInsightsRequestTelemetry();
@@ -103,33 +129,43 @@ namespace MoM.Web
             }
             else
             {
+                applicationBuilder.UseStatusCodePagesWithRedirects("~/Error/Index/{0}");
                 applicationBuilder.UseExceptionHandler("/Error/Index");
             }
 
             applicationBuilder.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
+            // Configure Session.
+            //applicationBuilder.UseSession();
+
             applicationBuilder.UseApplicationInsightsExceptionTelemetry();
+
+            // Add static files to the request pipeline
             applicationBuilder.UseDefaultFiles();
             applicationBuilder.UseStaticFiles();
 
+            // Add cookie-based authentication to the request pipeline
+            applicationBuilder.UseIdentity();
+
+            // Inject each module config methods
             foreach (IModule modules in ModuleManager.GetModules)
                 modules.Configure(applicationBuilder, hostingEnvironment);
 
-
-
+            // Routes for MVC (note that Angular will also add routes)
             applicationBuilder.UseMvc(routeBuilder =>
             {
-                //routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                //Base routes for mvc and the angular 2 app
+                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
                 //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
-                //routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
-                //routeBuilder.MapRoute(name: "Resource", template: "resource", defaults: new { controller = "Resource", action = "Index" });
+                routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
+                // Inject each module routebuilder methods
                 foreach (IModule modules in ModuleManager.GetModules)
                     modules.RegisterRoutes(routeBuilder);
-            }
-            );
+            });
 
-
+            //todo add initial data and run migrations
         }
 
         public IFileProvider GetFileProvider(string path)
@@ -137,7 +173,7 @@ namespace MoM.Web
             IEnumerable<IFileProvider> fileProviders = new IFileProvider[] { new PhysicalFileProvider(path) };
 
             return new CompositeFileProvider(
-              fileProviders.Concat(
+                fileProviders.Concat(
                 ModuleManager.GetAssemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
               )
             );

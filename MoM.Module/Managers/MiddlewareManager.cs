@@ -36,7 +36,7 @@ namespace MoM.Module.Managers
                 PropertyInfo connectionStringPropertyInfo = type.GetProperty("ConnectionString");
 
                 if (connectionStringPropertyInfo != null)
-                    connectionStringPropertyInfo.SetValue(null, this.ConfigurationRoot["Data:DefaultConnection:ConnectionString"]);
+                    connectionStringPropertyInfo.SetValue(null, ConfigurationRoot["Data:DefaultConnection:ConnectionString"]);
 
                 PropertyInfo assembliesPropertyInfo = type.GetProperty("Assemblies");
 

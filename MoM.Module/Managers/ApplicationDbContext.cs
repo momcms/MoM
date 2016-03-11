@@ -9,17 +9,17 @@ using System.Reflection;
 
 namespace MoM.Module.Managers
 {
-    public class DataStorageContextManager : IdentityDbContext<ApplicationUser>, IDataStorageContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {
         private string ConnectionString { get; set; }
         private IEnumerable<Assembly> Assemblies { get; set; }
 
-        public DataStorageContextManager()
+        public ApplicationDbContext()
         {
 
         }
 
-        public DataStorageContextManager(string connectionString, IEnumerable<Assembly> assemblies)
+        public ApplicationDbContext(string connectionString, IEnumerable<Assembly> assemblies)
         {
             ConnectionString = connectionString;
             Assemblies = assemblies;
@@ -29,13 +29,25 @@ namespace MoM.Module.Managers
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer(ConnectionString);
+            if(!optionsBuilder.IsConfigured)
+                optionsBuilder.UseSqlServer(ConnectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            // Customize the ASP.NET Identity model and override the defaults if needed.
+            // For example, you can rename the ASP.NET Identity table names and more.
+            // Add your customizations after calling base.OnModelCreating(builder);
+            const string IdentitySchema = "Identity";
+            modelBuilder.Entity<ApplicationUser>().ToTable("User", IdentitySchema).Property(p => p.Id).HasColumnName("UserId");
+            modelBuilder.Entity<IdentityRole>().ToTable("Role", IdentitySchema).Property(p => p.Id).HasColumnName("RoleId");
+            modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin", IdentitySchema);
+            modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim", IdentitySchema);
+            modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim", IdentitySchema);
+            modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRole", IdentitySchema);
 
+            // Load all ModelBuilders from the modules
             foreach (Assembly assembly in DataStorageManager.Assemblies.Where(a => !a.FullName.Contains("Reflection")))
             {
                 foreach (Type type in assembly.GetTypes())
@@ -43,7 +55,6 @@ namespace MoM.Module.Managers
                     if (typeof(IDataModelRegistrator).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
                     {
                         IDataModelRegistrator modelRegistrar = (IDataModelRegistrator)Activator.CreateInstance(type);
-
                         modelRegistrar.RegisterModels(modelBuilder);
                     }
                 }

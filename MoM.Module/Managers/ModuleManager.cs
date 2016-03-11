@@ -31,7 +31,6 @@ namespace MoM.Module.Managers
                 if (Modules == null)
                 {
                     List<IModule> modules = new List<IModule>();
-
                     foreach (Assembly assembly in Assemblies)
                     {
                         foreach (Type type in assembly.GetTypes())
@@ -39,15 +38,12 @@ namespace MoM.Module.Managers
                             if (typeof(IModule).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
                             {
                                 IModule module = (IModule)Activator.CreateInstance(type);
-
                                 modules.Add(module);
                             }
                         }
                     }
-
                     Modules = modules;
                 }
-
                 return Modules;
             }
         }
