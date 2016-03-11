@@ -1,5 +1,7 @@
-﻿using Microsoft.Data.Entity;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
+using Microsoft.Data.Entity;
 using MoM.Module.Interfaces;
+using MoM.Module.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,16 +9,14 @@ using System.Reflection;
 
 namespace MoM.Module.Managers
 {
-    public class DataStorageContextManager : DbContext, IDataStorageContext
+    public class DataStorageContextManager : IdentityDbContext<ApplicationUser>, IDataStorageContext
     {
         private string ConnectionString { get; set; }
         private IEnumerable<Assembly> Assemblies { get; set; }
 
-
-        //enable automigrations 
         public DataStorageContextManager()
         {
-                //Database.MigrateAsync();
+
         }
 
         public DataStorageContextManager(string connectionString, IEnumerable<Assembly> assemblies)
@@ -24,11 +24,6 @@ namespace MoM.Module.Managers
             ConnectionString = connectionString;
             Assemblies = assemblies;
             Database.EnsureCreated();
-            //if (!_created)
-            //{
-                //Database.MigrateAsync();
-            //}
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -8,15 +8,13 @@
     "emitEntryPoint": true
   },
   "dependencies": {
-    "EntityFramework.Commands": "7.0.0-rc1-final",
-    "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
+    "EntityFramework.Core": "7.0.0-rc1-final",
+    "Glimpse": "2.0.0-beta1",
     "Microsoft.ApplicationInsights.AspNet": "1.0.0-rc1",
     "Microsoft.AspNet.Authentication.Cookies": "1.0.0-rc1-final",
     "Microsoft.AspNet.Diagnostics.Entity": "7.0.0-rc1-final",
-    "Microsoft.AspNet.FileProviders.Embedded": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
+    "Microsoft.AspNet.Http.Abstractions": "1.0.0-rc1-final",
     "Microsoft.AspNet.IISPlatformHandler": "1.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
     "Microsoft.AspNet.Mvc.TagHelpers": "6.0.0-rc1-final",
     "Microsoft.AspNet.Server.Kestrel": "1.0.0-rc1-final",
     "Microsoft.AspNet.StaticFiles": "1.0.0-rc1-final",
@@ -28,7 +26,11 @@
     "Microsoft.Extensions.Logging": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Console": "1.0.0-rc1-final",
     "Microsoft.Extensions.Logging.Debug": "1.0.0-rc1-final",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
+    "System.ComponentModel.Annotations": "4.0.11-beta-23516",
+    "System.IO": "4.0.11-beta-23516",
+    "System.IO.Compression": "4.0.0",
     "MoM.Module": "1.0.0-*"
   },
   "exclude": [
