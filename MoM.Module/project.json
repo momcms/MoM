@@ -5,7 +5,9 @@
     "EntityFramework.MicrosoftSqlServer": "7.0.0-rc1-final",
     "Microsoft.AspNet.Identity": "3.0.0-rc1-final",
     "Microsoft.AspNet.Identity.EntityFramework": "3.0.0-rc1-final",
-    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final"
+    "Microsoft.AspNet.Mvc": "6.0.0-rc1-final",
+    "System.IO": "4.0.11-beta-23516",
+    "System.IO.Compression": "4.0.0"
   },
   "frameworks": {
     "dnx451": { },

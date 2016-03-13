@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace MoM.Module.Managers
 {
-    public class ModuleManager
+    public class AssemblyManager
     {
         private static IEnumerable<Assembly> Assemblies;
         private static IEnumerable<IModule> Modules;

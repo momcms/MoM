@@ -19,7 +19,7 @@ namespace MoM.Web.Providers
         {
             get
             {
-                return DefaultAssemblyProvider.CandidateAssemblies.Concat(ModuleManager.GetAssemblies).Distinct();
+                return DefaultAssemblyProvider.CandidateAssemblies.Concat(AssemblyManager.GetAssemblies).Distinct();
             }
         }
     }

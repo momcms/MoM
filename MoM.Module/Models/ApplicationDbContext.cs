@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
 using MoM.Module.Interfaces;
-using MoM.Module.Models;
+using MoM.Module.Managers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace MoM.Module.Managers
+namespace MoM.Module.Models
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
     {

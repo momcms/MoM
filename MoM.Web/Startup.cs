@@ -18,12 +18,15 @@ using Microsoft.Data.Entity;
 using MoM.Module.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MoM.Module.Services;
+using MoM.Module.Extensions;
+using MoM.Module.Middleware;
+using MoM.Web.Config;
 
 namespace MoM.Web
 {
     public class Startup
     {
-        protected IConfigurationRoot Configuration;
+        protected IConfiguration Configuration;
 
         private string ApplicationBasePath;
         private string ModulePath;
@@ -68,20 +71,20 @@ namespace MoM.Web
             services.AddApplicationInsightsTelemetry(Configuration);
 
             // Get assemblies to load as modules
-            IEnumerable<Assembly> assemblies = AssemblyManager.GetAssemblies(
+            IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(
               ModulePath,
               AssemblyLoaderContainer,
               AssemblyLoadContextAccessor,
               LibraryManager
             );
-            ModuleManager.SetAssemblies(assemblies);
+            Module.Managers.AssemblyManager.SetAssemblies(assemblies);
 
             services.AddCaching();
 
             //services.AddGlimpse();
 
             // Load MVC and add precompiled views to mvc from the modules
-            services.AddMvc().AddPrecompiledRazorViews(ModuleManager.GetAssemblies.ToArray());
+            services.AddMvc().AddPrecompiledRazorViews(Module.Managers.AssemblyManager.GetAssemblies.ToArray());
             services.Configure<RazorViewEngineOptions>(options => {
                 options.FileProvider = GetFileProvider(ApplicationBasePath);
             });
@@ -90,10 +93,13 @@ namespace MoM.Web
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
+            // Set theme
+            services.Configure<Site>(Configuration.GetSection("Site"));
+
             // Inject each module service methods and database items
-            foreach (IModule modules in ModuleManager.GetModules)
+            foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
             {
-                modules.SetConfigurationRoot(Configuration);
+                modules.SetConfiguration(Configuration);
                 modules.ConfigureServices(services);
             }
 
@@ -112,6 +118,12 @@ namespace MoM.Web
 
             services.AddTransient<DefaultAssemblyProvider>();
             services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
+
+            // configure view locations for the custom theme engine
+            services.Configure<RazorViewEngineOptions>(options =>
+            {
+                options.ViewLocationExpanders.Add(new ThemeViewLocationExpander(Configuration));
+            });
         }
 
         public virtual void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
@@ -144,11 +156,17 @@ namespace MoM.Web
             applicationBuilder.UseDefaultFiles();
             applicationBuilder.UseStaticFiles();
 
+            // Add gzip compression
+            applicationBuilder.UseCompression();
+
             // Add cookie-based authentication to the request pipeline
             applicationBuilder.UseIdentity();
 
+            // Ensure correct 401 and 403 HttpStatusCodes for authorization
+            applicationBuilder.UseAuthorizeCorrectly();
+
             // Inject each module config methods
-            foreach (IModule modules in ModuleManager.GetModules)
+            foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
                 modules.Configure(applicationBuilder, hostingEnvironment);
 
             // Routes for MVC (note that Angular will also add routes)
@@ -161,7 +179,7 @@ namespace MoM.Web
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
                 // Inject each module routebuilder methods
-                foreach (IModule modules in ModuleManager.GetModules)
+                foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
                     modules.RegisterRoutes(routeBuilder);
             });
 
@@ -174,7 +192,7 @@ namespace MoM.Web
 
             return new CompositeFileProvider(
                 fileProviders.Concat(
-                ModuleManager.GetAssemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
+                Module.Managers.AssemblyManager.GetAssemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
               )
             );
         }

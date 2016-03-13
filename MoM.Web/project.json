@@ -29,8 +29,6 @@
     "Microsoft.Extensions.PlatformAbstractions": "1.0.0-rc1-final",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-rc1-final",
     "System.ComponentModel.Annotations": "4.0.11-beta-23516",
-    "System.IO": "4.0.11-beta-23516",
-    "System.IO.Compression": "4.0.0",
     "MoM.Module": "1.0.0-*",
     "Microsoft.AspNet.Session": "1.0.0-rc1-final"
   },

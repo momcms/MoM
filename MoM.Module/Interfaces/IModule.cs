@@ -3,14 +3,17 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MoM.Module.Enums;
 
 namespace MoM.Module.Interfaces
 {
     public interface IModule
     {
         string Name { get; }
+        ExtensionType Type { get; }
 
-        void SetConfigurationRoot(IConfigurationRoot configurationRoot);
+        void SetConfiguration(IConfiguration configuration);
+        IConfiguration GetConfiguration();
 
         void ConfigureServices(IServiceCollection services);
         void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment);

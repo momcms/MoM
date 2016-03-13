@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.Entity;
 using MoM.Module.Interfaces;
-using MoM.Module.Managers;
+using MoM.Module.Models;
 
 namespace MoM.Module.Base
 {
