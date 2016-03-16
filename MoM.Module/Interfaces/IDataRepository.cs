@@ -2,6 +2,6 @@
 {
     public interface IDataRepository
     {
-        void SetStorageContext(IApplicationDbContext storageContext);
+        void SetStorageContext(IApplicationDbContext storageContext);        
     }
 }
