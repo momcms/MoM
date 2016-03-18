@@ -1,0 +1,149 @@
+﻿@{
+    ViewData["Title"] = "Error";
+}
+<div></div>
+
+@section head{
+<style>
+    /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+    canvas {
+        background: linear-gradient( hsl(212, 70%, 5%) 0%, hsl(212, 70%, 20%) 50%);
+        display: block;
+    }
+
+    div.skyline {
+        height: 100%;
+        left: 0;
+        position: fixed;
+        top: 0;
+        bottom:0;
+        width: 100%;
+        /*background: url(http://jackrugile.com/images/misc/skyline-texture.png);*/
+    }
+
+    .square-content{
+        position:  absolute;
+        top: 5rem;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        color: white;
+    }
+    .square-content > div {
+       display: table;
+       margin: 0 auto; 
+       width: 80%;
+       height: 20rem;
+       background: rgba(0, 0, 0, 0.3);
+    }
+    .square-content > div > div {
+       text-align: center;
+       margin-top: 0.5rem;
+    }
+    .square-content div h1, .square-content div p {
+        margin-top: 0.5rem;
+        text-align: center;
+        vertical-align: middle;
+        color: white
+    }
+    .square-content div button {
+        margin-left: 1rem; 
+    }
+    .square-content div button:last-child {
+        margin-right: 1rem; 
+    }
+</style>
+<script src="~/js/prefixfree.min.js"></script>
+}
+<div class="skyline" id="skyline">
+    <div class="square-content">
+        <div>
+            <h1>Error</h1>
+            <p>The city looks completely deserted.</p>
+            <p>This place is rumoured to contain something beatiful.</p>
+            <p>What do you want to do?</p>
+            <div>
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#keep-calm" aria-pressed="false" autocomplete="off">
+                    Keep calm
+                </button>
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#keep-searching" aria-pressed="false" autocomplete="off">
+                    Keep searching
+                </button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#let-go" aria-pressed="false" autocomplete="off">
+                    Let go
+                </button>     
+            </div> 
+            <div>
+                <a href="~/">Return to our glorious page</a>
+            </div>      
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="keep-calm" tabindex="-1" role="dialog" aria-labelledby="keep-calm-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="keep-calm-label">Keep calm</h4>
+            </div>
+            <div class="modal-body">
+                <blockquote>Be like a duck. Calm on the surface, but always paddling like the dickens underneath.</blockquote>
+                <p>Michael Caine</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="keep-searching" tabindex="-1" role="dialog" aria-labelledby="keep-searching-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="keep-searching-label">Keep searching</h4>
+            </div>
+            <div class="modal-body">
+                <blockquote>Searching is half the fun. Life is much more manageable when thought of as a scavenger hunt as opposed to a surprise party.</blockquote>
+                <p>Jimmy Buffett</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="let-go" tabindex="-1" role="dialog" aria-labelledby="let-go-label" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="let-go-label">Let go</h4>
+            </div>
+            <div class="modal-body">
+                <blockquote>Some of us think holding on makes us strong but sometimes it is letting go.</blockquote>
+                <p>Hermann Hesse</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script><!-- Tether for Bootstrap -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/js/bootstrap.min.js" integrity="sha384-vZ2WRJMwsjRMW/8U7i6PWi6AlO1L79snBrmgiDpgIWJ82z8eA5lenwvxbMV1PAh7" crossorigin="anonymous"></script>
+<script src='https://rawgithub.com/soulwire/sketch.js/master/js/sketch.min.js'></script>
+<script src="~/js/404.js"></script>
+}

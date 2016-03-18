@@ -1,0 +1,13 @@
+﻿<nav class="navbar navbar-static-top navbar-dark navbar-em">
+    <a [routerLink]="['./Home']">
+        <img src="~/site/logo.png" srcset="~/site/logo.svg 1x" class="navbar-brand" alt="EasyModules.NET Logo" width="320" height="48">
+    </a>
+    <ul *ngIf="routes != null" class="nav navbar-nav">
+        <li *ngFor="#rt of menu" [class.active]="getLinkStyle(rt)" class="nav-item">
+            <a class="nav-link" [routerLink]="[rt.name]">{{rt.name}}</a>
+        </li>
+    </ul>
+</nav>
+<div class="content padding has-header">
+    <router-outlet></router-outlet>
+</div>
