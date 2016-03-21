@@ -63,7 +63,14 @@ System.register(["angular2/core", "angular2/router"], function(exports_1) {
                                 useAsDefault: false,
                                 data: { includeInMenu: false },
                                 loader: function () { return System.import("app/modules/MoM.Blog/pages/post").then(function (c) { return c["PostComponent"]; }); }
-                            })
+                            }),
+                            new router_1.AsyncRoute({
+                                path: "/admin/blog",
+                                name: "AdminBlog",
+                                useAsDefault: false,
+                                data: { includeInMenu: false, includeInAdminMenu: true, icon: "" },
+                                loader: function () { return System.import("app/modules/MoM.Blog/pages/admin").then(function (c) { return c["AdminComponent"]; }); }
+                            }),
                         ];
                         this.router.config(this.routes);
                         this.menu = this.routes.filter(function (route) {

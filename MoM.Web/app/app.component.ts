@@ -54,7 +54,14 @@ export class AppComponent implements OnInit {
                     useAsDefault: false,
                     data: { includeInMenu: false },
                     loader: () => System.import("app/modules/MoM.Blog/pages/post").then(c => c["PostComponent"])
-                })
+                }),
+                new AsyncRoute({
+                    path: "/admin/blog",
+                    name: "AdminBlog",
+                    useAsDefault: false,
+                    data: { includeInMenu: false, includeInAdminMenu: true, icon: "" },
+                    loader: () => System.import("app/modules/MoM.Blog/pages/admin").then(c => c["AdminComponent"])
+                }),
             ];
 
             this.router.config(this.routes);

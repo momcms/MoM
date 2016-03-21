@@ -1,4 +1,4 @@
-﻿/// <binding AfterBuild='copy-module' ProjectOpened='watch-core' />
+﻿/// <binding AfterBuild='copy-scripts' ProjectOpened='watch-web' />
 /*
 This file in the main entry point for defining Gulp tasks and using Gulp plugins.
 Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
@@ -18,18 +18,79 @@ var gulp = require("gulp"),
     cssmin = require('gulp-cssmin'),
     rename = require('gulp-rename');
 
+var paths = {
+    npm: '../../node_modules/',
+    scripDist: "./dist",
+    scriptDestination: "./wwwroot/app/",
+    lib: './wwwroot/lib/'
+}
+
+var libs = [
+    paths.npm + 'angular2/bundles/angular2.dev.js',
+    paths.npm + 'angular2/bundles/http.dev.js',
+    paths.npm + 'angular2/bundles/angular2-polyfills.js',
+    paths.npm + 'angular2/bundles/router.dev.js',
+    paths.npm + 'es6-shim/es6-shim.js',
+    paths.npm + 'systemjs/dist/system.js',
+    paths.npm + 'systemjs/dist/system-polyfills.js',
+    paths.npm + 'moment/moment.js',
+    paths.npm + 'jquery/dist/jquery.js',
+    paths.npm + 'jquery-validation/dist/jquery.validate.js',
+    paths.npm + 'jquery-validation-unobtrusive/jquery.validate.unobtrusive.js',
+
+    paths.npm + 'angular2/bundles/angular2.min.js',
+    paths.npm + 'angular2/bundles/http.min.js',
+    paths.npm + 'angular2/bundles/angular2-polyfills.min.js',
+    paths.npm + 'angular2/bundles/router.min.js',
+    paths.npm + 'es6-shim/es6-shim.min.js',
+    paths.npm + 'systemjs/dist/system.js',
+    paths.npm + 'systemjs/dist/system-polyfills.js',
+    paths.npm + 'moment/min/moment.min.js',
+    paths.npm + 'jquery/dist/jquery.min.js',
+    paths.npm + 'jquery-validation/dist/jquery.validate.min.js',
+    paths.npm + 'jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js',
+
+    paths.npm + 'systemjs/dist/system.js.map',
+    paths.npm + 'systemjs/dist/system-polyfills.js.map',
+];
+
 var tsProject = typescript.createProject('app/tsconfig.json');
 
 var moduleName = "MoM.CMS";
 
-var paths = {
-    scripDist: "./dist",
-    scriptDestination: "./wwwroot/app/"
-}
-
 gulp.task('copy-scripts', ['typescript-transpile'], function () {
     gulp.src(paths.scripDist + "/app/**/*.js")
     .pipe(gulp.dest(paths.scriptDestination))
+});
+
+gulp.task('clean-app', function (cb) {
+    rimraf('./wwwroot/app', cb);
+});
+
+gulp.task('rxjs', ['rxjs-min', 'ng2-prism'], function () {
+    return gulp.src([paths.npm + 'rxjs/**/*.js', paths.npm + 'rxjs/**/*.map'])
+        .pipe(gulp.dest(paths.lib + 'rxjs/'));
+});
+
+gulp.task('ng2-prism', ['rxjs-min'], function () {
+    return gulp.src([paths.npm + 'ng2-prism/**/*.js'])
+        .pipe(gulp.dest(paths.lib + 'extensions/ng2-prism/'));
+});
+
+gulp.task('rxjs-min', ['clean-libs'], function () {
+    return gulp.src(paths.npm + 'rxjs/**/*.js')
+        .pipe(uglify())
+        .pipe(rename({ extname: '.min.js' }))
+        .pipe(gulp.dest(paths.lib + 'rxjs/'));
+});
+
+gulp.task('copy-libs', ['rxjs'], function () {
+    return gulp.src(libs)
+        .pipe(gulp.dest(paths.lib));
+});
+
+gulp.task('clean-libs', function (cb) {
+    rimraf('./wwwroot/lib', cb);
 });
 
 gulp.task('lint-typescript', function () {
@@ -43,6 +104,7 @@ gulp.task('typescript-transpile', ['lint-typescript'], function () {
         .pipe(typescript(tsProject));
     return tsResult.js.pipe(gulp.dest(paths.scripDist + "/app/"));
 });
-gulp.task('watch-core', function () {
+
+gulp.task('watch-web', function () {
     gulp.watch('app/**/*.ts', ['copy-scripts']);
 });
