@@ -8,8 +8,7 @@
     "module": "system",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "outDir": "../~/app/"
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules",

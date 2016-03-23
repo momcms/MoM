@@ -2,9 +2,9 @@
 
 @Component({
     selector: "mvc",
-    templateUrl: "/components/services"
+    templateUrl: "/pages/home"
 })
-export class ServicesComponent implements OnInit {
+export class HomeComponent implements OnInit {
     //message: string;
 
     constructor() { }

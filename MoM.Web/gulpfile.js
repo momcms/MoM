@@ -37,6 +37,7 @@ var libs = [
     paths.npm + 'jquery/dist/jquery.js',
     paths.npm + 'jquery-validation/dist/jquery.validate.js',
     paths.npm + 'jquery-validation-unobtrusive/jquery.validate.unobtrusive.js',
+    paths.npm + 'bootstrap/dist/js/bootstrap.js',
 
     paths.npm + 'angular2/bundles/angular2.min.js',
     paths.npm + 'angular2/bundles/http.min.js',
@@ -49,6 +50,7 @@ var libs = [
     paths.npm + 'jquery/dist/jquery.min.js',
     paths.npm + 'jquery-validation/dist/jquery.validate.min.js',
     paths.npm + 'jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js',
+    paths.npm + 'bootstrap/dist/js/bootstrap.min.js',
 
     paths.npm + 'systemjs/dist/system.js.map',
     paths.npm + 'systemjs/dist/system-polyfills.js.map',
@@ -67,14 +69,24 @@ gulp.task('clean-app', function (cb) {
     rimraf('./wwwroot/app', cb);
 });
 
-gulp.task('rxjs', ['rxjs-min', 'ng2-prism'], function () {
-    return gulp.src([paths.npm + 'rxjs/**/*.js', paths.npm + 'rxjs/**/*.map'])
-        .pipe(gulp.dest(paths.lib + 'rxjs/'));
+gulp.task('clean-dist', function (cb) {
+    rimraf('./dist', cb);
 });
 
+//Extensions
 gulp.task('ng2-prism', ['rxjs-min'], function () {
     return gulp.src([paths.npm + 'ng2-prism/**/*.js'])
         .pipe(gulp.dest(paths.lib + 'extensions/ng2-prism/'));
+});
+
+gulp.task('ng2-bootstrap', ['rxjs-min'], function () {
+    return gulp.src([paths.npm + 'ng2-bootstrap/**/*.js'])
+        .pipe(gulp.dest(paths.lib + 'extensions/ng2-bootstrap/'));
+});
+
+gulp.task('rxjs', ['rxjs-min', 'ng2-prism', 'ng2-bootstrap'], function () {
+    return gulp.src([paths.npm + 'rxjs/**/*.js', paths.npm + 'rxjs/**/*.map'])
+        .pipe(gulp.dest(paths.lib + 'rxjs/'));
 });
 
 gulp.task('rxjs-min', ['clean-libs'], function () {

@@ -1,10 +1,10 @@
 ﻿import {Component, OnInit} from "angular2/core";
 
 @Component({
-    selector: "mvc",
-    templateUrl: "/components/home"
+    selector: "mom-admin-content",
+    templateUrl: "/pages/admincontent"
 })
-export class HomeComponent implements OnInit {
+export class AdminContentComponent implements OnInit {
     //message: string;
 
     constructor() { }

@@ -9,30 +9,30 @@ System.register(["angular2/core"], function(exports_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1;
-    var ServicesComponent;
+    var AdminContentComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             }],
         execute: function() {
-            ServicesComponent = (function () {
+            AdminContentComponent = (function () {
                 //message: string;
-                function ServicesComponent() {
+                function AdminContentComponent() {
                 }
-                ServicesComponent.prototype.ngOnInit = function () {
+                AdminContentComponent.prototype.ngOnInit = function () {
                     //this.message = "Welcome to EasyModules.NET"
                 };
-                ServicesComponent = __decorate([
+                AdminContentComponent = __decorate([
                     core_1.Component({
-                        selector: "mvc",
-                        templateUrl: "/components/services"
+                        selector: "mom-admin-content",
+                        templateUrl: "/pages/admincontent"
                     }), 
                     __metadata('design:paramtypes', [])
-                ], ServicesComponent);
-                return ServicesComponent;
+                ], AdminContentComponent);
+                return AdminContentComponent;
             })();
-            exports_1("ServicesComponent", ServicesComponent);
+            exports_1("AdminContentComponent", AdminContentComponent);
         }
     }
 });

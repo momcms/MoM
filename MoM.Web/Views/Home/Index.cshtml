@@ -3,9 +3,13 @@
 }
 
 <app>
-    <div class="spinner-outer">
-        <div class="spinner-inner">
-            <i class="fa fa-spinner fa-pulse fa-5x"></i>
+    <div class="spinner-container" *ngIf="isLoading">
+        <div class="spinner-outer">
+            <div class="spinner-inner">
+                <p><img src="~/site/logo.png" srcset="~/site/logo.svg 1x" class="navbar-brand" alt="EasyModules.NET Logo" width="320" height="48"></p>
+                <p><i class="fa fa-spinner fa-pulse fa-5x"></i></p>
+                <p>Loading...</p>
+            </div>
         </div>
     </div>
 </app>
@@ -24,14 +28,18 @@
     <script src="lib/system.js"></script>
     <script src="lib/rxjs/bundles/Rx.js"></script>
     <script src="lib/moment.js"></script>
-
+    <script src="lib/jquery.js"></script>
+    <script src="lib/bootstrap.js"></script>
     <script>
     System.config({
         defaultJSExtensions: true,
         map: {
             'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment',
-            "ng2-prism": "lib/extensions/ng2-prism"
+            'moment': 'lib/moment.js'
+        },
+        packages: {
+            app: { format: 'register', defaultExtension: 'js' },
+            'rxjs': { defaultExtension: 'js' }
         }
     });
     </script>

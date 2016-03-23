@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<nav class="navbar navbar-light navbar-fixed-top mom-header-navbar">
+    <button type="button" class="navbar-toggler hidden-sm-up" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="#">
+        <img src="~/site/logo.png" srcset="~/site/logo.svg 1x" class="navbar-brand" alt="EasyModules.NET Logo" width="320" height="48">
+    </a>
+    <div id="navbar" *ngIf="routes != null">
+        <nav class="nav navbar-nav pull-xs-left">
+            <a class="nav-item nav-link" *ngFor="#rt of menu" [routerLink]="[rt.name]">{{rt.name}}</a>
+        </nav>
+        <form class="pull-xs-right">
+            <label class="sr-only" for="search">Search...</label>
+            <div class="input-group mom-header-search">
+                <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                <input type="text" class="form-control" id="search" placeholder="Search...">
+            </div>
+        </form>
+    </div>
+</nav>
+<router-outlet></router-outlet>

@@ -2,8 +2,8 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta content="EasyModules.NET" name="application-name" />
     <meta content="#FFFFFF" name="msapplication-TileColor" />
     <meta content="~/site/favicon/mstile-144x144.png" name="msapplication-TileImage" />
@@ -39,47 +39,35 @@
     @RenderSection("head", required: false)
 </head>
 <body>
-    <div id="wrapper">
+    @RenderBody()
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <p><span class="footer-headline"><i class="fa fa-home fa-2x"></i>&nbsp;Address</span></p>
+                    <p>Klostermarksvej 6</p>
+                    <p>2700 Brønshøj</p>
+                    <p>Denmark</p>
+                </div>
 
-        <div class="header">
-        </div><!-- #header -->
-
-        <div id="content">
-            @RenderBody()
-        </div><!-- #content -->
-
-        <footer class="footer" id="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <p><span class="footer-headline"><i class="fa fa-home fa-2x"></i>&nbsp;Address</span></p>
-                        <p>Klostermarksvej 6</p>
-                        <p>2700 Brønshøj</p>
-                        <p>Denmark</p>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <p><span class="footer-headline"><i class="fa fa-envelope-o fa-2x"></i>&nbsp;Contact</span></p>
-                        <p><a href="mailto:info@easymodules.net">info@easymodules.net</a></p>
-                        <p>Mobile: +45 61 62 99 99</p>
-                    </div>
-                    <div class="col-sm-4">
-                        <p><span class="footer-headline"><i class="fa fa-university fa-2x"></i>&nbsp;Legal</span></p>
-                        <p>VAT Registration No:&nbsp;&nbsp;&nbsp;DK37043133</p>
-                        <p>Production Unit No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DK1020680705</p>
-                        <p>Bank Department No:&nbsp;&nbsp;7436</p>
-                        <p>Bank Account No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0001115673</p>
-                    </div>
+                <div class="col-sm-4">
+                    <p><span class="footer-headline"><i class="fa fa-envelope-o fa-2x"></i>&nbsp;Contact</span></p>
+                    <p><a href="mailto:info@easymodules.net">info@easymodules.net</a></p>
+                    <p>Mobile: +45 61 62 99 99</p>
+                </div>
+                <div class="col-sm-4">
+                    <p><span class="footer-headline"><i class="fa fa-university fa-2x"></i>&nbsp;Legal</span></p>
+                    <p>VAT Registration No:&nbsp;&nbsp;&nbsp;DK37043133</p>
+                    <p>Production Unit No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DK1020680705</p>
+                    <p>Bank Department No:&nbsp;&nbsp;7436</p>
+                    <p>Bank Account No:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0001115673</p>
                 </div>
             </div>
-            <article class="footer-copyright">
-                <span>Copyright&nbsp;<i class="fa fa-copyright"></i>&nbsp;2015-2016&nbsp;by&nbsp;EasyModules.NET</span>
-            </article>
-        </footer>
-
-    </div><!-- #wrapper -->
-
-    
+        </div>
+        <article class="footer-copyright">
+            <span>Copyright&nbsp;<i class="fa fa-copyright"></i>&nbsp;2015-2016&nbsp;by&nbsp;EasyModules.NET</span>
+        </article>
+    </footer> 
     @RenderSection("scripts", required: false)
 </body>
 </html>

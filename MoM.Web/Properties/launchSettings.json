@@ -15,6 +15,13 @@
         "Hosting:Environment": "Development"
       }
     },
+    "IIS Express Staging": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "Hosting:Environment": "Staging"
+      }
+    },
     "web": {
       "commandName": "web",
       "environmentVariables": {

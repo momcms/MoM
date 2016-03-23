@@ -1,4 +1,4 @@
-System.register(["angular2/core", "angular2/router"], function(exports_1) {
+System.register(['rxjs/Rx', "angular2/core", "angular2/router"], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,6 +12,7 @@ System.register(["angular2/core", "angular2/router"], function(exports_1) {
     var AppComponent;
     return {
         setters:[
+            function (_1) {},
             function (core_1_1) {
                 core_1 = core_1_1;
             },
@@ -34,21 +35,14 @@ System.register(["angular2/core", "angular2/router"], function(exports_1) {
                                 name: "Home",
                                 useAsDefault: true,
                                 data: { includeInMenu: true },
-                                loader: function () { return System.import("app/components/home").then(function (c) { return c["HomeComponent"]; }); }
+                                loader: function () { return System.import("app/pages/home").then(function (c) { return c["HomeComponent"]; }); }
                             }),
                             new router_1.AsyncRoute({
                                 path: "/services",
                                 name: "Services",
                                 useAsDefault: false,
                                 data: { includeInMenu: true },
-                                loader: function () { return System.import("app/components/services").then(function (c) { return c["ServicesComponent"]; }); }
-                            }),
-                            new router_1.AsyncRoute({
-                                path: "/admin",
-                                name: "Admin",
-                                useAsDefault: false,
-                                data: { includeInMenu: true },
-                                loader: function () { return System.import("app/components/admin").then(function (c) { return c["AdminComponent"]; }); }
+                                loader: function () { return System.import("app/pages/services").then(function (c) { return c["ServicesComponent"]; }); }
                             }),
                             new router_1.AsyncRoute({
                                 path: "/blog",
@@ -65,12 +59,12 @@ System.register(["angular2/core", "angular2/router"], function(exports_1) {
                                 loader: function () { return System.import("app/modules/MoM.Blog/pages/post").then(function (c) { return c["PostComponent"]; }); }
                             }),
                             new router_1.AsyncRoute({
-                                path: "/admin/blog",
-                                name: "AdminBlog",
+                                path: "/admin/...",
+                                name: "Admin",
                                 useAsDefault: false,
-                                data: { includeInMenu: false, includeInAdminMenu: true, icon: "" },
-                                loader: function () { return System.import("app/modules/MoM.Blog/pages/admin").then(function (c) { return c["AdminComponent"]; }); }
-                            }),
+                                data: { includeInMenu: true },
+                                loader: function () { return System.import("app/pages/admin").then(function (c) { return c["AdminComponent"]; }); }
+                            })
                         ];
                         this.router.config(this.routes);
                         this.menu = this.routes.filter(function (route) {
@@ -84,7 +78,7 @@ System.register(["angular2/core", "angular2/router"], function(exports_1) {
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: "app",
-                        templateUrl: "/components/template",
+                        templateUrl: "/pages/app",
                         directives: [router_1.ROUTER_DIRECTIVES]
                     }), 
                     __metadata('design:paramtypes', [router_1.Router, router_1.Location])

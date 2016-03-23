@@ -1,11 +1,13 @@
-﻿import {Component, OnInit} from "angular2/core";
+﻿// Add all operators to Observable
+import 'rxjs/Rx';
+import {Component, OnInit} from "angular2/core";
 import {AsyncRoute, Router, RouteDefinition, RouteConfig, Location, ROUTER_DIRECTIVES} from "angular2/router";
 
 declare var System: any;
 
 @Component({
     selector: "app",
-    templateUrl: "/components/template",
+    templateUrl: "/pages/app",
     directives: [ROUTER_DIRECTIVES]
 })
 
@@ -25,21 +27,14 @@ export class AppComponent implements OnInit {
                     name: "Home",
                     useAsDefault: true,
                     data: { includeInMenu: true },
-                    loader: () => System.import("app/components/home").then(c => c["HomeComponent"])
+                    loader: () => System.import("app/pages/home").then(c => c["HomeComponent"])
                 }),
                 new AsyncRoute({
                     path: "/services",
                     name: "Services",
                     useAsDefault: false,
                     data: { includeInMenu: true },
-                    loader: () => System.import("app/components/services").then(c => c["ServicesComponent"])
-                }),
-                new AsyncRoute({
-                    path: "/admin",
-                    name: "Admin",
-                    useAsDefault: false,
-                    data: { includeInMenu: true },
-                    loader: () => System.import("app/components/admin").then(c => c["AdminComponent"])
+                    loader: () => System.import("app/pages/services").then(c => c["ServicesComponent"])
                 }),
                 new AsyncRoute({
                     path: "/blog",
@@ -56,12 +51,12 @@ export class AppComponent implements OnInit {
                     loader: () => System.import("app/modules/MoM.Blog/pages/post").then(c => c["PostComponent"])
                 }),
                 new AsyncRoute({
-                    path: "/admin/blog",
-                    name: "AdminBlog",
+                    path: "/admin/...",
+                    name: "Admin",
                     useAsDefault: false,
-                    data: { includeInMenu: false, includeInAdminMenu: true, icon: "" },
-                    loader: () => System.import("app/modules/MoM.Blog/pages/admin").then(c => c["AdminComponent"])
-                }),
+                    data: { includeInMenu: true },
+                    loader: () => System.import("app/pages/admin").then(c => c["AdminComponent"])
+                })
             ];
 
             this.router.config(this.routes);
