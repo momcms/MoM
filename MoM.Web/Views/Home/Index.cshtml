@@ -27,15 +27,14 @@
     <script src="lib/angular2-polyfills.js"></script>
     <script src="lib/system.js"></script>
     <script src="lib/rxjs/bundles/Rx.js"></script>
-    <script src="lib/moment.js"></script>
-    <script src="lib/jquery.js"></script>
-    <script src="lib/bootstrap.js"></script>
+    <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
     <script>
     System.config({
         defaultJSExtensions: true,
         map: {
             'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment.js'
+            'moment': 'lib/moment.js',
+            'ng2-bootstrap': 'lib/extensions/ng2-bootstrap'
         },
         packages: {
             app: { format: 'register', defaultExtension: 'js' },
@@ -60,14 +59,15 @@
     <script src="lib/angular2-polyfills.min.js"></script>
     <script src="lib/system.js"></script>
     <script src="lib/rxjs/bundles/Rx.min.js"></script>
-    <script src="lib/moment.min.js"></script>
+    <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
 
     <script>
     System.config({
         defaultJSExtensions: true,
         map: {
             'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment'
+            'moment': 'lib/moment',
+            'ng2-bootstrap': 'lib/extensions/ng2-bootstrap'
         }
     });
     </script>
