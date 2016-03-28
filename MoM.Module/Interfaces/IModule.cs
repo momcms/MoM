@@ -10,7 +10,7 @@ namespace MoM.Module.Interfaces
     public interface IModule
     {
         string Name { get; }
-        ExtensionType Type { get; }
+        ModuleType Type { get; }
 
         void SetConfiguration(IConfiguration configuration);
         IConfiguration GetConfiguration();

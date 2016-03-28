@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNet.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.OptionsModel;
-using MoM.Web.Config;
+using MoM.Module.Config;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,9 +8,9 @@ namespace MoM.Web.Controllers
 {
     public class HomeController : Controller
     {
-        IOptions<Site> SiteSettings;
+        IOptions<SiteSettings> SiteSettings;
 
-        public HomeController(IOptions<Site> siteSettings)
+        public HomeController(IOptions<SiteSettings> siteSettings)
         {
             SiteSettings = siteSettings;
         }

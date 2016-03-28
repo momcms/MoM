@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNet.Mvc;
 using Microsoft.Extensions.OptionsModel;
-using MoM.Web.Config;
+using MoM.Module.Config;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -8,9 +8,9 @@ namespace MoM.Web.Controllers
 {
     public class ErrorController : Controller
     {
-        IOptions<Site> SiteSettings;
+        IOptions<SiteSettings> SiteSettings;
 
-        public ErrorController(IOptions<Site> siteSettings)
+        public ErrorController(IOptions<SiteSettings> siteSettings)
         {
             SiteSettings = siteSettings;
         }

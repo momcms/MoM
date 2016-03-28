@@ -11,14 +11,14 @@ namespace MoM.Module.Dtos
         public int extensionId { get; set; }
         public string name { get; set; }
         public string description { get; set; }
-        public ExtensionType type { get; set; }
+        public ModuleType type { get; set; }
         public int versionMajor { get; set; }
         public int versionMinor { get; set; }
         public bool isInstalled { get; set; }
 
         public ExtensionDto() { }
 
-        public ExtensionDto(int ExtensionId, string Name, string Description, ExtensionType Type, int VersionMajor, int VersionMinor, bool IsInstalled)
+        public ExtensionDto(int ExtensionId, string Name, string Description, ModuleType Type, int VersionMajor, int VersionMinor, bool IsInstalled)
         {
             extensionId = ExtensionId;
             name = Name;

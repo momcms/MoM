@@ -20,15 +20,17 @@ System.register(["angular2/core", 'angular2/router'], function(exports_1) {
             }],
         execute: function() {
             AdminComponent = (function () {
-                function AdminComponent() {
+                function AdminComponent(router) {
+                    this.router = router;
                 }
-                AdminComponent.prototype.ngOnInit = function () {
+                AdminComponent.prototype.isLinkActive = function (instruction) {
+                    return this.router.isRouteActive(this.router.generate(instruction));
                 };
                 AdminComponent = __decorate([
                     core_1.Component({
                         selector: "mom-admin",
                         templateUrl: "/pages/admin",
-                        directives: [router_1.RouterOutlet]
+                        directives: [router_1.RouterOutlet, router_1.RouterLink]
                     }),
                     router_1.RouteConfig([
                         new router_1.AsyncRoute({
@@ -37,6 +39,20 @@ System.register(["angular2/core", 'angular2/router'], function(exports_1) {
                             useAsDefault: true,
                             data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Content" },
                             loader: function () { return System.import("app/pages/admincontent").then(function (c) { return c["AdminContentComponent"]; }); }
+                        }),
+                        new router_1.AsyncRoute({
+                            path: "/security",
+                            name: "AdminSecurity",
+                            useAsDefault: false,
+                            data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Settings" },
+                            loader: function () { return System.import("app/pages/adminsecurity").then(function (c) { return c["AdminSecurityComponent"]; }); }
+                        }),
+                        new router_1.AsyncRoute({
+                            path: "/settings",
+                            name: "AdminSettings",
+                            useAsDefault: false,
+                            data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Settings" },
+                            loader: function () { return System.import("app/pages/adminsettings").then(function (c) { return c["AdminSettingsComponent"]; }); }
                         }),
                         new router_1.AsyncRoute({
                             path: "/blog",
@@ -60,7 +76,7 @@ System.register(["angular2/core", 'angular2/router'], function(exports_1) {
                             loader: function () { return System.import("app/modules/MoM.Blog/pages/adminpost").then(function (c) { return c["AdminPostComponent"]; }); }
                         })
                     ]), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [router_1.Router])
                 ], AdminComponent);
                 return AdminComponent;
             })();

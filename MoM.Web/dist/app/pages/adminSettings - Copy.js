@@ -1,4 +1,4 @@
-System.register(["angular2/core", 'angular2/router'], function(exports_1) {
+System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,35 +8,35 @@ System.register(["angular2/core", 'angular2/router'], function(exports_1) {
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1;
-    var HomeComponent;
+    var core_1, ng2_bootstrap_1;
+    var AdminSettingsComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
-            function (router_1_1) {
-                router_1 = router_1_1;
+            function (ng2_bootstrap_1_1) {
+                ng2_bootstrap_1 = ng2_bootstrap_1_1;
             }],
         execute: function() {
-            HomeComponent = (function () {
+            AdminSettingsComponent = (function () {
                 //message: string;
-                function HomeComponent() {
+                function AdminSettingsComponent() {
                 }
-                HomeComponent.prototype.ngOnInit = function () {
+                AdminSettingsComponent.prototype.ngOnInit = function () {
                     //this.message = "Welcome to EasyModules.NET"
                 };
-                HomeComponent = __decorate([
+                AdminSettingsComponent = __decorate([
                     core_1.Component({
-                        selector: "mvc",
-                        templateUrl: "/pages/home",
-                        directives: [router_1.RouterLink]
+                        selector: "mom-admin-settings",
+                        directives: [ng2_bootstrap_1.TAB_DIRECTIVES],
+                        templateUrl: "/pages/adminsettings"
                     }), 
                     __metadata('design:paramtypes', [])
-                ], HomeComponent);
-                return HomeComponent;
+                ], AdminSettingsComponent);
+                return AdminSettingsComponent;
             })();
-            exports_1("HomeComponent", HomeComponent);
+            exports_1("AdminSettingsComponent", AdminSettingsComponent);
         }
     }
 });

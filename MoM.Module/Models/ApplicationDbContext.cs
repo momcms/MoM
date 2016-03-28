@@ -46,6 +46,8 @@ namespace MoM.Module.Models
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim", IdentitySchema);
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim", IdentitySchema);
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRole", IdentitySchema);
+            modelBuilder.Entity<ClientRouteConfig>();
+            modelBuilder.Entity<Module>();
 
             // Load all ModelBuilders from the modules
             foreach (Assembly assembly in DataStorageManager.Assemblies.Where(a => !a.FullName.Contains("Reflection")))
@@ -60,5 +62,9 @@ namespace MoM.Module.Models
                 }
             }
         }
+        //public DbSet<ClientRouteConfig> ClientRouteConfigs { get; set; }
+        //public DbSet<Module> Modules { get; set; }
+        //public DbSet<SiteSetting> SiteSettings { get; set; }
+
     }
 }

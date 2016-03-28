@@ -30,10 +30,18 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
                     this.routes = null;
                     this.menu = null;
                     this.isCollapsed = true;
+                    this.isAdminArea = false;
                 }
                 AppComponent.prototype.ngOnInit = function () {
                     if (this.routes === null) {
                         this.routes = [
+                            //new AsyncRoute({
+                            //    path: "/",
+                            //    name: "Public",
+                            //    useAsDefault: true,
+                            //    data: { includeInMenu: false },
+                            //    loader: () => System.import("app/pages/public").then(c => c["PublicComponent"])
+                            //}),
                             new router_1.AsyncRoute({
                                 path: "/",
                                 name: "Home",
@@ -76,6 +84,10 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
                         });
                     }
                 };
+                //hide footer if the area is admin
+                AppComponent.prototype.ngDoCheck = function () {
+                    this.isAdminArea = this.location.path().startsWith("/admin");
+                };
                 AppComponent.prototype.getLinkStyle = function (route) {
                     return this.location.path().indexOf(route.path) > -1;
                 };
@@ -83,7 +95,7 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
                     core_1.Component({
                         selector: "app",
                         templateUrl: "/pages/app",
-                        directives: [router_1.ROUTER_DIRECTIVES, ng2_bootstrap_1.Collapse]
+                        directives: [router_1.RouterOutlet, router_1.RouterLink, router_1.ROUTER_DIRECTIVES, ng2_bootstrap_1.Collapse]
                     }), 
                     __metadata('design:paramtypes', [router_1.Router, router_1.Location])
                 ], AppComponent);

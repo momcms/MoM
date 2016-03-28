@@ -9,6 +9,8 @@ using Microsoft.Extensions.Logging;
 using MoM.Module.Models;
 using MoM.Web.ViewModels.Account;
 using MoM.Module.Interfaces;
+using Microsoft.Extensions.OptionsModel;
+using MoM.Module.Config;
 
 namespace MoM.Web.Controllers
 {
@@ -20,19 +22,23 @@ namespace MoM.Web.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
+        IOptions<SiteSettings> SiteSettings;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IOptions<SiteSettings> siteSettings
+            )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            SiteSettings = siteSettings;
         }
 
         //
@@ -41,6 +47,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -89,6 +97,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             return View();
         }
 
@@ -99,6 +109,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };

@@ -7,8 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.PlatformAbstractions;
 using MoM.Module.Interfaces;
-using MoM.Module.Managers;
-using MoM.Web.Managers;
 using MoM.Web.Providers;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +18,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using MoM.Module.Services;
 using MoM.Module.Extensions;
 using MoM.Module.Middleware;
-using MoM.Web.Config;
+using MoM.Module.Config;
+using Microsoft.Extensions.OptionsModel;
 
 namespace MoM.Web
 {
@@ -36,7 +35,13 @@ namespace MoM.Web
         private IAssemblyLoadContextAccessor AssemblyLoadContextAccessor;
         private ILibraryManager LibraryManager;
 
-        public Startup(IHostingEnvironment hostingEnvironment, IApplicationEnvironment applicationEnvironment, IAssemblyLoaderContainer assemblyLoaderContainer, IAssemblyLoadContextAccessor assemblyLoadContextAccessor, ILibraryManager libraryManager)
+        public Startup(
+            IHostingEnvironment hostingEnvironment, 
+            IApplicationEnvironment applicationEnvironment, 
+            IAssemblyLoaderContainer assemblyLoaderContainer, 
+            IAssemblyLoadContextAccessor assemblyLoadContextAccessor, 
+            ILibraryManager libraryManager
+            )
         {
             HostingEnvironment = hostingEnvironment;
             ApplicationBasePath = applicationEnvironment.ApplicationBasePath;
@@ -53,11 +58,13 @@ namespace MoM.Web
             if (hostingEnvironment.IsDevelopment())
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
-                //configurationBuilder.AddUserSecrets();
+                // Good documentation here https://docs.asp.net/en/latest/security/app-secrets.html
+                configurationBuilder.AddUserSecrets();
 
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 configurationBuilder.AddApplicationInsightsSettings(developerMode: true);
             }
+            
 
             configurationBuilder.AddEnvironmentVariables();
 
@@ -93,8 +100,17 @@ namespace MoM.Web
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            // Set theme
-            services.Configure<Site>(Configuration.GetSection("Site"));
+            // Set site options to a strongly typed object for easy access
+            // Source: https://docs.asp.net/en/latest/fundamentals/configuration.html
+            // Instantiate in a class with:
+            // IOptions<Site> SiteSettings;
+            // public ClassName(IOptions<Site> siteSettings)
+            // {
+            //    SiteSettings = siteSettings;
+            // }
+            // Use in method like:
+            // var theme = SiteSettings.Value.Theme;
+            services.Configure<SiteSettings>(Configuration.GetSection("Site"));
 
             // Inject each module service methods and database items
             foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
@@ -107,7 +123,7 @@ namespace MoM.Web
             services.AddEntityFramework()
                 .AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Data:DefaultConnection:ConnectionString"]));
+                    options.UseSqlServer(Configuration["Site:ConnectionString"]));
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 options.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
                 options.Cookies.ApplicationCookie.AutomaticChallenge = false;
@@ -161,6 +177,43 @@ namespace MoM.Web
 
             // Add cookie-based authentication to the request pipeline
             applicationBuilder.UseIdentity();
+
+            //If they are configured then add social login services
+            if(Configuration["Site:Authentication:Facebook:Enabled"] == "True")
+            {
+                applicationBuilder.UseFacebookAuthentication(options =>
+                {
+                    options.AppId = Configuration["Site:Authentication:Facebook:AppId"];
+                    options.AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"];
+                });
+            }
+
+            if (Configuration["Site:Authentication:Google:Enabled"] == "True")
+            {
+                applicationBuilder.UseGoogleAuthentication(options =>
+                {
+                    options.ClientId = "";
+                    options.ClientSecret = "";
+                });
+            }
+
+            if (Configuration["Site:Authentication:Microsoft:Enabled"] == "True")
+            {
+                applicationBuilder.UseMicrosoftAccountAuthentication(options =>
+                {
+                    options.ClientId = "";
+                    options.ClientSecret = "";
+                });
+            }
+
+            if (Configuration["Site:Authentication:Twitter:Enabled"] == "True")
+            {
+                applicationBuilder.UseTwitterAuthentication(options =>
+                {
+                    options.ConsumerKey = "";
+                    options.ConsumerSecret = "";
+                });
+            }
 
             // Ensure correct 401 and 403 HttpStatusCodes for authorization
             applicationBuilder.UseAuthorizeCorrectly();

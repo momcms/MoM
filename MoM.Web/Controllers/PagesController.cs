@@ -8,6 +8,8 @@ namespace MoM.Web.Controllers
     {
         public IActionResult App() => PartialView();
 
+        public IActionResult Public() => PartialView();
+
         public IActionResult Home() => PartialView();
 
         public IActionResult Services() => PartialView();
@@ -15,5 +17,9 @@ namespace MoM.Web.Controllers
         public IActionResult Admin() => PartialView();
 
         public IActionResult AdminContent() => PartialView();
+
+        public IActionResult AdminSecurity() => PartialView();
+
+        public IActionResult AdminSettings() => PartialView();
     }
 }
