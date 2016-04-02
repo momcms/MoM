@@ -8,6 +8,7 @@ using System.Reflection;
 using System.Linq;
 using Microsoft.AspNet.Hosting;
 using MoM.Module.Enums;
+using MoM.Module.Dtos;
 
 namespace MoM.Module.Managers
 {
@@ -15,19 +16,20 @@ namespace MoM.Module.Managers
     {
         private IConfiguration Configuration;
 
-        public string Name
+        public ExtensionInfoDto Info
         {
             get
             {
-                return "Data Extension";
-            }
-        }
-
-        public ModuleType Type
-        {
-            get
-            {
-                return ModuleType.Module;
+                return new ExtensionInfoDto
+                {
+                    name = "Data Manager",
+                    description = "This is a Core class that allows injection from modules and themes to the different startup methods.",
+                    authors = "Rolf Veinø Sørensen",
+                    iconCss = "fa fa-database",
+                    type = ModuleType.Core,
+                    versionMajor = 1,
+                    versionMinor = 0
+                };
             }
         }
 

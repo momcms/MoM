@@ -26,14 +26,14 @@
     <script src="lib/system-polyfills.js"></script>
     <script src="lib/angular2-polyfills.js"></script>
     <script src="lib/system.js"></script>
-    <script src="lib/rxjs/bundles/Rx.js"></script>
+    <script src="lib/rxjs/bundles/Rx.umd.js"></script>
     <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
     <script>
     System.config({
         defaultJSExtensions: true,
         map: {
             'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment.js',
+            'moment': 'lib/moment.min.js',
             'ng2-bootstrap': 'lib/extensions/ng2-bootstrap',
             "ng2-prism": "lib/extensions/ng2-prism",
             "prismjs": "lib/extensions/ng2-prism/node_modules/prismjs"
@@ -56,30 +56,33 @@
 <environment names="Staging,Production">
     <!-- Load libraries -->
     <!-- IE required polyfills, in this exact order -->
-    <script src="lib/es6-shim.min.js"></script>
+    <script src="lib/es6-shim.js"></script>
     <script src="lib/system-polyfills.js"></script>
-    <script src="lib/angular2-polyfills.min.js"></script>
+    <script src="lib/angular2-polyfills.js"></script>
     <script src="lib/system.js"></script>
-    <script src="lib/rxjs/bundles/Rx.min.js"></script>
-    <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.min.js"></script>
-
+    <script src="lib/rxjs/bundles/Rx.umd.js"></script>
+    <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
     <script>
     System.config({
         defaultJSExtensions: true,
         map: {
             'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment',
+            'moment': 'lib/moment.min.js',
             'ng2-bootstrap': 'lib/extensions/ng2-bootstrap',
             "ng2-prism": "lib/extensions/ng2-prism",
             "prismjs": "lib/extensions/ng2-prism/node_modules/prismjs"
+        },
+        packages: {
+            app: { format: 'register', defaultExtension: 'js' },
+            'rxjs': { defaultExtension: 'js' }
         }
     });
     </script>
-    <script src="lib/angular2.min.js"></script>
-    <script src="lib/http.min.js"></script>
-    <script src="lib/router.min.js"></script>
+    <script src="lib/angular2.dev.js"></script>
+    <script src="lib/http.dev.js"></script>
+    <script src="lib/router.dev.js"></script>
     <script>
-        System.import('app/main')
+        System.import('app/main.dev')
             .then(null, console.error.bind(console));
     </script>
 </environment>

@@ -14,16 +14,16 @@
             <dd>
                 @if (Model.HasPassword)
             {
-                    <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ChangePassword">Change</a>&nbsp;&nbsp;]</text>
+                    <text>&nbsp;&nbsp;<a asp-controller="Manage" class="btn btn-primary" asp-action="ChangePassword"><i class="fa fa-pencil-square-o mom-icon"></i>Change</a>&nbsp;&nbsp;</text>
                 }
                 else
                 {
-                    <text>[&nbsp;&nbsp;<a asp-controller="Manage" asp-action="SetPassword">Create</a>&nbsp;&nbsp;]</text>
+                    <text>&nbsp;&nbsp;<a asp-controller="Manage" class="btn btn-primary" asp-action="SetPassword"><i class="fa fa-plus-square-o mom-icon"></i>Create</a>&nbsp;&nbsp;</text>
                 }
             </dd>
             <dt>External Logins:</dt>
             <dd>
-                @Model.Logins.Count [&nbsp;&nbsp;<a asp-controller="Manage" asp-action="ManageLogins">Manage</a>&nbsp;&nbsp;]
+                @Model.Logins.Count&nbsp;&nbsp;<a asp-controller="Manage" class="btn btn-primary" asp-action="ManageLogins"><i class="fa fa-cogs mom-icon"></i>Manage</a>&nbsp;&nbsp;
             </dd>
             <dt>Phone Number:</dt>
             <dd>
@@ -49,22 +49,22 @@
 
             <dt>Two-Factor Authentication:</dt>
             <dd>
-                <p>
+                @*<p>
                     There are no two-factor authentication providers configured. See <a href="http://go.microsoft.com/fwlink/?LinkID=532713">this article</a>
                     for setting up this application to support two-factor authentication.
-                </p>
-                @*@if (Model.TwoFactor)
+                </p>*@
+                @if (Model.TwoFactor)
                     {
                         <form asp-controller="Manage" asp-action="DisableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                            Enabled [<button type="submit" class="btn-link">Disable</button>]
+                            Enabled <button type="submit" class="btn btn-danger">Disable</button>
                         </form>
                     }
                     else
                     {
                         <form asp-controller="Manage" asp-action="EnableTwoFactorAuthentication" method="post" class="form-horizontal" role="form">
-                            [<button type="submit" class="btn-link">Enable</button>] Disabled
+                            <button type="submit" class="btn btn-success">Enable</button> Disabled
                         </form>
-                    }*@
+                    }
             </dd>
         </dl>
     </div>

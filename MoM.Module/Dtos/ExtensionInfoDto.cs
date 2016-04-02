@@ -1,32 +1,28 @@
 ﻿using MoM.Module.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MoM.Module.Dtos
 {
-    public partial class ExtensionDto
+    public partial class ExtensionInfoDto
     {
-        public int extensionId { get; set; }
         public string name { get; set; }
         public string description { get; set; }
+        public string authors { get; set; }
+        public string iconCss { get; set; }
         public ModuleType type { get; set; }
         public int versionMajor { get; set; }
         public int versionMinor { get; set; }
-        public bool isInstalled { get; set; }
 
-        public ExtensionDto() { }
+        public ExtensionInfoDto() { }
 
-        public ExtensionDto(int ExtensionId, string Name, string Description, ModuleType Type, int VersionMajor, int VersionMinor, bool IsInstalled)
+        public ExtensionInfoDto(string Name, string Description, string Authors, string IconCss, ModuleType Type, int VersionMajor, int VersionMinor)
         {
-            extensionId = ExtensionId;
             name = Name;
             description = Description;
+            authors = Authors;
+            iconCss = IconCss;
             type = Type;
             versionMajor = VersionMajor;
             versionMinor = VersionMinor;
-            isInstalled = IsInstalled;
         }
     }
 }

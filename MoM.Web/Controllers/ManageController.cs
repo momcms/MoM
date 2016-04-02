@@ -8,30 +8,36 @@ using Microsoft.Extensions.Logging;
 using MoM.Module.Models;
 using MoM.Web.ViewModels.Manage;
 using MoM.Module.Interfaces;
+using Microsoft.Extensions.OptionsModel;
+using MoM.Module.Config;
 
 namespace MoM.Web.Controllers
 {
     [Authorize]
     public class ManageController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
-        private readonly ISmsSender _smsSender;
-        private readonly ILogger _logger;
+        private readonly UserManager<ApplicationUser> UserManager;
+        private readonly SignInManager<ApplicationUser> SignInManager;
+        private readonly IEmailSender EmailSender;
+        private readonly ISmsSender SmsSender;
+        private readonly ILogger Logger;
+        IOptions<SiteSettings> SiteSettings;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IEmailSender emailSender,
         ISmsSender smsSender,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory,
+        IOptions<SiteSettings> siteSettings
+        )
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _emailSender = emailSender;
-            _smsSender = smsSender;
-            _logger = loggerFactory.CreateLogger<ManageController>();
+            UserManager = userManager;
+            SignInManager = signInManager;
+            EmailSender = emailSender;
+            SmsSender = smsSender;
+            Logger = loggerFactory.CreateLogger<ManageController>();
+            SiteSettings = siteSettings;
         }
 
         //
@@ -39,6 +45,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             ViewData["StatusMessage"] =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -51,11 +59,11 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             var model = new IndexViewModel
             {
-                HasPassword = await _userManager.HasPasswordAsync(user),
-                PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
-                TwoFactor = await _userManager.GetTwoFactorEnabledAsync(user),
-                Logins = await _userManager.GetLoginsAsync(user),
-                BrowserRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user)
+                HasPassword = await UserManager.HasPasswordAsync(user),
+                PhoneNumber = await UserManager.GetPhoneNumberAsync(user),
+                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(user),
+                Logins = await UserManager.GetLoginsAsync(user),
+                BrowserRemembered = await SignInManager.IsTwoFactorClientRememberedAsync(user)
             };
             return View(model);
         }
@@ -70,10 +78,10 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                var result = await _userManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
+                var result = await UserManager.RemoveLoginAsync(user, account.LoginProvider, account.ProviderKey);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await SignInManager.SignInAsync(user, isPersistent: false);
                     message = ManageMessageId.RemoveLoginSuccess;
                 }
             }
@@ -84,6 +92,8 @@ namespace MoM.Web.Controllers
         // GET: /Manage/AddPhoneNumber
         public IActionResult AddPhoneNumber()
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             return View();
         }
 
@@ -93,14 +103,16 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
             // Generate the token and send it
             var user = await GetCurrentUserAsync();
-            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
-            await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
+            await SmsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
             return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
         }
 
@@ -113,9 +125,9 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                await _userManager.SetTwoFactorEnabledAsync(user, true);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                _logger.LogInformation(1, "Employee enabled two-factor authentication.");
+                await UserManager.SetTwoFactorEnabledAsync(user, true);
+                await SignInManager.SignInAsync(user, isPersistent: false);
+                Logger.LogInformation(1, "Employee enabled two-factor authentication.");
             }
             return RedirectToAction(nameof(Index), "Manage");
         }
@@ -129,9 +141,9 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                await _userManager.SetTwoFactorEnabledAsync(user, false);
-                await _signInManager.SignInAsync(user, isPersistent: false);
-                _logger.LogInformation(2, "Employee disabled two-factor authentication.");
+                await UserManager.SetTwoFactorEnabledAsync(user, false);
+                await SignInManager.SignInAsync(user, isPersistent: false);
+                Logger.LogInformation(2, "Employee disabled two-factor authentication.");
             }
             return RedirectToAction(nameof(Index), "Manage");
         }
@@ -141,7 +153,7 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
         {
-            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(await GetCurrentUserAsync(), phoneNumber);
+            var code = await UserManager.GenerateChangePhoneNumberTokenAsync(await GetCurrentUserAsync(), phoneNumber);
             // Send an SMS to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
@@ -152,6 +164,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -159,10 +173,10 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                var result = await _userManager.ChangePhoneNumberAsync(user, model.PhoneNumber, model.Code);
+                var result = await UserManager.ChangePhoneNumberAsync(user, model.PhoneNumber, model.Code);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await SignInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.AddPhoneSuccess });
                 }
             }
@@ -180,10 +194,10 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                var result = await _userManager.SetPhoneNumberAsync(user, null);
+                var result = await UserManager.SetPhoneNumberAsync(user, null);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await SignInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.RemovePhoneSuccess });
                 }
             }
@@ -195,6 +209,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public IActionResult ChangePassword()
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             return View();
         }
 
@@ -204,6 +220,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -211,11 +229,11 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                var result = await UserManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    _logger.LogInformation(3, "Employee changed their password successfully.");
+                    await SignInManager.SignInAsync(user, isPersistent: false);
+                    Logger.LogInformation(3, "Employee changed their password successfully.");
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.ChangePasswordSuccess });
                 }
                 AddErrors(result);
@@ -229,6 +247,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public IActionResult SetPassword()
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             return View();
         }
 
@@ -238,6 +258,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -246,10 +268,10 @@ namespace MoM.Web.Controllers
             var user = await GetCurrentUserAsync();
             if (user != null)
             {
-                var result = await _userManager.AddPasswordAsync(user, model.NewPassword);
+                var result = await UserManager.AddPasswordAsync(user, model.NewPassword);
                 if (result.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, isPersistent: false);
+                    await SignInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction(nameof(Index), new { Message = ManageMessageId.SetPasswordSuccess });
                 }
                 AddErrors(result);
@@ -262,6 +284,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         {
+            var theme = SiteSettings.Value.Theme;
+            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Selected + "/";
             ViewData["StatusMessage"] =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.AddLoginSuccess ? "The external login was added."
@@ -272,8 +296,8 @@ namespace MoM.Web.Controllers
             {
                 return View("Error");
             }
-            var userLogins = await _userManager.GetLoginsAsync(user);
-            var otherLogins = _signInManager.GetExternalAuthenticationSchemes().Where(auth => userLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider)).ToList();
+            var userLogins = await UserManager.GetLoginsAsync(user);
+            var otherLogins = SignInManager.GetExternalAuthenticationSchemes().Where(auth => userLogins.All(ul => auth.AuthenticationScheme != ul.LoginProvider)).ToList();
             ViewData["ShowRemoveButton"] = user.PasswordHash != null || userLogins.Count > 1;
             return View(new ManageLoginsViewModel
             {
@@ -290,7 +314,7 @@ namespace MoM.Web.Controllers
         {
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Action("LinkLoginCallback", "Manage");
-            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
+            var properties = SignInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, User.GetUserId());
             return new ChallengeResult(provider, properties);
         }
 
@@ -304,12 +328,12 @@ namespace MoM.Web.Controllers
             {
                 return View("Error");
             }
-            var info = await _signInManager.GetExternalLoginInfoAsync(User.GetUserId());
+            var info = await SignInManager.GetExternalLoginInfoAsync(User.GetUserId());
             if (info == null)
             {
                 return RedirectToAction(nameof(ManageLogins), new { Message = ManageMessageId.Error });
             }
-            var result = await _userManager.AddLoginAsync(user, info);
+            var result = await UserManager.AddLoginAsync(user, info);
             var message = result.Succeeded ? ManageMessageId.AddLoginSuccess : ManageMessageId.Error;
             return RedirectToAction(nameof(ManageLogins), new { Message = message });
         }
@@ -338,7 +362,7 @@ namespace MoM.Web.Controllers
 
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
-            return await _userManager.FindByIdAsync(HttpContext.User.GetUserId());
+            return await UserManager.FindByIdAsync(HttpContext.User.GetUserId());
         }
 
         #endregion

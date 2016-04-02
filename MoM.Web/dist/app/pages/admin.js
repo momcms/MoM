@@ -55,6 +55,20 @@ System.register(["angular2/core", 'angular2/router'], function(exports_1) {
                             loader: function () { return System.import("app/pages/adminsettings").then(function (c) { return c["AdminSettingsComponent"]; }); }
                         }),
                         new router_1.AsyncRoute({
+                            path: "/modules",
+                            name: "AdminModules",
+                            useAsDefault: false,
+                            data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Modules" },
+                            loader: function () { return System.import("app/pages/adminmodules").then(function (c) { return c["AdminModulesComponent"]; }); }
+                        }),
+                        new router_1.AsyncRoute({
+                            path: "/reports",
+                            name: "AdminReports",
+                            useAsDefault: false,
+                            data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Reports" },
+                            loader: function () { return System.import("app/pages/adminreports").then(function (c) { return c["AdminReportsComponent"]; }); }
+                        }),
+                        new router_1.AsyncRoute({
                             path: "/blog",
                             name: "AdminBlog",
                             useAsDefault: false,

@@ -15,19 +15,23 @@
                     <h4>Log in</h4>
                     <div asp-validation-summary="ValidationSummary.All" class="alert-danger"></div>
                     <div class="row">
-                        <label asp-for="Email" class="col-md-2 control-label"></label>
                         <div class="col-md-10">
-                            <input asp-for="Email" class="form-control" />
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-envelope-o"></i></div>
+                                <input asp-for="Email" class="form-control" placeholder="Email">
+                            </div>
                         </div>
                     </div>
                     <div class="row margin-top-small">
-                        <label asp-for="Password" class="col-md-2 control-label"></label>
                         <div class="col-md-10">
-                            <input asp-for="Password" class="form-control" />
+                            <div class="input-group">
+                                <div class="input-group-addon"><i class="fa fa-user-secret"></i></div>
+                                <input asp-for="Password" class="form-control" placeholder="Password">
+                            </div>
                         </div>
                     </div>
                     <div class="row margin-top-small">
-                        <div class="col-md-offset-2 col-md-10 text-md-right text-sm-right text-xs-right">
+                        <div class="col-md-10 text-md-right text-sm-right text-xs-right">
                             <div class="checkbox">
                                 <input asp-for="RememberMe" />
                                 <label asp-for="RememberMe"></label>
@@ -35,7 +39,7 @@
                         </div>
                     </div>
                     <div class="row margin-top-small">
-                        <div class="col-md-offset-2 col-md-10 text-md-center text-sm-center text-xs-center">
+                        <div class="col-md-10 text-md-center text-sm-center text-xs-center">
                             <a class="btn btn-warning" asp-action="ForgotPassword">Forgot password?</a>
                             <a class="btn btn-success" asp-action="Register">Register</a>
                             <button type="submit" class="btn btn-primary">Log in</button>
@@ -44,7 +48,7 @@
                 </form>
             </section>
             <div class="row">
-                <div class="col-md-offset-2 col-md-10 margin-top text-md-center text-sm-center text-xs-center">
+                <div class="col-md-10 margin-top text-md-center text-sm-center text-xs-center">
                     <section>
                         <h4>Use another service to log in.</h4>
                         @{

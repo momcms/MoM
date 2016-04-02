@@ -21,5 +21,9 @@ namespace MoM.Web.Controllers
         public IActionResult AdminSecurity() => PartialView();
 
         public IActionResult AdminSettings() => PartialView();
+
+        public IActionResult AdminReports() => PartialView();
+
+        public IActionResult AdminModules() => PartialView();
     }
 }

@@ -20,6 +20,7 @@ using MoM.Module.Extensions;
 using MoM.Module.Middleware;
 using MoM.Module.Config;
 using Microsoft.Extensions.OptionsModel;
+using System.IO;
 
 namespace MoM.Web
 {
@@ -28,7 +29,6 @@ namespace MoM.Web
         protected IConfiguration Configuration;
 
         private string ApplicationBasePath;
-        private string ModulePath;
 
         private IHostingEnvironment HostingEnvironment;
         private IAssemblyLoaderContainer AssemblyLoaderContainer;
@@ -45,11 +45,10 @@ namespace MoM.Web
         {
             HostingEnvironment = hostingEnvironment;
             ApplicationBasePath = applicationEnvironment.ApplicationBasePath;
-            ModulePath = ApplicationBasePath.Substring(0, ApplicationBasePath.LastIndexOf("MoM")) + "artifacts\\bin\\Modules";
             AssemblyLoaderContainer = assemblyLoaderContainer;
             AssemblyLoadContextAccessor = assemblyLoadContextAccessor;
             LibraryManager = libraryManager;
-
+            
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
@@ -77,9 +76,11 @@ namespace MoM.Web
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
+            string extensionsPath = Configuration["Site:ModulePath"];
+            int lastIndex = ApplicationBasePath.LastIndexOf("MoM") == 0 ? ApplicationBasePath.LastIndexOf("src") : ApplicationBasePath.LastIndexOf("MoM");
             // Get assemblies to load as modules
             IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(
-              ModulePath,
+              Path.Combine(ApplicationBasePath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + extensionsPath),
               AssemblyLoaderContainer,
               AssemblyLoadContextAccessor,
               LibraryManager
@@ -113,10 +114,10 @@ namespace MoM.Web
             services.Configure<SiteSettings>(Configuration.GetSection("Site"));
 
             // Inject each module service methods and database items
-            foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
+            foreach (IModule module in Module.Managers.AssemblyManager.GetModules)
             {
-                modules.SetConfiguration(Configuration);
-                modules.ConfigureServices(services);
+                module.SetConfiguration(Configuration);
+                module.ConfigureServices(services);
             }
 
             //Identity
@@ -179,7 +180,8 @@ namespace MoM.Web
             applicationBuilder.UseIdentity();
 
             //If they are configured then add social login services
-            if(Configuration["Site:Authentication:Facebook:Enabled"] == "True")
+            //https://developers.facebook.com/apps
+            if (Configuration["Site:Authentication:Facebook:Enabled"] == "True")
             {
                 applicationBuilder.UseFacebookAuthentication(options =>
                 {
@@ -187,22 +189,22 @@ namespace MoM.Web
                     options.AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"];
                 });
             }
-
+            //https://console.developers.google.com/
             if (Configuration["Site:Authentication:Google:Enabled"] == "True")
             {
                 applicationBuilder.UseGoogleAuthentication(options =>
                 {
-                    options.ClientId = "";
-                    options.ClientSecret = "";
+                    options.ClientId = Configuration["Site:Authentication:Google:ClientId"];
+                    options.ClientSecret = Configuration["Site:Authentication:Google:ClientSecret"];
                 });
             }
-
+            //https://msdn.microsoft.com/en-us/library/bb676626.aspx
             if (Configuration["Site:Authentication:Microsoft:Enabled"] == "True")
             {
                 applicationBuilder.UseMicrosoftAccountAuthentication(options =>
                 {
-                    options.ClientId = "";
-                    options.ClientSecret = "";
+                    options.ClientId = Configuration["Site:Authentication:Microsoft:ClientId"];
+                    options.ClientSecret = Configuration["Site:Authentication:Microsoft:ClientSecret"];
                 });
             }
 
@@ -210,8 +212,8 @@ namespace MoM.Web
             {
                 applicationBuilder.UseTwitterAuthentication(options =>
                 {
-                    options.ConsumerKey = "";
-                    options.ConsumerSecret = "";
+                    options.ConsumerKey = Configuration["Site:Authentication:Twitter:ConsumerKey"];
+                    options.ConsumerSecret = Configuration["Site:Authentication:Twitter:ConsumerSecret"];
                 });
             }
 

@@ -9,6 +9,7 @@
         public Logo Logo { get; set; }
         public string ModulePath { get; set; }
         public string ConnectionString { get; set; }
+        public Email Email { get; set; }
     }
 
     public class Theme
@@ -22,6 +23,7 @@
         public Facebook Facebook { get; set; }
         public Google Google { get; set; }
         public Microsoft Microsoft { get; set; }
+        public Twitter Twitter { get; set; }
     }
 
     public class Facebook
@@ -60,5 +62,16 @@
         public bool UseImageLogo { get; set; }
         public bool UseSvgLogo { get; set; }
         public int Width { get; set; }
+    }
+
+    public class Email
+    {
+        public string HostName { get; set; }
+        public string Password { get; set; }
+        public int Port { get; set; }
+        public bool RequireCredentials { get; set; }
+        public string SenderEmailAdress { get; set; }
+        public string UserName { get; set; }
+        public bool UseSSL { get; set; }
     }
 }

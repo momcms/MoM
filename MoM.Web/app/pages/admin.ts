@@ -31,6 +31,20 @@ declare var System: any;
         loader: () => System.import("app/pages/adminsettings").then(c => c["AdminSettingsComponent"])
     }),
     new AsyncRoute({
+        path: "/modules",
+        name: "AdminModules",
+        useAsDefault: false,
+        data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Modules" },
+        loader: () => System.import("app/pages/adminmodules").then(c => c["AdminModulesComponent"])
+    }),
+    new AsyncRoute({
+        path: "/reports",
+        name: "AdminReports",
+        useAsDefault: false,
+        data: { includeInMenu: true, icon: "fa fa-sitemap fa-2x", title: "Reports" },
+        loader: () => System.import("app/pages/adminreports").then(c => c["AdminReportsComponent"])
+    }),
+    new AsyncRoute({
         path: "/blog",
         name: "AdminBlog",
         useAsDefault: false,

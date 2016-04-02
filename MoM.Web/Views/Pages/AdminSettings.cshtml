@@ -3,29 +3,83 @@
     <tabset>
         <tab>
             <template tab-heading>
-                <i class="fa fa-globe mom-icon"></i><span>Site</span>
+                <i class="fa fa-home mom-icon"></i><span>Site</span>
             </template>
-            Site content
+            <div class="container-fluid margin-top margin-bottom">
+                <form *ngIf="!isLoading" (ngSubmit)="onSaveSiteSettings()" #postForm="ngForm">
+                    <div class="form-group row">
+                        <label for="inputTitle" class="col-sm-2 form-control-label">Title</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" [(ngModel)]="siteSettings.Title" required id="inputTitle" ngControl="title" #title="ngForm" placeholder="Title">
+                            <div [hidden]="title.valid || title.pristine" class="alert alert-danger">Title is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </tab>
+        <tab>
+            <template tab-heading>
+                <i class="fa fa-database mom-icon"></i>
+                <span>Database</span>
+            </template>
+            <div class="container-fluid margin-top margin-bottom">
+                Database content
+            </div>                
         </tab>
         <tab>
             <template tab-heading>
                 <i class="fa fa-paint-brush mom-icon"></i><span>Themes</span>
             </template>
-            Themes content
+            <div class="container-fluid margin-top margin-bottom">
+                Themes content
+            </div>   
+        </tab>
+        <tab>
+            <template tab-heading>
+                <i class="fa fa-envelope-o mom-icon"></i>
+                <span>Messages</span>
+            </template>
+            <div class="container-fluid margin-top margin-bottom">
+                <form *ngIf="!isLoading" (ngSubmit)="onSaveSiteSettings()" #postForm="ngForm">
+                    <div class="form-group row">
+                        <label for="inputEmailHostName" class="col-sm-2 form-control-label">HostName</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" [(ngModel)]="siteSettings.Email.HostName" required id="inputEmailHostName" ngControl="emailHostName" #emailHostName="ngForm" placeholder="HostName">
+                            <div [hidden]="emailHostName.valid || emailHostName.pristine" class="alert alert-danger">Email hostname is required</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-primary" (click)="onCancel()">Cancel</button>
+                            <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>     
         </tab>
         <tab>
             <template tab-heading>
                 <i class="fa fa-search mom-icon"></i>
                 <span>Search</span>
             </template>
-            Search content
+            <div class="container-fluid margin-top margin-bottom">
+                Search content
+            </div>   
         </tab>
         <tab>
             <template tab-heading>
                 <i class="fa fa-tachometer mom-icon"></i>
                 <span>Performance</span>
             </template>
-            Performance content
+            <div class="container-fluid margin-top margin-bottom">
+                Performance content
+            </div> 
         </tab>
     </tabset>
 </mom-admin-settings>
