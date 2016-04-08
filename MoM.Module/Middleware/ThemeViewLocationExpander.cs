@@ -23,10 +23,6 @@ namespace MoM.Module.Middleware
 
         public virtual IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-            foreach(var module in Managers.AssemblyManager.GetModules)
-            {
-
-            }
             List<string> result = viewLocations.Select(f => f.Replace("/Views/", "/Views/Themes/" + context.Values["theme"])).ToList();
             foreach (var viewLocation in viewLocations) //keep the fallback paths
             {

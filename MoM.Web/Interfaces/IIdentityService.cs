@@ -1,10 +1,7 @@
 ﻿using MoM.Module.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace MoM.Module.Interfaces
+namespace MoM.Web.Interfaces
 {
     public interface IIdentityService
     {

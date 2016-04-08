@@ -8,9 +8,10 @@ using MoM.Module.Models;
 namespace MoM.Module.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160407065539_v6")]
+    partial class v6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -347,19 +348,6 @@ namespace MoM.Module.Migrations
                     b.HasAnnotation("Relational:TableName", "NavigationMenuItem");
                 });
 
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenuNavigationMenuItem", b =>
-                {
-                    b.Property<int>("NavigationMenuId");
-
-                    b.Property<int>("NavigationMenuItemId");
-
-                    b.HasKey("NavigationMenuId", "NavigationMenuItemId");
-
-                    b.HasAnnotation("Relational:Schema", "Core");
-
-                    b.HasAnnotation("Relational:TableName", "NavigationMenuNavigationMenuItem");
-                });
-
             modelBuilder.Entity("MoM.Tutorial.Models.HelloPlanet", b =>
                 {
                     b.Property<int>("HelloPlanetId")
@@ -440,17 +428,6 @@ namespace MoM.Module.Migrations
                     b.HasOne("MoM.Module.Models.NavigationMenuItem")
                         .WithMany()
                         .HasForeignKey("ParentNavigationMenuItemId");
-                });
-
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenuNavigationMenuItem", b =>
-                {
-                    b.HasOne("MoM.Module.Models.NavigationMenu")
-                        .WithMany()
-                        .HasForeignKey("NavigationMenuId");
-
-                    b.HasOne("MoM.Module.Models.NavigationMenuItem")
-                        .WithMany()
-                        .HasForeignKey("NavigationMenuItemId");
                 });
         }
     }

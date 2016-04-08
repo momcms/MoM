@@ -1,11 +1,11 @@
-﻿using MoM.Module.Interfaces;
+﻿using MoM.Web.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using MoM.Module.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Authorization;
 
-namespace MoM.Module.Services
+namespace MoM.Web.Services
 {
     [Authorize]
     public class IdentityService : IIdentityService
@@ -30,6 +30,17 @@ namespace MoM.Module.Services
                     else
                         return UserManager.Users
                             .OrderByDescending(p => p.UserName)
+                            .Skip(pageNo * pageSize)
+                            .Take(pageSize);
+                case "Email":
+                    if (sortByAscending)
+                        return UserManager.Users
+                            .OrderBy(p => p.Email)
+                            .Skip(pageNo * pageSize)
+                            .Take(pageSize);
+                    else
+                        return UserManager.Users
+                            .OrderByDescending(p => p.Email)
                             .Skip(pageNo * pageSize)
                             .Take(pageSize);
                 default:

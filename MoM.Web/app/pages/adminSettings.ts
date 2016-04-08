@@ -1,13 +1,13 @@
 ﻿import {Component, OnInit} from "angular2/core";
-import {TAB_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
+import {TAB_DIRECTIVES, BUTTON_DIRECTIVES} from 'ng2-bootstrap/ng2-bootstrap';
 import {SiteSettings, Theme, Authentication, Facebook, Google, Microsoft, Twitter, Logo, Email} from "../core/interfaces/iSiteSettings";
-import {SiteSettingsService} from '../core/services/sitesettingsservice';
+import {AdminSiteSettingsService} from '../core/services/adminsitesettingsservice';
 import {Router, RouteParams} from 'angular2/router';
 
 @Component({
     selector: "mom-admin-settings",
-    directives: [TAB_DIRECTIVES],
-    providers: [SiteSettingsService],
+    directives: [TAB_DIRECTIVES, BUTTON_DIRECTIVES],
+    providers: [AdminSiteSettingsService],
     templateUrl: "/pages/adminsettings"
 })
 export class AdminSettingsComponent implements OnInit {
@@ -15,7 +15,7 @@ export class AdminSettingsComponent implements OnInit {
     isLoading: boolean = false;
 
     constructor(
-        private service: SiteSettingsService,
+        private service: AdminSiteSettingsService,
         private router: Router,
         private routeParams: RouteParams
     ) { }

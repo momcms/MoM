@@ -4,7 +4,7 @@ import {ExtensionInfo} from "../interfaces/iExtensionInfo";
 import 'rxjs/Rx';
 
 @Injectable()
-export class ModuleService {
+export class AdminModuleService {
     constructor(private http: Http) { }
 
     getInstalledModules(onNext: (json: ExtensionInfo) => void) {

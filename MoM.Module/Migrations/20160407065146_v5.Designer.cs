@@ -8,9 +8,10 @@ using MoM.Module.Models;
 namespace MoM.Module.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160407065146_v5")]
+    partial class v5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.0-rc1-16348")
@@ -301,65 +302,6 @@ namespace MoM.Module.Migrations
                     b.HasAnnotation("Relational:TableName", "Module");
                 });
 
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenu", b =>
-                {
-                    b.Property<int>("NavigationMenuId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("DisplayName")
-                        .HasAnnotation("MaxLength", 100);
-
-                    b.Property<string>("IconClass")
-                        .HasAnnotation("MaxLength", 100);
-
-                    b.Property<string>("Name")
-                        .HasAnnotation("MaxLength", 100);
-
-                    b.HasKey("NavigationMenuId");
-
-                    b.HasAnnotation("Relational:Schema", "Core");
-
-                    b.HasAnnotation("Relational:TableName", "NavigationMenu");
-                });
-
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenuItem", b =>
-                {
-                    b.Property<int>("NavigationMenuItemId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("DisplayName")
-                        .HasAnnotation("MaxLength", 100);
-
-                    b.Property<string>("IconClass")
-                        .HasAnnotation("MaxLength", 100);
-
-                    b.Property<string>("Name")
-                        .HasAnnotation("MaxLength", 100);
-
-                    b.Property<int?>("ParentNavigationMenuItemId");
-
-                    b.Property<string>("RouterLink");
-
-                    b.HasKey("NavigationMenuItemId");
-
-                    b.HasAnnotation("Relational:Schema", "Core");
-
-                    b.HasAnnotation("Relational:TableName", "NavigationMenuItem");
-                });
-
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenuNavigationMenuItem", b =>
-                {
-                    b.Property<int>("NavigationMenuId");
-
-                    b.Property<int>("NavigationMenuItemId");
-
-                    b.HasKey("NavigationMenuId", "NavigationMenuItemId");
-
-                    b.HasAnnotation("Relational:Schema", "Core");
-
-                    b.HasAnnotation("Relational:TableName", "NavigationMenuNavigationMenuItem");
-                });
-
             modelBuilder.Entity("MoM.Tutorial.Models.HelloPlanet", b =>
                 {
                     b.Property<int>("HelloPlanetId")
@@ -433,24 +375,6 @@ namespace MoM.Module.Migrations
                     b.HasOne("MoM.Module.Models.ClientRouteConfig")
                         .WithMany()
                         .HasForeignKey("ParentClientRouteConfigId");
-                });
-
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenuItem", b =>
-                {
-                    b.HasOne("MoM.Module.Models.NavigationMenuItem")
-                        .WithMany()
-                        .HasForeignKey("ParentNavigationMenuItemId");
-                });
-
-            modelBuilder.Entity("MoM.Module.Models.NavigationMenuNavigationMenuItem", b =>
-                {
-                    b.HasOne("MoM.Module.Models.NavigationMenu")
-                        .WithMany()
-                        .HasForeignKey("NavigationMenuId");
-
-                    b.HasOne("MoM.Module.Models.NavigationMenuItem")
-                        .WithMany()
-                        .HasForeignKey("NavigationMenuItemId");
                 });
         }
     }

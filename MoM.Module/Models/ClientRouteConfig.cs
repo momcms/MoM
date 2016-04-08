@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using MoM.Module.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -24,8 +24,5 @@ namespace MoM.Module.Models
         public ClientRouteConfigType Type { get; set; }
         [StringLength(100)]
         public string IconClass { get; set; }
-        public bool ShowInMenu { get; set; }
-    }
-
-    public enum ClientRouteConfigType { Page, Widget }
+    }    
 }

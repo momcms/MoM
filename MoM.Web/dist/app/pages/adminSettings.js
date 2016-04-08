@@ -1,4 +1,4 @@
-System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/services/sitesettingsservice', 'angular2/router'], function(exports_1) {
+System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/services/adminsitesettingsservice', 'angular2/router'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, ng2_bootstrap_1, sitesettingsservice_1, router_1;
+    var core_1, ng2_bootstrap_1, adminsitesettingsservice_1, router_1;
     var AdminSettingsComponent;
     return {
         setters:[
@@ -18,8 +18,8 @@ System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/servic
             function (ng2_bootstrap_1_1) {
                 ng2_bootstrap_1 = ng2_bootstrap_1_1;
             },
-            function (sitesettingsservice_1_1) {
-                sitesettingsservice_1 = sitesettingsservice_1_1;
+            function (adminsitesettingsservice_1_1) {
+                adminsitesettingsservice_1 = adminsitesettingsservice_1_1;
             },
             function (router_1_1) {
                 router_1 = router_1_1;
@@ -64,11 +64,11 @@ System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/servic
                 AdminSettingsComponent = __decorate([
                     core_1.Component({
                         selector: "mom-admin-settings",
-                        directives: [ng2_bootstrap_1.TAB_DIRECTIVES],
-                        providers: [sitesettingsservice_1.SiteSettingsService],
+                        directives: [ng2_bootstrap_1.TAB_DIRECTIVES, ng2_bootstrap_1.BUTTON_DIRECTIVES],
+                        providers: [adminsitesettingsservice_1.AdminSiteSettingsService],
                         templateUrl: "/pages/adminsettings"
                     }), 
-                    __metadata('design:paramtypes', [sitesettingsservice_1.SiteSettingsService, router_1.Router, router_1.RouteParams])
+                    __metadata('design:paramtypes', [adminsitesettingsservice_1.AdminSiteSettingsService, router_1.Router, router_1.RouteParams])
                 ], AdminSettingsComponent);
                 return AdminSettingsComponent;
             })();

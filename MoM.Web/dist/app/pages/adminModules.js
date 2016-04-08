@@ -1,4 +1,4 @@
-System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/services/moduleservice'], function(exports_1) {
+System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/services/adminmoduleservice'], function(exports_1) {
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,7 +8,7 @@ System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/servic
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, ng2_bootstrap_1, moduleservice_1;
+    var core_1, ng2_bootstrap_1, adminmoduleservice_1;
     var AdminModulesComponent;
     return {
         setters:[
@@ -18,8 +18,8 @@ System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/servic
             function (ng2_bootstrap_1_1) {
                 ng2_bootstrap_1 = ng2_bootstrap_1_1;
             },
-            function (moduleservice_1_1) {
-                moduleservice_1 = moduleservice_1_1;
+            function (adminmoduleservice_1_1) {
+                adminmoduleservice_1 = adminmoduleservice_1_1;
             }],
         execute: function() {
             AdminModulesComponent = (function () {
@@ -45,10 +45,10 @@ System.register(["angular2/core", 'ng2-bootstrap/ng2-bootstrap', '../core/servic
                     core_1.Component({
                         selector: "mom-admin-modules",
                         directives: [ng2_bootstrap_1.TAB_DIRECTIVES],
-                        providers: [moduleservice_1.ModuleService],
+                        providers: [adminmoduleservice_1.AdminModuleService],
                         templateUrl: "/pages/adminmodules"
                     }), 
-                    __metadata('design:paramtypes', [moduleservice_1.ModuleService])
+                    __metadata('design:paramtypes', [adminmoduleservice_1.AdminModuleService])
                 ], AdminModulesComponent);
                 return AdminModulesComponent;
             })();

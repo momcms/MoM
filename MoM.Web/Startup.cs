@@ -136,6 +136,13 @@ namespace MoM.Web
             services.AddTransient<DefaultAssemblyProvider>();
             services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
 
+            //add watch to changes in appsettings.json
+            var appConfig = new FileInfo(ApplicationBasePath + "\\appsettings.json");
+            
+            services.AddInstance<IAppSettingsWatcher>(new AppsettingsWatcher(appConfig, Configuration));
+
+            FileSystemWatcher appSettingsWatcher = services.BuildServiceProvider().GetService<IAppSettingsWatcher>().WatchAppSettings();
+
             // configure view locations for the custom theme engine
             services.Configure<RazorViewEngineOptions>(options =>
             {

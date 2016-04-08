@@ -4,7 +4,7 @@ import {SiteSettings, Theme, Authentication, Facebook, Google, Microsoft, Twitte
 import 'rxjs/Rx';
 
 @Injectable()
-export class SiteSettingsService {
+export class AdminSiteSettingsService {
     constructor(private http: Http) { }
 
     getSiteSettings(onNext: (json: SiteSettings) => void) {
