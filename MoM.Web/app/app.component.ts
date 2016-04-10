@@ -38,14 +38,14 @@ export class AppComponent implements OnInit {
                     name: "Home",
                     useAsDefault: true,
                     data: { includeInMenu: true },
-                    loader: () => System.import("app/pages/home").then(c => c["HomeComponent"])
+                    loader: () => System.import("app/modules/MoM.CMS/pages/home").then(c => c["HomeComponent"])
                 }),
                 new AsyncRoute({
                     path: "/services",
                     name: "Services",
                     useAsDefault: false,
                     data: { includeInMenu: true },
-                    loader: () => System.import("app/pages/services").then(c => c["ServicesComponent"])
+                    loader: () => System.import("app/modules/MoM.CMS/pages/services").then(c => c["ServicesComponent"])
                 }),
                 new AsyncRoute({
                     path: "/blog",
@@ -66,7 +66,7 @@ export class AppComponent implements OnInit {
                     name: "Admin",
                     useAsDefault: false,
                     data: { includeInMenu: true },
-                    loader: () => System.import("app/pages/admin").then(c => c["AdminComponent"])
+                    loader: () => System.import("app/modules/MoM.CMS/pages/admin").then(c => c["AdminComponent"])
                 })
             ];
 

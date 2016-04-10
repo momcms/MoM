@@ -6,24 +6,6 @@ namespace MoM.Web.Controllers
 {
     public class PagesController : Controller
     {
-        public IActionResult App() => PartialView();
-
-        public IActionResult Public() => PartialView();
-
-        public IActionResult Home() => PartialView();
-
-        public IActionResult Services() => PartialView();
-
-        public IActionResult Admin() => PartialView();
-
-        public IActionResult AdminContent() => PartialView();
-
-        public IActionResult AdminSecurity() => PartialView();
-
-        public IActionResult AdminSettings() => PartialView();
-
-        public IActionResult AdminReports() => PartialView();
-
-        public IActionResult AdminModules() => PartialView();
+        public IActionResult App() => PartialView();        
     }
 }

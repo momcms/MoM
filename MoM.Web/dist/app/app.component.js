@@ -47,14 +47,14 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
                                 name: "Home",
                                 useAsDefault: true,
                                 data: { includeInMenu: true },
-                                loader: function () { return System.import("app/pages/home").then(function (c) { return c["HomeComponent"]; }); }
+                                loader: function () { return System.import("app/modules/MoM.CMS/pages/home").then(function (c) { return c["HomeComponent"]; }); }
                             }),
                             new router_1.AsyncRoute({
                                 path: "/services",
                                 name: "Services",
                                 useAsDefault: false,
                                 data: { includeInMenu: true },
-                                loader: function () { return System.import("app/pages/services").then(function (c) { return c["ServicesComponent"]; }); }
+                                loader: function () { return System.import("app/modules/MoM.CMS/pages/services").then(function (c) { return c["ServicesComponent"]; }); }
                             }),
                             new router_1.AsyncRoute({
                                 path: "/blog",
@@ -75,7 +75,7 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
                                 name: "Admin",
                                 useAsDefault: false,
                                 data: { includeInMenu: true },
-                                loader: function () { return System.import("app/pages/admin").then(function (c) { return c["AdminComponent"]; }); }
+                                loader: function () { return System.import("app/modules/MoM.CMS/pages/admin").then(function (c) { return c["AdminComponent"]; }); }
                             })
                         ];
                         this.router.config(this.routes);
