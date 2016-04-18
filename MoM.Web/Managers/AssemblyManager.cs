@@ -26,19 +26,19 @@ namespace MoM.Web.Managers
             }
 
             // We must not load all of the assemblies
-            foreach (Library library in libraryManager.GetLibraries())
-                if (IsCandidateLibrary(libraryManager, library))
-                    assemblies.AddRange(library.Assemblies.Select(an => assemblyLoadContext.Load(an)));
+            //foreach (Library library in libraryManager.GetLibraries())
+            //    if (IsCandidateLibrary(libraryManager, library))
+            //        assemblies.AddRange(library.Assemblies.Select(an => assemblyLoadContext.Load(an)));
 
             return assemblies;
         }
 
-        private static bool IsCandidateLibrary(ILibraryManager libraryManager, Library library)
-        {
-            if (library.Dependencies.Any(d => d.Contains("ExtCore.Infrastructure")))
-                return true;
+        //private static bool IsCandidateLibrary(ILibraryManager libraryManager, Library library)
+        //{
+        //    if (library.Dependencies.Any(d => d.Contains("ExtCore.Infrastructure")))
+        //        return true;
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }
