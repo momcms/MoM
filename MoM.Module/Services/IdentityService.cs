@@ -1,4 +1,4 @@
-﻿using MoM.Web.Interfaces;
+﻿using MoM.Module.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using MoM.Module.Models;
@@ -6,19 +6,24 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity.EntityFramework;
 using MoM.Module.Dtos;
+using System;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
-namespace MoM.Web.Services
+namespace MoM.Module.Services
 {
     [Authorize]
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplicationUser> UserManager;
         private readonly RoleManager<IdentityRole> RoleManager;
+        private readonly ILogger Logger;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+        public IdentityService(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, ILogger logger)
         {
             UserManager = userManager;
             RoleManager = roleManager;
+            Logger = logger;
         }
 
         public IEnumerable<UserDto> GetUsers(int pageNo, int pageSize, string sortColumn, bool sortByAscending)
@@ -55,19 +60,31 @@ namespace MoM.Web.Services
             }
         }
 
-        public void CreateUser(UserDto user)
+        public async Task CreateUser(UserDto user, string password)
         {
-
+            var result = await UserManager.CreateAsync(user.ToEntity(), password);
+            if (!result.Succeeded)
+            {
+                Logger.LogWarning(result.Errors.ToString());
+            }
         }
 
-        public void UpdateUser(UserDto user)
+        public async Task UpdateUser(UserDto user)
         {
-
+            var result = await UserManager.UpdateAsync(user.ToEntity());
+            if (!result.Succeeded)
+            {
+                Logger.LogWarning(result.Errors.ToString());
+            }
         }
 
-        public void DeleteUser(UserDto user)
+        public async Task DeleteUser(UserDto user)
         {
-
+            var result = await UserManager.DeleteAsync(user.ToEntity());
+            if (!result.Succeeded)
+            {
+                Logger.LogWarning(result.Errors.ToString());
+            }
         }
 
         public IEnumerable<RoleDto> GetRoles(int pageNo, int pageSize, string sortColumn, bool sortByAscending)
@@ -79,6 +96,33 @@ namespace MoM.Web.Services
                             .OrderByDescending(p => p.Name)
                             .Skip(pageNo * pageSize)
                             .Take(pageSize).ToDTOs();
+            }
+        }
+
+        public async Task CreateRole(string roleName)
+        {
+            var result = await RoleManager.CreateAsync(new IdentityRole { Name=roleName, NormalizedName = roleName.ToUpper(), ConcurrencyStamp= new Guid().ToString() });
+            if (!result.Succeeded)
+            {
+                var error = result.Errors;
+            }
+        }
+
+        public async Task UpdateRole(RoleDto role)
+        {
+            var result = await RoleManager.UpdateAsync(role.ToEntity());
+            if (!result.Succeeded)
+            {
+                Logger.LogWarning(result.Errors.ToString());
+            }
+        }
+
+        public async Task DeleteRole(RoleDto role)
+        {
+            var result = await RoleManager.DeleteAsync(role.ToEntity());
+            if (!result.Succeeded)
+            {
+                Logger.LogWarning(result.Errors.ToString());
             }
         }
     }
