@@ -18,7 +18,7 @@ namespace MoM.Web.Loaders
 
         public Assembly Load(AssemblyName assemblyName)
         {
-            return this.AssemblyLoadContext.LoadFile(Path.Combine(DirectoryPath, assemblyName + ".dll"));
+            return AssemblyLoadContext.LoadFile(Path.Combine(DirectoryPath, assemblyName + ".dll"));
         }
 
         public IntPtr LoadUnmanagedLibrary(string name)
