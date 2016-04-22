@@ -83,13 +83,22 @@ gulp.task('prismjs', ['clean-libs'], function () {
         .pipe(gulp.dest(paths.lib + 'extensions/prismjs/'));
 });
 
+gulp.task('ng2-dragula', ['clean-libs'], function () {
+    return gulp.src([paths.npm + 'ng2-dragula/**/*.js', paths.npm + 'ng2-dragula/**/*.map'])
+        .pipe(gulp.dest(paths.lib + 'extensions/ng2-dragula/'));
+});
+gulp.task('dragula', ['clean-libs'], function () {
+    return gulp.src([paths.npm + 'dragula/dist/**/*.js', paths.npm + 'dragula/**/*.map'])
+        .pipe(gulp.dest(paths.lib + 'extensions/dragula/'));
+});
+
 
 gulp.task('ng2-bootstrap', ['clean-libs'], function () {
     return gulp.src([paths.npm + 'ng2-bootstrap/**/*.js', paths.npm + 'ng2-bootstrap/**/*.map'])
         .pipe(gulp.dest(paths.lib + 'extensions/ng2-bootstrap/'));
 });
 
-gulp.task('rxjs', ['clean-libs', 'ng2-prism', 'prismjs', 'ng2-bootstrap'], function () {
+gulp.task('rxjs', ['clean-libs', 'ng2-prism', 'prismjs', 'ng2-bootstrap', 'ng2-dragula', 'dragula'], function () {
     return gulp.src([paths.npm + 'rxjs/**/*.js', paths.npm + 'rxjs/**/*.map'])
         .pipe(gulp.dest(paths.lib + 'rxjs/'));
 });
