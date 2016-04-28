@@ -15,7 +15,7 @@
     </div>
     <div class="hidden-md-down" *ngIf="routes != null">
         <nav class="nav navbar-nav pull-xs-left">
-            <a class="nav-item nav-link" *ngFor="#rt of menu" [routerLink]="[rt.name]">{{rt.name}}</a>
+            <a class="nav-item nav-link" *ngFor="let rt of menu" [routerLink]="[rt.name]">{{rt.name}}</a>
         </nav>
         <form class="pull-xs-right">
             <label class="sr-only" for="search">Search...</label>
@@ -27,7 +27,7 @@
     </div>
     <div class="container-fluid mom-collapse-menu" *ngIf="routes != null" [collapse]="isCollapsed">
         <nav class="nav navbar-nav pull-xs-left">
-            <a class="nav-item nav-link" *ngFor="#rt of menu" [routerLink]="[rt.name]">{{rt.name}}</a>
+            <a class="nav-item nav-link" *ngFor="let rt of menu" [routerLink]="[rt.name]">{{rt.name}}</a>
         </nav>
         <form class="pull-xs-right">
             <label class="sr-only" for="search">Search...</label>

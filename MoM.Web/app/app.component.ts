@@ -1,15 +1,16 @@
 ﻿// Add all operators to Observable
 import 'rxjs/Rx';
 import {Component, OnInit} from "angular2/core";
-import {AsyncRoute, Router, RouterLink, RouteDefinition, RouteConfig, Location, ROUTER_DIRECTIVES, RouterOutlet} from "angular2/router";
-import { Collapse } from 'ng2-bootstrap/ng2-bootstrap';
+import {AsyncRoute, Router, RouterLink, RouteDefinition, RouteConfig, ROUTER_DIRECTIVES, RouterOutlet} from "angular2/router";
+import { Location } from "angular2/platform/common"
+import { CollapseDirective } from 'ng2-bootstrap/ng2-bootstrap';
 
 declare var System: any;
 
 @Component({
     selector: "app",
     templateUrl: "/pages/app",
-    directives: [RouterOutlet, RouterLink, ROUTER_DIRECTIVES, Collapse]
+    directives: [RouterOutlet, RouterLink, ROUTER_DIRECTIVES, CollapseDirective]
 })
 
 export class AppComponent implements OnInit {

@@ -1,4 +1,4 @@
-System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/ng2-bootstrap'], function(exports_1, context_1) {
+System.register(['rxjs/Rx', "angular2/core", "angular2/router", "angular2/platform/common", 'ng2-bootstrap/ng2-bootstrap'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, ng2_bootstrap_1;
+    var core_1, router_1, common_1, ng2_bootstrap_1;
     var AppComponent;
     return {
         setters:[
@@ -20,6 +20,9 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
             },
             function (router_1_1) {
                 router_1 = router_1_1;
+            },
+            function (common_1_1) {
+                common_1 = common_1_1;
             },
             function (ng2_bootstrap_1_1) {
                 ng2_bootstrap_1 = ng2_bootstrap_1_1;
@@ -97,9 +100,9 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", 'ng2-bootstrap/n
                     core_1.Component({
                         selector: "app",
                         templateUrl: "/pages/app",
-                        directives: [router_1.RouterOutlet, router_1.RouterLink, router_1.ROUTER_DIRECTIVES, ng2_bootstrap_1.Collapse]
+                        directives: [router_1.RouterOutlet, router_1.RouterLink, router_1.ROUTER_DIRECTIVES, ng2_bootstrap_1.CollapseDirective]
                     }), 
-                    __metadata('design:paramtypes', [router_1.Router, router_1.Location])
+                    __metadata('design:paramtypes', [router_1.Router, common_1.Location])
                 ], AppComponent);
                 return AppComponent;
             }());
