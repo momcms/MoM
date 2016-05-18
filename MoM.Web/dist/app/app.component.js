@@ -62,6 +62,13 @@ System.register(['rxjs/Rx', "angular2/core", "angular2/router", "angular2/platfo
                                 loader: function () { return System.import("app/modules/MoM.CMS/pages/services").then(function (c) { return c["ServicesComponent"]; }); }
                             }),
                             new router_1.AsyncRoute({
+                                path: "/products",
+                                name: "Products",
+                                useAsDefault: false,
+                                data: { includeInMenu: true },
+                                loader: function () { return System.import("app/modules/MoM.CMS/pages/products").then(function (c) { return c["ProductsComponent"]; }); }
+                            }),
+                            new router_1.AsyncRoute({
                                 path: "/blog",
                                 name: "Blog",
                                 useAsDefault: false,

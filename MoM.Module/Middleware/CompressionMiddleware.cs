@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Http;
+using System.Collections.Generic;
 
 namespace MoM.Module.Middleware
 {
@@ -37,6 +38,11 @@ namespace MoM.Module.Middleware
                     }
                 }
             }
+        }
+
+        public IEnumerable<string> FileExtensions()
+        {
+            return new string[] {  };
         }
     }
 }

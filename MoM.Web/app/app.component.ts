@@ -49,6 +49,13 @@ export class AppComponent implements OnInit {
                     loader: () => System.import("app/modules/MoM.CMS/pages/services").then(c => c["ServicesComponent"])
                 }),
                 new AsyncRoute({
+                    path: "/products",
+                    name: "Products",
+                    useAsDefault: false,
+                    data: { includeInMenu: true },
+                    loader: () => System.import("app/modules/MoM.CMS/pages/products").then(c => c["ProductsComponent"])
+                }),
+                new AsyncRoute({
                     path: "/blog",
                     name: "Blog",
                     useAsDefault: false,
