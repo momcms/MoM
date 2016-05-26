@@ -16,17 +16,12 @@
         "Hosting:Environment": "Development"
       }
     },
-    "IIS Express Staging": {
-      "commandName": "IISExpress",
+    "Web": {
+      "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "http://localhost:5000",
       "environmentVariables": {
-        "Hosting:Environment": "Staging"
-      }
-    },
-    "web": {
-      "commandName": "web",
-      "environmentVariables": {
-        "Hosting:Environment": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
   }

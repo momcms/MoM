@@ -1,26 +1,30 @@
-﻿using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.FileProviders;
-using Microsoft.AspNet.Hosting;
-using Microsoft.AspNet.Mvc.Infrastructure;
-using Microsoft.AspNet.Mvc.Razor;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.PlatformAbstractions;
-using MoM.Module.Interfaces;
 using MoM.Web.Providers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Data.Entity;
-using MoM.Module.Models;
-using Microsoft.AspNet.Identity.EntityFramework;
-using MoM.Module.Services;
-using MoM.Module.Extensions;
-using MoM.Module.Middleware;
-using MoM.Module.Config;
-using Microsoft.Extensions.OptionsModel;
 using System.IO;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.VisualStudio.Web.CodeGeneration.DotNet;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.Extensions.FileProviders;
+using MoM.Module.Interfaces;
+using MoM.Module.Services;
+using MoM.Module.Config;
+using MoM.Module.Models;
+using MoM.Module.Middleware;
+using Microsoft.AspNetCore.Builder;
+using MoM.Module.Extensions;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MoM.Web.Managers;
+using Microsoft.CodeAnalysis;
+using Microsoft.AspNetCore.Mvc.Razor.Compilation;
+using System;
+using MoM.Module.Managers;
 
 namespace MoM.Web
 {
@@ -31,26 +35,15 @@ namespace MoM.Web
         private string ApplicationBasePath;
 
         private IHostingEnvironment HostingEnvironment;
-        private IAssemblyLoaderContainer AssemblyLoaderContainer;
-        private IAssemblyLoadContextAccessor AssemblyLoadContextAccessor;
         private ILibraryManager LibraryManager;
 
-        public Startup(
-            IHostingEnvironment hostingEnvironment, 
-            IApplicationEnvironment applicationEnvironment, 
-            IAssemblyLoaderContainer assemblyLoaderContainer, 
-            IAssemblyLoadContextAccessor assemblyLoadContextAccessor, 
-            ILibraryManager libraryManager
-            )
+        public Startup(IHostingEnvironment hostingEnvironment)
         {
             HostingEnvironment = hostingEnvironment;
-            ApplicationBasePath = applicationEnvironment.ApplicationBasePath;
-            AssemblyLoaderContainer = assemblyLoaderContainer;
-            AssemblyLoadContextAccessor = assemblyLoadContextAccessor;
-            LibraryManager = libraryManager;
             
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .SetBasePath(hostingEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
 
 
@@ -74,28 +67,19 @@ namespace MoM.Web
         public virtual void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddApplicationInsightsTelemetry(Configuration);
-
-            string extensionsPath = Configuration["Site:ModulePath"];
-            int lastIndex = ApplicationBasePath.LastIndexOf("MoM") == 0 ? ApplicationBasePath.LastIndexOf("src") : ApplicationBasePath.LastIndexOf("MoM");
-            // Get assemblies to load as modules
-            IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(
-              Path.Combine(ApplicationBasePath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + extensionsPath),
-              AssemblyLoaderContainer,
-              AssemblyLoadContextAccessor,
-              LibraryManager
-            );
-            Module.Managers.AssemblyManager.SetAssemblies(assemblies);
-
-            services.AddCaching();
+            //services.AddApplicationInsightsTelemetry(Configuration);
+            DiscoverAssemblies();
+            HostingEnvironment.WebRootFileProvider = CreateCompositeFileProvider();
+            AddMvcServices(services);
+            //services.AddCaching();
 
             //services.AddGlimpse();
 
             // Load MVC and add precompiled views to mvc from the modules
-            services.AddMvc().AddPrecompiledRazorViews(Module.Managers.AssemblyManager.GetAssemblies.ToArray());
-            services.Configure<RazorViewEngineOptions>(options => {
-                options.FileProvider = GetFileProvider(ApplicationBasePath);
-            });
+            //services.AddMvc().AddPrecompiledRazorViews(Module.Managers.AssemblyManager.GetAssemblies.ToArray());
+            //services.Configure<RazorViewEngineOptions>(options => {
+            //    options.FileProvider = GetFileProvider(ApplicationBasePath);
+            //});
 
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
@@ -111,10 +95,11 @@ namespace MoM.Web
             // }
             // Use in method like:
             // var theme = SiteSettings.Value.Theme;
-            services.Configure<SiteSettings>(Configuration.GetSection("Site"));
+
+            //services.Configure<SiteSettings>(Configuration.GetSection("Site"));
 
             // Inject each module service methods and database items
-            foreach (IModule module in Module.Managers.AssemblyManager.GetModules)
+            foreach (IModule module in ExtensionManager.Extensions)
             {
                 module.SetConfiguration(Configuration);
                 module.ConfigureServices(services);
@@ -122,7 +107,7 @@ namespace MoM.Web
 
             //Identity
             services.AddEntityFramework()
-                .AddSqlServer()
+                //.AddSqlServer()
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration["Site:ConnectionString"]));
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
@@ -133,13 +118,13 @@ namespace MoM.Web
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-            services.AddTransient<DefaultAssemblyProvider>();
-            services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
+            //services.AddTransient<DefaultAssemblyProvider>();
+            //services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
 
             //add watch to changes in appsettings.json
             var appConfig = new FileInfo(ApplicationBasePath + "\\appsettings.json");
             
-            services.AddInstance<IAppSettingsWatcher>(new AppsettingsWatcher(appConfig, Configuration));
+            services.AddSingleton<IAppSettingsWatcher>(new AppsettingsWatcher(appConfig, Configuration));
 
             FileSystemWatcher appSettingsWatcher = services.BuildServiceProvider().GetService<IAppSettingsWatcher>().WatchAppSettings();
 
@@ -169,7 +154,7 @@ namespace MoM.Web
                 applicationBuilder.UseExceptionHandler("/Error/Index");
             }
 
-            applicationBuilder.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
+            //applicationBuilder.UseIISPlatformHandler(options => options.AuthenticationDescriptions.Clear());
 
             // Configure Session.
             //applicationBuilder.UseSession();
@@ -190,37 +175,37 @@ namespace MoM.Web
             //https://developers.facebook.com/apps
             if (Configuration["Site:Authentication:Facebook:Enabled"] == "True")
             {
-                applicationBuilder.UseFacebookAuthentication(options =>
+                applicationBuilder.UseFacebookAuthentication(new FacebookOptions()
                 {
-                    options.AppId = Configuration["Site:Authentication:Facebook:AppId"];
-                    options.AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"];
+                    AppId = Configuration["Site:Authentication:Facebook:AppId"],
+                    AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"]
                 });
             }
             //https://console.developers.google.com/
             if (Configuration["Site:Authentication:Google:Enabled"] == "True")
             {
-                applicationBuilder.UseGoogleAuthentication(options =>
+                applicationBuilder.UseGoogleAuthentication(new GoogleOptions()
                 {
-                    options.ClientId = Configuration["Site:Authentication:Google:ClientId"];
-                    options.ClientSecret = Configuration["Site:Authentication:Google:ClientSecret"];
+                    ClientId = Configuration["Site:Authentication:Google:ClientId"],
+                    ClientSecret = Configuration["Site:Authentication:Google:ClientSecret"]
                 });
             }
             //https://msdn.microsoft.com/en-us/library/bb676626.aspx
             if (Configuration["Site:Authentication:Microsoft:Enabled"] == "True")
             {
-                applicationBuilder.UseMicrosoftAccountAuthentication(options =>
+                applicationBuilder.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
                 {
-                    options.ClientId = Configuration["Site:Authentication:Microsoft:ClientId"];
-                    options.ClientSecret = Configuration["Site:Authentication:Microsoft:ClientSecret"];
+                    ClientId = Configuration["Site:Authentication:Microsoft:ClientId"],
+                    ClientSecret = Configuration["Site:Authentication:Microsoft:ClientSecret"]
                 });
             }
 
             if (Configuration["Site:Authentication:Twitter:Enabled"] == "True")
             {
-                applicationBuilder.UseTwitterAuthentication(options =>
+                applicationBuilder.UseTwitterAuthentication(new TwitterOptions()
                 {
-                    options.ConsumerKey = Configuration["Site:Authentication:Twitter:ConsumerKey"];
-                    options.ConsumerSecret = Configuration["Site:Authentication:Twitter:ConsumerSecret"];
+                    ConsumerKey = Configuration["Site:Authentication:Twitter:ConsumerKey"],
+                    ConsumerSecret = Configuration["Site:Authentication:Twitter:ConsumerSecret"]
                 });
             }
 
@@ -228,8 +213,10 @@ namespace MoM.Web
             applicationBuilder.UseAuthorizeCorrectly();
 
             // Inject each module config methods
-            foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
-                modules.Configure(applicationBuilder, hostingEnvironment);
+            //foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
+            //    modules.Configure(applicationBuilder, hostingEnvironment);
+            foreach (IModule module in ExtensionManager.Extensions)
+                module.Configure(applicationBuilder);
 
             // Routes for MVC (note that Angular will also add routes)
             applicationBuilder.UseMvc(routeBuilder =>
@@ -241,25 +228,66 @@ namespace MoM.Web
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
                 // Inject each module routebuilder methods
-                foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
-                    modules.RegisterRoutes(routeBuilder);
+                //foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
+                //    modules.RegisterRoutes(routeBuilder);
+                foreach (IModule module in ExtensionManager.Extensions)
+                    module.RegisterRoutes(routeBuilder);
             });
 
             //todo add initial data and run migrations
         }
 
-        public IFileProvider GetFileProvider(string path)
+        private void DiscoverAssemblies()
         {
-            IEnumerable<IFileProvider> fileProviders = new IFileProvider[] { new PhysicalFileProvider(path) };
+            int lastIndex = HostingEnvironment.ContentRootPath.LastIndexOf("MoM") == 0 ? HostingEnvironment.ContentRootPath.LastIndexOf("src") : HostingEnvironment.ContentRootPath.LastIndexOf("MoM");
+            string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"];
+            
+            //string extensionsPath = this.hostingEnvironment.ContentRootPath + this.configurationRoot["Extensions:Path"];
+            IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(extensionsPath);
 
-            return new CompositeFileProvider(
-                fileProviders.Concat(
-                Module.Managers.AssemblyManager.GetAssemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
-              )
+            ExtensionManager.SetAssemblies(assemblies);
+        }
+
+        private void AddMvcServices(IServiceCollection services)
+        {
+            IMvcBuilder mvcBuilder = services.AddMvc();
+            List<MetadataReference> metadataReferences = new List<MetadataReference>();
+
+            foreach (Assembly assembly in ExtensionManager.Assemblies)
+            {
+                mvcBuilder.AddApplicationPart(assembly);
+                metadataReferences.Add(MetadataReference.CreateFromFile(assembly.Location));
+            }
+
+            mvcBuilder.AddRazorOptions(
+              o =>
+              {
+                  foreach (Assembly assembly in ExtensionManager.Assemblies)
+                      o.FileProviders.Add(new EmbeddedFileProvider(assembly, assembly.GetName().Name));
+
+                  Action<RoslynCompilationContext> previous = o.CompilationCallback;
+
+                  o.CompilationCallback = c =>
+                  {
+                      previous?.Invoke(c);
+
+                      c.Compilation = c.Compilation.AddReferences(metadataReferences);
+                  };
+              }
             );
         }
 
-        // Entry point for the application.
-        public static void Main(string[] args) => WebApplication.Run<Startup>(args);
+        private IFileProvider CreateCompositeFileProvider()
+        {
+            IEnumerable<IFileProvider> fileProviders = new IFileProvider[] {
+                HostingEnvironment.WebRootFileProvider
+            };
+
+            return new Providers.CompositeFileProvider(
+              fileProviders.Concat(
+                ExtensionManager.Assemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
+              )
+            );
+        }
     }
 }

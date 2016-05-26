@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using MoM.Module.Models;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Authorization;
-using Microsoft.AspNet.Identity.EntityFramework;
 using MoM.Module.Dtos;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MoM.Module.Services
 {

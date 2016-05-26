@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using MoM.Module.Interfaces;
 using MoM.Module.Services;
-using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Identity;
 using MoM.Module.Models;
 using MoM.Module.Dtos;
-using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 

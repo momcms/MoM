@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNet.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using MoM.Module.Middleware;
 
 namespace MoM.Module.Extensions

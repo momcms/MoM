@@ -1,26 +1,26 @@
-﻿using Microsoft.AspNet.Mvc.Infrastructure;
-using MoM.Module.Managers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿//using Microsoft.AspNetCore.Mvc.Infrastructure;
+//using MoM.Module.Managers;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Reflection;
 
-namespace MoM.Web.Providers
-{
-    public class ModuleAssemblyProvider : IAssemblyProvider
-    {
-        private readonly DefaultAssemblyProvider DefaultAssemblyProvider;
+//namespace MoM.Web.Providers
+//{
+//    public class ModuleAssemblyProvider : IAssemblyProvider
+//    {
+//        private readonly DefaultAssemblyProvider DefaultAssemblyProvider;
 
-        public ModuleAssemblyProvider(DefaultAssemblyProvider defaultAssemblyProvider)
-        {
-            DefaultAssemblyProvider = defaultAssemblyProvider;
-        }
+//        public ModuleAssemblyProvider(DefaultAssemblyProvider defaultAssemblyProvider)
+//        {
+//            DefaultAssemblyProvider = defaultAssemblyProvider;
+//        }
 
-        public IEnumerable<Assembly> CandidateAssemblies
-        {
-            get
-            {
-                return DefaultAssemblyProvider.CandidateAssemblies.Concat(AssemblyManager.GetAssemblies).Distinct();
-            }
-        }
-    }
-}
+//        public IEnumerable<Assembly> CandidateAssemblies
+//        {
+//            get
+//            {
+//                return DefaultAssemblyProvider.CandidateAssemblies.Concat(AssemblyManager.GetAssemblies).Distinct();
+//            }
+//        }
+//    }
+//}

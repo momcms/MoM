@@ -12,11 +12,12 @@ namespace MoM.Module.Services
         public static IEnumerable<Assembly> Assemblies { get; set; }
         public IEnumerable<ExtensionInfoDto> GetInstalledModules()
         {
-            foreach (IModule module in AssemblyManager.GetModules)
+            IEnumerable<IModule> modules = ExtensionManager.Extensions;
+            foreach (IModule module in modules)
             {
                 var info = module.Info;
             }
-            return AssemblyManager.GetModules.Select(m => m.Info);
+            return modules.Select(m => m.Info);
         }
     }
 }

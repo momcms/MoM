@@ -1,4 +1,4 @@
-﻿using Microsoft.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using MoM.Module.Interfaces;
 using MoM.Module.Models;
 
