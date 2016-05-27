@@ -3,6 +3,8 @@ using System;
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
 
 namespace MoM.Module.Managers
 {
@@ -63,7 +65,7 @@ namespace MoM.Module.Managers
             List<Type> implementations = new List<Type>();
 
             foreach (Assembly assembly in ExtensionManager.GetAssemblies(predicate))
-                foreach (Type type in assembly.GetTypes())
+                foreach (Type type in GetLoadableTypes(assembly)) // assembly.GetTypes())
                     if (typeof(T).GetTypeInfo().IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
                         implementations.Add(type);
 
@@ -110,6 +112,35 @@ namespace MoM.Module.Managers
                 return ExtensionManager.Assemblies;
 
             return ExtensionManager.Assemblies.Where(predicate);
+        }
+
+        public static IEnumerable<Type> GetLoadableTypes(Assembly assembly)
+        {
+            // TODO: Argument validation
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                StringBuilder sb = new StringBuilder();
+                foreach (Exception exSub in e.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    FileNotFoundException exFileNotFound = exSub as FileNotFoundException;
+                    if (exFileNotFound != null)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.ToString()))
+                        {
+                            sb.AppendLine("Error Log:");
+                            sb.AppendLine(exFileNotFound.ToString());
+                        }
+                    }
+                    sb.AppendLine();
+                }
+                string errorMessage = sb.ToString();
+                return e.Types.Where(t => t != null);
+            }
         }
     }
 }

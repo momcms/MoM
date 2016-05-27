@@ -54,7 +54,7 @@ namespace MoM.Web
                 configurationBuilder.AddUserSecrets();
 
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
-                configurationBuilder.AddApplicationInsightsSettings(developerMode: true);
+                //configurationBuilder.AddApplicationInsightsSettings(developerMode: true);
             }
             
 
@@ -98,6 +98,12 @@ namespace MoM.Web
 
             //services.Configure<SiteSettings>(Configuration.GetSection("Site"));
 
+            services.Configure<SiteSettings>(options =>
+            {
+                options.Theme = new Theme { Module = Configuration["Site:Theme:Module"], Selected = Configuration["Site:Theme:Selected"] };
+                options.Title = Configuration["Site:Title"];
+            });
+
             // Inject each module service methods and database items
             foreach (IModule module in ExtensionManager.Extensions)
             {
@@ -140,7 +146,7 @@ namespace MoM.Web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            applicationBuilder.UseApplicationInsightsRequestTelemetry();
+            //applicationBuilder.UseApplicationInsightsRequestTelemetry();
 
             if (hostingEnvironment.IsDevelopment())
             {
@@ -159,7 +165,7 @@ namespace MoM.Web
             // Configure Session.
             //applicationBuilder.UseSession();
 
-            applicationBuilder.UseApplicationInsightsExceptionTelemetry();
+            //applicationBuilder.UseApplicationInsightsExceptionTelemetry();
 
             // Add static files to the request pipeline
             applicationBuilder.UseDefaultFiles();
@@ -240,7 +246,7 @@ namespace MoM.Web
         private void DiscoverAssemblies()
         {
             int lastIndex = HostingEnvironment.ContentRootPath.LastIndexOf("MoM") == 0 ? HostingEnvironment.ContentRootPath.LastIndexOf("src") : HostingEnvironment.ContentRootPath.LastIndexOf("MoM");
-            string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"];
+            string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"] + "\\";
             
             //string extensionsPath = this.hostingEnvironment.ContentRootPath + this.configurationRoot["Extensions:Path"];
             IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(extensionsPath);
