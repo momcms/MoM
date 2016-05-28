@@ -146,6 +146,8 @@ namespace MoM.Web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+
+
             //applicationBuilder.UseApplicationInsightsRequestTelemetry();
 
             if (hostingEnvironment.IsDevelopment())
@@ -192,7 +194,7 @@ namespace MoM.Web
                 //Base routes for mvc and the angular 2 app
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
-                routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
+                //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
                 // Inject each module routebuilder methods
