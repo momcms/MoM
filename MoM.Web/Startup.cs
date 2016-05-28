@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MoM.Web.Providers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,7 +19,6 @@ using MoM.Module.Middleware;
 using Microsoft.AspNetCore.Builder;
 using MoM.Module.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using MoM.Web.Managers;
 using Microsoft.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using System;
@@ -76,8 +74,9 @@ namespace MoM.Web
             //services.AddGlimpse();
 
             // Load MVC and add precompiled views to mvc from the modules
-            //services.AddMvc().AddPrecompiledRazorViews(Module.Managers.AssemblyManager.GetAssemblies.ToArray());
-            //services.Configure<RazorViewEngineOptions>(options => {
+            //services.AddMvc();//.AddPrecompiledRazorViews(Module.Managers.AssemblyManager.GetAssemblies.ToArray());
+            //services.Configure<RazorViewEngineOptions>(options =>
+            //{
             //    options.FileProvider = GetFileProvider(ApplicationBasePath);
             //});
 
@@ -137,6 +136,7 @@ namespace MoM.Web
             // configure view locations for the custom theme engine
             services.Configure<RazorViewEngineOptions>(options =>
             {
+                var fileProviders = options.FileProviders.ToList();
                 options.ViewLocationExpanders.Add(new ThemeViewLocationExpander(Configuration));
             });
         }
@@ -168,7 +168,7 @@ namespace MoM.Web
             //applicationBuilder.UseApplicationInsightsExceptionTelemetry();
 
             // Add static files to the request pipeline
-            applicationBuilder.UseDefaultFiles();
+            //applicationBuilder.UseDefaultFiles();
             applicationBuilder.UseStaticFiles();
 
             // Add gzip compression
@@ -177,50 +177,12 @@ namespace MoM.Web
             // Add cookie-based authentication to the request pipeline
             applicationBuilder.UseIdentity();
 
-            //If they are configured then add social login services
-            //https://developers.facebook.com/apps
-            if (Configuration["Site:Authentication:Facebook:Enabled"] == "True")
-            {
-                applicationBuilder.UseFacebookAuthentication(new FacebookOptions()
-                {
-                    AppId = Configuration["Site:Authentication:Facebook:AppId"],
-                    AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"]
-                });
-            }
-            //https://console.developers.google.com/
-            if (Configuration["Site:Authentication:Google:Enabled"] == "True")
-            {
-                applicationBuilder.UseGoogleAuthentication(new GoogleOptions()
-                {
-                    ClientId = Configuration["Site:Authentication:Google:ClientId"],
-                    ClientSecret = Configuration["Site:Authentication:Google:ClientSecret"]
-                });
-            }
-            //https://msdn.microsoft.com/en-us/library/bb676626.aspx
-            if (Configuration["Site:Authentication:Microsoft:Enabled"] == "True")
-            {
-                applicationBuilder.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
-                {
-                    ClientId = Configuration["Site:Authentication:Microsoft:ClientId"],
-                    ClientSecret = Configuration["Site:Authentication:Microsoft:ClientSecret"]
-                });
-            }
-
-            if (Configuration["Site:Authentication:Twitter:Enabled"] == "True")
-            {
-                applicationBuilder.UseTwitterAuthentication(new TwitterOptions()
-                {
-                    ConsumerKey = Configuration["Site:Authentication:Twitter:ConsumerKey"],
-                    ConsumerSecret = Configuration["Site:Authentication:Twitter:ConsumerSecret"]
-                });
-            }
+            AddSocialLogins(applicationBuilder);
 
             // Ensure correct 401 and 403 HttpStatusCodes for authorization
             applicationBuilder.UseAuthorizeCorrectly();
 
             // Inject each module config methods
-            //foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
-            //    modules.Configure(applicationBuilder, hostingEnvironment);
             foreach (IModule module in ExtensionManager.Extensions)
                 module.Configure(applicationBuilder);
 
@@ -234,8 +196,6 @@ namespace MoM.Web
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
                 // Inject each module routebuilder methods
-                //foreach (IModule modules in Module.Managers.AssemblyManager.GetModules)
-                //    modules.RegisterRoutes(routeBuilder);
                 foreach (IModule module in ExtensionManager.Extensions)
                     module.RegisterRoutes(routeBuilder);
             });
@@ -294,6 +254,47 @@ namespace MoM.Web
                 ExtensionManager.Assemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
               )
             );
+        }
+
+        private void AddSocialLogins(IApplicationBuilder applicationBuilder)
+        {
+            //If they are configured then add social login services
+            //https://developers.facebook.com/apps
+            if (Configuration["Site:Authentication:Facebook:Enabled"] == "True")
+            {
+                applicationBuilder.UseFacebookAuthentication(new FacebookOptions()
+                {
+                    AppId = Configuration["Site:Authentication:Facebook:AppId"],
+                    AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"]
+                });
+            }
+            //https://console.developers.google.com/
+            if (Configuration["Site:Authentication:Google:Enabled"] == "True")
+            {
+                applicationBuilder.UseGoogleAuthentication(new GoogleOptions()
+                {
+                    ClientId = Configuration["Site:Authentication:Google:ClientId"],
+                    ClientSecret = Configuration["Site:Authentication:Google:ClientSecret"]
+                });
+            }
+            //https://msdn.microsoft.com/en-us/library/bb676626.aspx
+            if (Configuration["Site:Authentication:Microsoft:Enabled"] == "True")
+            {
+                applicationBuilder.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
+                {
+                    ClientId = Configuration["Site:Authentication:Microsoft:ClientId"],
+                    ClientSecret = Configuration["Site:Authentication:Microsoft:ClientSecret"]
+                });
+            }
+
+            if (Configuration["Site:Authentication:Twitter:Enabled"] == "True")
+            {
+                applicationBuilder.UseTwitterAuthentication(new TwitterOptions()
+                {
+                    ConsumerKey = Configuration["Site:Authentication:Twitter:ConsumerKey"],
+                    ConsumerSecret = Configuration["Site:Authentication:Twitter:ConsumerSecret"]
+                });
+            }
         }
     }
 }
