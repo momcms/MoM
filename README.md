@@ -1,5 +1,7 @@
 # MoM (Mother of Modules)
 
+[![Join the chat at https://gitter.im/RolfVeinoeSorensen/MoM](https://badges.gitter.im/RolfVeinoeSorensen/MoM.svg)](https://gitter.im/RolfVeinoeSorensen/MoM?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ### MoM loves all of her children.
 
 ## Prerequisities
@@ -41,7 +43,7 @@ Wiki and tutorials are still to come.
 
 ## Authors
 
-* **Rolf Veinø Sørensen** - *Initial work* - [easymodules.net](https://easymodules.net/)
+* **Rolf VeinÃ¸ SÃ¸rensen** - *Initial work* - [easymodules.net](https://easymodules.net/)
 
 See also the list of [contributors](https://github.com/RolfVeinoeSorensen/MoM/contributors) who participated in this project.
 
