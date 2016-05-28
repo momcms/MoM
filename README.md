@@ -9,7 +9,7 @@ This solution is very basic and you will need some modules to get started.
 
 ## Feature list:
 
- * ASP.NET 5
+ * ASP.NET 5 (Currently RC2)
  * MVC 6
  * Uses Depency Injection to create a modular pattern
  * Provides a starting point to create your own solutions
