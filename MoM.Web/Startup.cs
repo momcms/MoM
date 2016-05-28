@@ -73,35 +73,11 @@ namespace MoM.Web
 
             //services.AddGlimpse();
 
-            // Load MVC and add precompiled views to mvc from the modules
-            //services.AddMvc();//.AddPrecompiledRazorViews(Module.Managers.AssemblyManager.GetAssemblies.ToArray());
-            //services.Configure<RazorViewEngineOptions>(options =>
-            //{
-            //    options.FileProvider = GetFileProvider(ApplicationBasePath);
-            //});
-
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
 
-            // Set site options to a strongly typed object for easy access
-            // Source: https://docs.asp.net/en/latest/fundamentals/configuration.html
-            // Instantiate in a class with:
-            // IOptions<Site> SiteSettings;
-            // public ClassName(IOptions<Site> siteSettings)
-            // {
-            //    SiteSettings = siteSettings;
-            // }
-            // Use in method like:
-            // var theme = SiteSettings.Value.Theme;
-
-            //services.Configure<SiteSettings>(Configuration.GetSection("Site"));
-
-            services.Configure<SiteSettings>(options =>
-            {
-                options.Theme = new Theme { Module = Configuration["Site:Theme:Module"], Selected = Configuration["Site:Theme:Selected"] };
-                options.Title = Configuration["Site:Title"];
-            });
+            AddSiteSettings(services);
 
             // Inject each module service methods and database items
             foreach (IModule module in ExtensionManager.Extensions)
@@ -122,9 +98,6 @@ namespace MoM.Web
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-
-            //services.AddTransient<DefaultAssemblyProvider>();
-            //services.AddTransient<IAssemblyProvider, ModuleAssemblyProvider>();
 
             //add watch to changes in appsettings.json
             var appConfig = new FileInfo(ApplicationBasePath + "\\appsettings.json");
@@ -194,7 +167,7 @@ namespace MoM.Web
                 //Base routes for mvc and the angular 2 app
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
-                //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
+                routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
                 // Inject each module routebuilder methods
@@ -256,6 +229,29 @@ namespace MoM.Web
                 ExtensionManager.Assemblies.Select(a => new EmbeddedFileProvider(a, a.GetName().Name))
               )
             );
+        }
+
+        private void AddSiteSettings(IServiceCollection services)
+        {
+            // Set site options to a strongly typed object for easy access
+            // Source: https://docs.asp.net/en/latest/fundamentals/configuration.html
+            // Instantiate in a class with:
+            // IOptions<Site> SiteSettings;
+            // public ClassName(IOptions<Site> siteSettings)
+            // {
+            //    SiteSettings = siteSettings;
+            // }
+            // Use in method like:
+            // var theme = SiteSettings.Value.Theme;
+
+            //services.Configure<SiteSettings>(Configuration.GetSection("Site"));
+
+            services.Configure<SiteSettings>(options =>
+            {
+                options.Theme = new Theme { Module = Configuration["Site:Theme:Module"], Selected = Configuration["Site:Theme:Selected"] };
+                options.Title = Configuration["Site:Title"];
+                options.ConnectionString = Configuration["Site:ConnectionString"];
+            });
         }
 
         private void AddSocialLogins(IApplicationBuilder applicationBuilder)

@@ -28,9 +28,10 @@ namespace MoM.Module.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            ConnectionString = !string.IsNullOrEmpty(ConnectionString) ? ConnectionString : "Server=.;Database=MoM;Trusted_Connection=True;MultipleActiveResultSets=true";
             base.OnConfiguring(optionsBuilder);
             if(!optionsBuilder.IsConfigured)
-                optionsBuilder.UseSqlServer(ConnectionString);
+                optionsBuilder.UseSqlServer(ConnectionString, b => b.MigrationsAssembly("MoM.Web"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
