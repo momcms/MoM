@@ -73,7 +73,7 @@ gulp.task('clean-dist', function (cb) {
     rimraf('./dist', cb);
 });
 
-//Extensions
+// extensions
 gulp.task('ng2-prism', ['clean-libs'], function () {
     return gulp.src([paths.npm + 'ng2-prism/**/*.js', paths.npm + 'ng2-prism/**/*.map'])
         .pipe(gulp.dest(paths.lib + 'extensions/ng2-prism/'));
@@ -103,12 +103,12 @@ gulp.task('rxjs', ['clean-libs', 'ng2-prism', 'prismjs', 'ng2-bootstrap', 'ng2-d
         .pipe(gulp.dest(paths.lib + 'rxjs/'));
 });
 
-gulp.task('rxjs-min', ['clean-libs'], function () {
-    return gulp.src(paths.npm + 'rxjs/**/*.js')
-        .pipe(uglify())
-        .pipe(rename({ extname: '.min.js' }))
-        .pipe(gulp.dest(paths.lib + 'rxjs/'));
-});
+// gulp.task('rxjs-min', ['clean-libs'], function () {
+//    return gulp.src(paths.npm + 'rxjs/**/*.js')
+//        .pipe(uglify())
+//        .pipe(rename({ extname: '.min.js' }))
+//        .pipe(gulp.dest(paths.lib + 'rxjs/'));
+//});
 
 gulp.task('copy-libs', ['rxjs'], function () {
     return gulp.src(libs)
@@ -121,7 +121,7 @@ gulp.task('clean-libs', function (cb) {
 
 gulp.task('lint-typescript', function () {
     gulp.src(['app/**/*.ts'])
-        .pipe(tslint())
+        .pipe(tslint({ configuration: "../../tslint.json" }))
         .pipe(tslint.report('verbose'));
 });
 

@@ -1,9 +1,9 @@
-﻿// Add all operators to Observable
-import 'rxjs/Rx';
-import {Component, OnInit} from "angular2/core";
-import {AsyncRoute, Router, RouterLink, RouteDefinition, RouteConfig, ROUTER_DIRECTIVES, RouterOutlet} from "angular2/router";
-import { Location } from "angular2/platform/common"
-import { CollapseDirective } from 'ng2-bootstrap/ng2-bootstrap';
+﻿// add all operators to Observable
+import "rxjs/Rx";
+import {Component, OnInit} from "@angular/core";
+import {AsyncRoute, Router, RouterLink, RouteDefinition, ROUTER_DIRECTIVES, RouterOutlet} from "@angular/router-deprecated";
+import { Location } from "@angular/common";
+import { CollapseDirective } from "ng2-bootstrap/ng2-bootstrap";
 
 declare var System: any;
 
@@ -22,18 +22,17 @@ export class AppComponent implements OnInit {
         private router: Router,
         private location: Location
     ) { }
-   
 
     ngOnInit() {
         if (this.routes === null) {
             this.routes = [
-                //new AsyncRoute({
+                // new AsyncRoute({
                 //    path: "/",
                 //    name: "Public",
                 //    useAsDefault: true,
                 //    data: { includeInMenu: false },
                 //    loader: () => System.import("app/pages/public").then(c => c["PublicComponent"])
-                //}),
+                // }),
                 new AsyncRoute({
                     path: "/",
                     name: "Home",
@@ -86,8 +85,8 @@ export class AppComponent implements OnInit {
 
     }
 
-    //hide footer if the area is admin
-    ngDoCheck() {        
+    // hide footer if the area is admin
+    ngDoCheck() {
         this.isAdminArea = this.location.path().startsWith("/admin");
     }
     getLinkStyle(route: RouteDefinition) {
