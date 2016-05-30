@@ -14,79 +14,36 @@
     </div>
 </app>
 
-@section head{
-    <base href="~/" />
-}
-
-@section scripts {
+@section head {
 <environment names="Development">
+    <base href="~/" />
     <!-- Load libraries -->
-    <!-- IE required polyfills, in this exact order -->
-    <script src="lib/es6-shim.js"></script>
-    <script src="lib/system-polyfills.js"></script>
-    <script src="lib/angular2-polyfills.js"></script>
-    <script src="lib/system.js"></script>
-    <script src="lib/rxjs/bundles/Rx.umd.js"></script>
+    <!-- Polyfill(s) for older browsers -->
+    <script src="lib/core-js/client/shim.min.js"></script>
+    <script src="lib/zone.js/dist/zone.js"></script>
+    <script src="lib/reflect-metadata/Reflect.js"></script>
+    <script src="lib/systemjs/dist/system.src.js"></script>
     <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
+    <!-- Configure SystemJS -->
+    <script src="app/systemjs.config.js"></script>
     <script>
-    System.config({
-        defaultJSExtensions: true,
-        map: {
-            'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment.min.js',
-            'ng2-bootstrap': 'lib/extensions/ng2-bootstrap',
-            "ng2-prism": "lib/extensions/ng2-prism",
-            "prismjs": "lib/extensions/ng2-prism/node_modules/prismjs",
-            "dragula": "lib/extensions/dragula/dragula",
-            "ng2-dragula": "lib/extensions/ng2-dragula"
-            
-        },
-        packages: {
-            app: { format: 'register', defaultExtension: 'js' },
-            'rxjs': { defaultExtension: 'js' }
-        }
-    });
-    </script>
-    <script src="lib/angular2.dev.js"></script>
-    <script src="lib/http.dev.js"></script>
-    <script src="lib/router.dev.js"></script>
-    <script>
-        System.import('app/main.dev')
-            .then(null, console.error.bind(console));
+        System.import('app/main.dev').catch(function (err) { console.error(err); });
     </script>
 </environment>
 <!-- TODO: Libraries should be the minified versions but not all frameworks are working with min files -->
 <environment names="Staging,Production">
+    <base href="~/" />
     <!-- Load libraries -->
-    <!-- IE required polyfills, in this exact order -->
-    <script src="lib/es6-shim.js"></script>
-    <script src="lib/system-polyfills.js"></script>
-    <script src="lib/angular2-polyfills.js"></script>
-    <script src="lib/system.js"></script>
-    <script src="lib/rxjs/bundles/Rx.umd.js"></script>
+    <!-- Polyfill(s) for older browsers -->
+    <script src="lib/core-js/client/shim.min.js"></script>
+    <script src="lib/zone.js/dist/zone.js"></script>
+    <script src="lib/reflect-metadata/Reflect.js"></script>
+    <script src="lib/systemjs/dist/system.src.js"></script>
     <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
+    <!-- Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
     <script>
-    System.config({
-        defaultJSExtensions: true,
-        map: {
-            'rxjs': 'lib/rxjs',
-            'moment': 'lib/moment.min.js',
-            'ng2-bootstrap': 'lib/extensions/ng2-bootstrap',
-            "ng2-prism": "lib/extensions/ng2-prism",
-            "prismjs": "lib/extensions/ng2-prism/node_modules/prismjs"
-        },
-        packages: {
-            app: { format: 'register', defaultExtension: 'js' },
-            'rxjs': { defaultExtension: 'js' }
-        }
-    });
-    </script>
-    <script src="lib/angular2.dev.js"></script>
-    <script src="lib/http.dev.js"></script>
-    <script src="lib/router.dev.js"></script>
-    <script>
-        System.import('app/main.dev')
-            .then(null, console.error.bind(console));
+        System.import('app/main.dev').catch(function (err) { console.error(err); });
     </script>
 </environment>
 
