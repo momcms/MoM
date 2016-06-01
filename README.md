@@ -27,16 +27,16 @@ The file structure and reason why the modules are located in a seperate git proj
  * Git Node and NPM
 
 ## Getting Started
-Please go to the [The offcial open source developer project can be found here](https://github.com/RolfVeinoeSorensen/MoM.Dev) and follow the instructions there.
+Please go to [MoM.Dev](https://github.com/RolfVeinoeSorensen/MoM.Dev) and follow the instructions there.
 
 ### Installing
 For now you will need to be a developer and follow the instructions under Getting Started.
 MoM will get an installer to make it alot easier at a later time so stay tuned.
 
 ### Repositories
-[The offcial open source developer project can be found here](https://github.com/RolfVeinoeSorensen/MoM.Dev)
-[The offcial open source modules can be found here](https://github.com/RolfVeinoeSorensen/MoM.Modules)
-[The offcial open source themes can be found here](https://github.com/RolfVeinoeSorensen/MoM.Themes)
+ * [MoM.Dev](https://github.com/RolfVeinoeSorensen/MoM.Dev)
+ * [MoM.Modules](https://github.com/RolfVeinoeSorensen/MoM.Modules)
+ * [MoM.Themes](https://github.com/RolfVeinoeSorensen/MoM.Themes)
 
 ## Goal
 Mother of Modules is meant to be easy for end users to install and maintain.
