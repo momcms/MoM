@@ -9,5 +9,5 @@ var ng2_bootstrap_1 = require("ng2-bootstrap/ng2-bootstrap");
 var app_component_1 = require("./app.component");
 ng2_bootstrap_1.Ng2BootstrapConfig.theme = ng2_bootstrap_1.Ng2BootstrapTheme.BS4;
 platform_browser_dynamic_1.bootstrap(app_component_1.AppComponent, [router_deprecated_1.ROUTER_PROVIDERS, http_1.HTTP_PROVIDERS]);
-// console.log(Ng2BootstrapConfig.theme); 
+console.log(ng2_bootstrap_1.Ng2BootstrapConfig.theme);
 //# sourceMappingURL=main.dev.js.map
