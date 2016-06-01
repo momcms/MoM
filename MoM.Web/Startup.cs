@@ -33,12 +33,13 @@ namespace MoM.Web
         private string ApplicationBasePath;
 
         private IHostingEnvironment HostingEnvironment;
-        private ILibraryManager LibraryManager;
 
         public Startup(IHostingEnvironment hostingEnvironment)
         {
             HostingEnvironment = hostingEnvironment;
-            
+            ApplicationBasePath = hostingEnvironment.ContentRootPath;
+
+
             IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
