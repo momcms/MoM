@@ -3,13 +3,9 @@
 
 ### MoM loves all of her children.
 
-## Prerequisities
-This solution is very basic and you will need some modules to get started.
-[The offcial open source modules can be found here](https://github.com/RolfVeinoeSorensen/MoM.Modules)
-
 ## Feature list:
 
- * ASP.NET 5 (Currently RC2)
+ * .NET Core (1.0.0-rc2-final)
  * MVC 6
  * Uses Depency Injection to create a modular pattern
  * Provides a starting point to create your own solutions
@@ -19,21 +15,32 @@ This solution is very basic and you will need some modules to get started.
 
 ## Flawor
 This solution is most likely not for everyone.
-It favors developers who wants to work with MVC 6, EF7, MS SQL Server and Angular 2.
+It favors developers who wants to work with MVC 6, EF7, MS SQL Server and Angular 2 as SPA.
 The design is meant to give the developer less options on how to build their web application.
 On the plus side this should me a more unified style in the modules beeing created.
 The file structure and reason why the modules are located in a seperate git project is to make it easy for you to create your own modules project on your github and you can chose to have that private if you like.
 
-## Getting Started
-Needs description...
+## Prerequisities
+ * Microsoft Visual Studio 2015 ([Community Edition](https://www.visualstudio.com/en-us) will work fine)
+ * Microsoft SQL Server 2014 or higher ([Developer Edition](https://blogs.technet.microsoft.com/dataplatforminsider/2016/03/31/microsoft-sql-server-developer-edition-is-now-free/) is now free)
+ * .NET Core ([1.0.0-rc2-final](https://www.microsoft.com/net/core#windows))
+ * Git Node and NPM
 
+## Getting Started
+Please go to the [The offcial open source developer project can be found here](https://github.com/RolfVeinoeSorensen/MoM.Dev) and follow the instructions there.
 
 ### Installing
-Needs description...
+For now you will need to be a developer and follow the instructions under Getting Started.
+MoM will get an installer to make it alot easier at a later time so stay tuned.
+
+### Repositories
+[The offcial open source developer project can be found here](https://github.com/RolfVeinoeSorensen/MoM.Dev)
+[The offcial open source modules can be found here](https://github.com/RolfVeinoeSorensen/MoM.Modules)
+[The offcial open source themes can be found here](https://github.com/RolfVeinoeSorensen/MoM.Themes)
 
 ## Goal
 Mother of Modules is meant to be easy for end users to install and maintain.
-It will most likely never have the same amount of features like big .NET based CMS systems offers.
+MoM will focus on usability and becomming a good choice for businesses.
 
 ### This solution is not ready for production sites
 I am currently working on making this solution ready enough to serve my personal website.
