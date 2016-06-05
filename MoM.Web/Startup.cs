@@ -120,8 +120,6 @@ namespace MoM.Web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-
-
             //applicationBuilder.UseApplicationInsightsRequestTelemetry();
 
             if (hostingEnvironment.IsDevelopment())
@@ -182,9 +180,8 @@ namespace MoM.Web
         private void DiscoverAssemblies()
         {
             int lastIndex = HostingEnvironment.ContentRootPath.LastIndexOf("MoM") == 0 ? HostingEnvironment.ContentRootPath.LastIndexOf("src") : HostingEnvironment.ContentRootPath.LastIndexOf("MoM");
-            string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"] + "\\";
-            
-            //string extensionsPath = this.hostingEnvironment.ContentRootPath + this.configurationRoot["Extensions:Path"];
+            //string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"] + "\\";
+            string extensionsPath = HostingEnvironment.ContentRootPath + Configuration["Site:ModulePath"];
             IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(extensionsPath);
 
             ExtensionManager.SetAssemblies(assemblies);

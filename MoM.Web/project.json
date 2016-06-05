@@ -105,5 +105,8 @@
     ]
   },
   "userSecretsId": "MoM-Web-f0299b93-4106-4378-9afa-fa41bc4edd7f",
-  "version": "1.0.0-*"
+  "version": "1.0.0-*",
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  }
 }

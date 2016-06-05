@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MoM.Module.Config;
 
@@ -10,10 +11,12 @@ namespace MoM.Web.Controllers.Api
     public class SiteSettingsController : Controller
     {
         IOptions<SiteSettings> SiteSettings;
+        IHostingEnvironment Host;
 
-        public SiteSettingsController(IOptions<SiteSettings> siteSettings)
+        public SiteSettingsController(IOptions<SiteSettings> siteSettings, IHostingEnvironment host)
         {
             SiteSettings = siteSettings;
+            Host = host;
         }
         // GET: api/values
         [HttpGet]
@@ -30,6 +33,13 @@ namespace MoM.Web.Controllers.Api
             //TODO Save the json then alter the configurationBuilder and return the updated object
             //var saveObj = siteSettings.ToJson();
             return siteSettings;
+        }
+
+        [HttpGet]
+        [Route("getmodulepath")]
+        public string GetModulePath()
+        {
+            return Host.ContentRootPath;
         }
     }
 }
