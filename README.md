@@ -24,7 +24,7 @@ The file structure and reason why the modules are located in a seperate git proj
  * Microsoft Visual Studio 2015 ([Community Edition](https://www.visualstudio.com/en-us) will work fine)
  * Microsoft SQL Server 2014 or higher ([Developer Edition](https://blogs.technet.microsoft.com/dataplatforminsider/2016/03/31/microsoft-sql-server-developer-edition-is-now-free/) is now free)
  * .NET Core ([1.0.0-rc2-final](https://www.microsoft.com/net/core#windows))
- * Git Node and NPM
+ * Git, Node and NPM
 
 ## Getting Started
 Please go to [MoM.Dev](https://github.com/RolfVeinoeSorensen/MoM.Dev) and follow the instructions there.
@@ -42,7 +42,7 @@ MoM will get an installer to make it alot easier at a later time so stay tuned.
 Mother of Modules is meant to be easy for end users to install and maintain.
 MoM will focus on usability and becomming a good choice for businesses.
 
-### This solution is not ready for production sites
+## This solution is not ready for production sites
 I am currently working on making this solution ready enough to serve my personal website.
 It will in time feature the possibility to load modules dynamically like Orchard 2 allready does.
 Wiki and tutorials are still to come.

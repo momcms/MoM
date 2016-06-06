@@ -10,7 +10,7 @@ namespace MoM.Module.Services
     public class ModulesService : IModuleService
     {
         public static IEnumerable<Assembly> Assemblies { get; set; }
-        public IEnumerable<ExtensionInfoDto> GetInstalledModules()
+        public IEnumerable<ModuleInfoDto> GetInstalledModules()
         {
             IEnumerable<IModule> modules = ExtensionManager.Extensions;
             foreach (IModule module in modules)

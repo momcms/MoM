@@ -5,6 +5,6 @@ namespace MoM.Module.Interfaces
 {
     public interface IModuleService
     {
-        IEnumerable<ExtensionInfoDto> GetInstalledModules();
+        IEnumerable<ModuleInfoDto> GetInstalledModules();
     }
 }

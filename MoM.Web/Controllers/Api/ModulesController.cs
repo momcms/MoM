@@ -20,7 +20,7 @@ namespace MoM.Web.Controllers.Api
 
         [HttpGet]
         [Route("getinstalledmodules")]
-        public IEnumerable<ExtensionInfoDto> GetInstalledModules()
+        public IEnumerable<ModuleInfoDto> GetInstalledModules()
         {
             return Service.GetInstalledModules();
         }

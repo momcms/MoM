@@ -2,7 +2,7 @@
 
 namespace MoM.Module.Dtos
 {
-    public partial class ExtensionInfoDto
+    public partial class ModuleInfoDto
     {
         public string name { get; set; }
         public string description { get; set; }
@@ -12,9 +12,9 @@ namespace MoM.Module.Dtos
         public int versionMajor { get; set; }
         public int versionMinor { get; set; }
 
-        public ExtensionInfoDto() { }
+        public ModuleInfoDto() { }
 
-        public ExtensionInfoDto(string Name, string Description, string Authors, string IconCss, ModuleType Type, int VersionMajor, int VersionMinor)
+        public ModuleInfoDto(string Name, string Description, string Authors, string IconCss, ModuleType Type, int VersionMajor, int VersionMinor)
         {
             name = Name;
             description = Description;

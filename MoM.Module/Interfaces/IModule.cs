@@ -9,7 +9,7 @@ namespace MoM.Module.Interfaces
 {
     public interface IModule
     {
-        ExtensionInfoDto Info { get; }
+        ModuleInfoDto Info { get; }
 
         void SetConfiguration(IConfiguration configuration);
         IConfiguration GetConfiguration();
