@@ -56,18 +56,18 @@ namespace MoM.Module.Config
 
                     { "SiteEmailHostName", "" },
                     { "SiteEmailPassword", "" },
-                    { "SiteEmailPort", "" },
+                    { "SiteEmailPort", "587" },
                     { "SiteEmailRequireCredentials", "True" },
                     { "SiteEmailSenderEmailAdress", "" },
                     { "SiteEmailUserName", "" },
-                    { "SiteEmailUseSSL", "" },
+                    { "SiteEmailUseSSL", "False" },
 
-                    { "SiteLogoHeight", "" },
+                    { "SiteLogoHeight", "48" },
                     { "SiteLogoImagePath", "" },
                     { "SiteLogoSvgPath", "" },
                     { "SiteLogoUseImageLogo", "True" },
                     { "SiteLogoUseSvgLogo", "True" },
-                    { "SiteLogoWidth", "" }
+                    { "SiteLogoWidth", "320" }
                 };
             dbContext.Values.AddRange(configValues
                 .Select(kvp => new Configuration { Id = kvp.Key, Value = kvp.Value })
