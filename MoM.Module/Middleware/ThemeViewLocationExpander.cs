@@ -16,9 +16,9 @@ namespace MoM.Module.Middleware
 
         public void PopulateValues(ViewLocationExpanderContext context)
         {
-            var themeModule = Configuration["Site:Theme:Module"];
-            var themeSelected = Configuration["Site:Theme:Selected"];
-            context.Values["theme"] = themeModule + "/" + themeSelected + "/";
+            var themeModule = Configuration["SiteThemeModule"];
+            var themeName = Configuration["SiteThemeName"];
+            context.Values["theme"] = themeModule + "/" + themeName + "/";
         }
 
         public virtual IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)

@@ -236,4 +236,5 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 
-MoM.Web/migrations/
+MoM.Web/Migrations/
+MoM.Web/Modules/

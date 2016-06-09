@@ -1,6 +1,9 @@
-﻿namespace MoM.Module.Config
+﻿using MoM.Module.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MoM.Module.Config
 {
-    public class SiteSettings
+    public partial class SiteSetting
     {
         public string Title { get; set; }
         public Theme Theme { get; set; }
@@ -8,53 +11,52 @@
         public bool IsInstalled { get; set; }
         public Logo Logo { get; set; }
         public string ModulePath { get; set; }
-        public string ConnectionString { get; set; }
         public Email Email { get; set; }
     }
 
-    public class Theme
+    public partial class Theme
     {
         public string Module { get; set; }
-        public string Selected { get; set; }
+        public string Name { get; set; }
     }
 
-    public class Authentication
+    public partial class Authentication
     {
-        public Facebook Facebook { get; set; }
-        public Google Google { get; set; }
-        public Microsoft Microsoft { get; set; }
-        public Twitter Twitter { get; set; }
+        public AuthenticationFacebook Facebook { get; set; }
+        public AuthenticationGoogle Google { get; set; }
+        public AuthenticationMicrosoft Microsoft { get; set; }
+        public AuthenticationTwitter Twitter { get; set; }
     }
 
-    public class Facebook
+    public partial class AuthenticationFacebook
     {
         public string AppId { get; set; }
         public string AppSecret { get; set; }
         public bool Enabled { get; set; }
     }
 
-    public class Google
+    public partial class AuthenticationGoogle
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public bool Enabled { get; set; }
     }
 
-    public class Microsoft
+    public partial class AuthenticationMicrosoft
     {
         public string ClientId { get; set; }
         public string ClientSecret { get; set; }
         public bool Enabled { get; set; }
     }
 
-    public class Twitter
+    public partial class AuthenticationTwitter
     {
         public string ConsumerKey { get; set; }
         public string ConsumerSecret { get; set; }
         public bool Enabled { get; set; }
     }
 
-    public class Logo
+    public partial class Logo
     {
         public int Height { get; set; }
         public string ImagePath { get; set; }
@@ -64,7 +66,7 @@
         public int Width { get; set; }
     }
 
-    public class Email
+    public partial class Email
     {
         public string HostName { get; set; }
         public string Password { get; set; }

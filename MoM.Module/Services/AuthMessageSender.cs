@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
+using MoM.Module.Models;
 
 namespace MoM.Module.Services
 {
@@ -13,31 +14,31 @@ namespace MoM.Module.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        IOptions<SiteSettings> SiteSettings;
-        public AuthMessageSender(IOptions<SiteSettings> siteSettings)
+        IOptions<SiteSetting> SiteSetting;
+        public AuthMessageSender(IOptions<SiteSetting> siteSetting)
         {
-            SiteSettings = siteSettings;
+            SiteSetting = siteSetting;
         }
 
         public async Task SendEmailAsync(string email, string subject, string message)
         {
             var mailMessage = new MimeMessage();
             mailMessage.To.Add(new MailboxAddress("Rolf", email));
-            mailMessage.From.Add(new MailboxAddress("", SiteSettings.Value.Email.SenderEmailAdress));
+            mailMessage.From.Add(new MailboxAddress("", SiteSetting.Value.Email.SenderEmailAdress));
             mailMessage.Subject = subject;
             mailMessage.Body = new TextPart("html") { Text = message };
             using (var client = new SmtpClient())
             {
-                var useSSL = SiteSettings.Value.Email.UseSSL ? MailKit.Security.SecureSocketOptions.SslOnConnect : MailKit.Security.SecureSocketOptions.None;
-                    await client.ConnectAsync(SiteSettings.Value.Email.HostName, SiteSettings.Value.Email.Port, useSSL);
+                var useSSL = SiteSetting.Value.Email.UseSSL ? MailKit.Security.SecureSocketOptions.SslOnConnect : MailKit.Security.SecureSocketOptions.None;
+                    await client.ConnectAsync(SiteSetting.Value.Email.HostName, SiteSetting.Value.Email.Port, useSSL);
 
                     // Note: since we don't have an OAuth2 token, disable
                     // the XOAUTH2 authentication mechanism.
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                    if (SiteSettings.Value.Email.RequireCredentials)
+                    if (SiteSetting.Value.Email.RequireCredentials)
                     {
-                        await client.AuthenticateAsync(SiteSettings.Value.Email.UserName, SiteSettings.Value.Email.Password);
+                        await client.AuthenticateAsync(SiteSetting.Value.Email.UserName, SiteSetting.Value.Email.Password);
                     }                    
                     await client.SendAsync(mailMessage);
                     await client.DisconnectAsync(true);

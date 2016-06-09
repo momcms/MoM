@@ -39,8 +39,8 @@ namespace MoM.Web
             HostingEnvironment = hostingEnvironment;
             ApplicationBasePath = hostingEnvironment.ContentRootPath;
 
-
-            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+            // Create the configuration for the connectionstring
+            IConfigurationBuilder configurationConnectionStringBuilder = new ConfigurationBuilder()
                 .SetBasePath(hostingEnvironment.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true);
@@ -50,17 +50,24 @@ namespace MoM.Web
             {
                 // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
                 // Good documentation here https://docs.asp.net/en/latest/security/app-secrets.html
-                configurationBuilder.AddUserSecrets();
-
+                configurationConnectionStringBuilder.AddUserSecrets();
                 // This will push telemetry data through Application Insights pipeline faster, allowing you to view results immediately.
                 //configurationBuilder.AddApplicationInsightsSettings(developerMode: true);
             }
-            
 
-            configurationBuilder.AddEnvironmentVariables();
 
-            Configuration = configurationBuilder.Build();
+            configurationConnectionStringBuilder.AddEnvironmentVariables();
+            IConfiguration configurationConnectionString = configurationConnectionStringBuilder.Build();
 
+            // Create the configuration for the whole site including connectionsstring from appsettings.json
+            IConfigurationBuilder configurationSiteSettingsBuilder = new ConfigurationBuilder()
+                .SetBasePath(hostingEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{hostingEnvironment.EnvironmentName}.json", optional: true)
+                .AddEntityFrameworkConfig(options =>
+                    options.UseSqlServer(configurationConnectionString.GetConnectionString("DefaultConnection"))
+                    );
+            Configuration = configurationSiteSettingsBuilder.Build();
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
@@ -90,22 +97,25 @@ namespace MoM.Web
             //Identity
             services.AddEntityFramework()
                 //.AddSqlServer()
+                //.AddDbContext<ConfigurationContext>(options =>
+                //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")))
                 .AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlServer(Configuration["Site:ConnectionString"]));
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 options.Cookies.ApplicationCookie.AutomaticAuthenticate = true;
                 options.Cookies.ApplicationCookie.AutomaticChallenge = false;
                 //options.Cookies.ApplicationCookieAuthenticationScheme = "ApplicationCookie";
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            //.AddEntityFrameworkStores<ConfigurationContext>()
             .AddDefaultTokenProviders();
 
             //add watch to changes in appsettings.json
-            var appConfig = new FileInfo(ApplicationBasePath + "\\appsettings.json");
+            //var appConfig = new FileInfo(ApplicationBasePath + "\\appsettings.json");
             
-            services.AddSingleton<IAppSettingsWatcher>(new AppsettingsWatcher(appConfig, Configuration));
+            //services.AddSingleton<IAppSettingsWatcher>(new AppsettingsWatcher(appConfig, Configuration));
 
-            FileSystemWatcher appSettingsWatcher = services.BuildServiceProvider().GetService<IAppSettingsWatcher>().WatchAppSettings();
+            //FileSystemWatcher appSettingsWatcher = services.BuildServiceProvider().GetService<IAppSettingsWatcher>().WatchAppSettings();
 
             // configure view locations for the custom theme engine
             services.Configure<RazorViewEngineOptions>(options =>
@@ -181,7 +191,7 @@ namespace MoM.Web
         {
             int lastIndex = HostingEnvironment.ContentRootPath.LastIndexOf("MoM") == 0 ? HostingEnvironment.ContentRootPath.LastIndexOf("src") : HostingEnvironment.ContentRootPath.LastIndexOf("MoM");
             //string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"] + "\\";
-            string extensionsPath = HostingEnvironment.ContentRootPath + Configuration["Site:ModulePath"];
+            string extensionsPath = HostingEnvironment.ContentRootPath + "\\" + Configuration["SiteModulePath"];
             IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(extensionsPath);
 
             ExtensionManager.SetAssemblies(assemblies);
@@ -242,47 +252,107 @@ namespace MoM.Web
             // }
             // Use in method like:
             // var theme = SiteSettings.Value.Theme;
+            var siteSetting = Configuration.GetSection("SiteSetting");
+            services.Configure<SiteSetting>(options =>
+            {
+                options.IsInstalled = Convert.ToBoolean(Configuration["SiteIsInstalled"]);
+                options.ModulePath = Configuration["SiteModulePath"];
+                options.Title = Configuration["SiteTitle"];
+                
+                options.Theme = new Theme
+                {
+                    Module = Configuration["SiteThemeModule"],
+                    Name = Configuration["SiteThemeName"]
+                };
 
-            services.Configure<SiteSettings>(Configuration.GetSection("Site"));
+                options.Authentication = new Authentication
+                {
+                    Facebook = new AuthenticationFacebook
+                    {
+                        AppId = Configuration["SiteFacebookAppId"],
+                        AppSecret = Configuration["SiteFacebookAppSecret"],
+                        Enabled = Convert.ToBoolean(Configuration["SiteFacebookEnabled"])
+                    },
+                    Google = new AuthenticationGoogle
+                    {
+                        ClientId = Configuration["SiteGoogleClientAppId"],
+                        ClientSecret = Configuration["SiteGoogleClientSecret"],
+                        Enabled = Convert.ToBoolean(Configuration["SiteGoogleEnabled"])
+                    },
+                    Microsoft = new AuthenticationMicrosoft
+                    {
+                        ClientId = Configuration["SiteMicrosoftClientId"],
+                        ClientSecret = Configuration["SiteMicrosoftClientSecret"],
+                        Enabled = Convert.ToBoolean(Configuration["SiteMicrosoftEnabled"])
+                    },
+                    Twitter = new AuthenticationTwitter
+                    {
+                        ConsumerKey = Configuration["SiteTwitterConsumerKey"],
+                        ConsumerSecret = Configuration["SiteTwitterConsumerSecret"],
+                        Enabled = Convert.ToBoolean(Configuration["SiteTwitterEnabled"])
+                    }
+                };
+
+                options.Email = new Email
+                {
+                    HostName = Configuration["SiteEmailHostName"],
+                    Password = Configuration["SiteEmailPassword"],
+                    Port = Convert.ToInt32(Configuration["SiteEmailPort"]),
+                    RequireCredentials = Convert.ToBoolean(Configuration["SiteEmailRequireCredentials"]),
+                    SenderEmailAdress = Configuration["SiteEmailSenderEmailAdress"],
+                    UserName = Configuration["SiteEmailUserName"],
+                    UseSSL = Convert.ToBoolean(Configuration["SiteEmailUseSSL"])
+                };
+
+                options.Logo = new Logo
+                {
+                    Height = Convert.ToInt32(Configuration["SiteLogoHeight"]),
+                    ImagePath = Configuration["SiteLogoImagePath"],
+                    SvgPath = Configuration["SiteLogoSvgPath"],
+                    UseImageLogo = Convert.ToBoolean(Configuration["SiteLogoUseImageLogo"]),
+                    UseSvgLogo = Convert.ToBoolean(Configuration["SiteLogoUseSvgLogo"]),
+                    Width = Convert.ToInt32(Configuration["SiteLogoWidth"])
+                };
+            });
         }
 
         private void AddSocialLogins(IApplicationBuilder applicationBuilder)
         {
             //If they are configured then add social login services
             //https://developers.facebook.com/apps
-            if (Configuration["Site:Authentication:Facebook:Enabled"] == "True")
+            if (Convert.ToBoolean(Configuration["SiteFacebookEnabled"]))
             {
                 applicationBuilder.UseFacebookAuthentication(new FacebookOptions()
                 {
-                    AppId = Configuration["Site:Authentication:Facebook:AppId"],
-                    AppSecret = Configuration["Site:Authentication:Facebook:AppSecret"]
+                    AppId = Configuration["SiteFacebookAppId"],
+                    AppSecret = Configuration["SiteFacebookAppSecret"]
                 });
             }
             //https://console.developers.google.com/
-            if (Configuration["Site:Authentication:Google:Enabled"] == "True")
+            if (Convert.ToBoolean(Configuration["SiteGoogleEnabled"]))
             {
                 applicationBuilder.UseGoogleAuthentication(new GoogleOptions()
                 {
-                    ClientId = Configuration["Site:Authentication:Google:ClientId"],
-                    ClientSecret = Configuration["Site:Authentication:Google:ClientSecret"]
+                    ClientId = Configuration["SiteGoogleClientAppId"],
+                    ClientSecret = Configuration["SiteGoogleClientSecret"]
                 });
             }
             //https://msdn.microsoft.com/en-us/library/bb676626.aspx
-            if (Configuration["Site:Authentication:Microsoft:Enabled"] == "True")
+            if (Convert.ToBoolean(Configuration["SiteMicrosoftEnabled"]))
             {
                 applicationBuilder.UseMicrosoftAccountAuthentication(new MicrosoftAccountOptions()
                 {
-                    ClientId = Configuration["Site:Authentication:Microsoft:ClientId"],
-                    ClientSecret = Configuration["Site:Authentication:Microsoft:ClientSecret"]
+                    ClientId = Configuration["SiteMicrosoftClientId"],
+                    ClientSecret = Configuration["SiteMicrosoftClientSecret"]
                 });
             }
 
-            if (Configuration["Site:Authentication:Twitter:Enabled"] == "True")
+            if (Convert.ToBoolean(Configuration["SiteTwitterEnabled"]))
             {
                 applicationBuilder.UseTwitterAuthentication(new TwitterOptions()
                 {
-                    ConsumerKey = Configuration["Site:Authentication:Twitter:ConsumerKey"],
-                    ConsumerSecret = Configuration["Site:Authentication:Twitter:ConsumerSecret"]
+                    ConsumerKey = Configuration["SiteTwitterConsumerKey"],
+                    ConsumerSecret = Configuration["SiteTwitterConsumerSecret"]
                 });
             }
         }
