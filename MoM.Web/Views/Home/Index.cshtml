@@ -25,9 +25,9 @@
     <script src="lib/systemjs/dist/system.src.js"></script>
     <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
     <!-- Configure SystemJS -->
-    <script src="app/systemjs.config.js"></script>
+    <script src="app/main.config.js"></script>
     <script>
-        System.import('app/main.dev').catch(function (err) { console.error(err); });
+        System.import('app/main').catch(function (err) { console.error(err); });
     </script>
 </environment>
 <!-- TODO: Libraries should be the minified versions but not all frameworks are working with min files -->
@@ -41,9 +41,9 @@
     <script src="lib/systemjs/dist/system.src.js"></script>
     <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
     <!-- Configure SystemJS -->
-    <script src="systemjs.config.js"></script>
+    <script src="main.config.js"></script>
     <script>
-        System.import('app/main.dev').catch(function (err) { console.error(err); });
+        System.import('app/main').catch(function (err) { console.error(err); });
     </script>
 </environment>
 

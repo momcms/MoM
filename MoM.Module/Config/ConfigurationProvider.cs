@@ -23,9 +23,9 @@ namespace MoM.Module.Config
             using (var dbContext = new ConfigurationContext(builder.Options))
             {
                 dbContext.Database.EnsureCreated();
-                Data = !dbContext.Values.Any()
+                Data = !dbContext.Configurations.Any()
                     ? CreateAndSaveDefaultValues(dbContext)
-                    : dbContext.Values.ToDictionary(c => c.Id, c => c.Value);
+                    : dbContext.Configurations.ToDictionary(c => c.Id, c => c.Value);
             }
         }
 
@@ -35,7 +35,7 @@ namespace MoM.Module.Config
             var configValues = new Dictionary<string, string>
                 {
                     { "SiteIsInstalled", "False" },
-                    { "SiteModulePath", "artifacts\\bin\\Modules" },
+                    { "SiteModulePath", "Modules" },
                     { "SiteTitle", "MoM" },
 
                     { "SiteThemeModule", "MoM.Bootstrap" },
@@ -69,7 +69,7 @@ namespace MoM.Module.Config
                     { "SiteLogoUseSvgLogo", "True" },
                     { "SiteLogoWidth", "320" }
                 };
-            dbContext.Values.AddRange(configValues
+            dbContext.Configurations.AddRange(configValues
                 .Select(kvp => new Configuration { Id = kvp.Key, Value = kvp.Value })
                 .ToArray());
             dbContext.SaveChanges();

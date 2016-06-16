@@ -20,7 +20,11 @@ namespace MoM.Web.Controllers
         {
             var theme = SiteSetting.Value.Theme;
             ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
-            return View();
+            if (SiteSetting.Value.IsInstalled)
+            {
+                return View();
+            }
+            return View("~/Views/Install/Index.cshtml");            
         }
     }
 }

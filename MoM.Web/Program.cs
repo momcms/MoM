@@ -18,7 +18,14 @@ namespace MoM.Web
                 .UseStartup<Startup>()
                 .Build();
 
-            host.Run();
+            using (host)
+            {
+                host.Run();
+
+                //TODO: Maybe there is a need to create a custom host in order to control running services and configurations?
+                //var appShutdownService = host.
+            }
+
         }
     }
 }

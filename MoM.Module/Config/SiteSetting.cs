@@ -1,7 +1,4 @@
-﻿using MoM.Module.Interfaces;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MoM.Module.Config
+﻿namespace MoM.Module.Config
 {
     public partial class SiteSetting
     {

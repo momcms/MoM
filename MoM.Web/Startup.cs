@@ -29,6 +29,7 @@ namespace MoM.Web
     public class Startup
     {
         protected IConfiguration Configuration;
+        //protected IConfigurationRoot ConfigurationRoot;
 
         private string ApplicationBasePath;
 
@@ -67,7 +68,7 @@ namespace MoM.Web
                 .AddEntityFrameworkConfig(options =>
                     options.UseSqlServer(configurationConnectionString.GetConnectionString("DefaultConnection"))
                     );
-            Configuration = configurationSiteSettingsBuilder.Build();
+            Configuration = configurationSiteSettingsBuilder.Build();            
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
@@ -97,8 +98,8 @@ namespace MoM.Web
             //Identity
             services.AddEntityFramework()
                 //.AddSqlServer()
-                //.AddDbContext<ConfigurationContext>(options =>
-                //    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")))
+                .AddDbContext<ConfigurationContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")))
                 .AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
@@ -123,6 +124,10 @@ namespace MoM.Web
                 var fileProviders = options.FileProviders.ToList();
                 options.ViewLocationExpanders.Add(new ThemeViewLocationExpander(Configuration));
             });
+
+            //setup iconfig
+            //services.AddSingleton<IConfigurationRoot>(Configuration);   // IConfigurationRoot
+            services.AddSingleton(Configuration);   // IConfiguration explicitly
         }
 
         public virtual void Configure(IApplicationBuilder applicationBuilder, IHostingEnvironment hostingEnvironment, ILoggerFactory loggerFactory)
@@ -176,12 +181,13 @@ namespace MoM.Web
                 //Base routes for mvc and the angular 2 app
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
-                //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
                 // Inject each module routebuilder methods
                 foreach (IModule module in ExtensionManager.Extensions)
                     module.RegisterRoutes(routeBuilder);
+
+                routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
             });
 
             //todo add initial data and run migrations
@@ -189,8 +195,6 @@ namespace MoM.Web
 
         private void DiscoverAssemblies()
         {
-            int lastIndex = HostingEnvironment.ContentRootPath.LastIndexOf("MoM") == 0 ? HostingEnvironment.ContentRootPath.LastIndexOf("src") : HostingEnvironment.ContentRootPath.LastIndexOf("MoM");
-            //string extensionsPath = HostingEnvironment.ContentRootPath.Substring(0, lastIndex < 0 ? 0 : lastIndex) + Configuration["Site:ModulePath"] + "\\";
             string extensionsPath = HostingEnvironment.ContentRootPath + "\\" + Configuration["SiteModulePath"];
             IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(extensionsPath);
 

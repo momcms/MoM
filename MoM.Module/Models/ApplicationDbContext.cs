@@ -25,7 +25,7 @@ namespace MoM.Module.Models
             Assemblies = assemblies;
             //Database.EnsureCreated();
             Database.Migrate();
-            
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -49,22 +49,23 @@ namespace MoM.Module.Models
             modelBuilder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaim", IdentitySchema);
             modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("UserClaim", IdentitySchema);
             modelBuilder.Entity<IdentityUserRole<string>>().ToTable("UserRole", IdentitySchema);
+            modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserToken", IdentitySchema);
             modelBuilder.Entity<ClientRouteConfig>();
             modelBuilder.Entity<Module>();
             modelBuilder.Entity<Country>();
             modelBuilder.Entity<Language>();
             // Load all ModelBuilders from the modules
-            //foreach (Assembly assembly in DataStorageManager.Assemblies.Where(a => !a.FullName.Contains("Reflection")))
-            //{
-            //    foreach (Type type in assembly.GetTypes())
-            //    {
-            //        if (typeof(IDataModelRegistrator).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
-            //        {
-            //            IDataModelRegistrator modelRegistrar = (IDataModelRegistrator)Activator.CreateInstance(type);
-            //            modelRegistrar.RegisterModels(modelBuilder);
-            //        }
-            //    }
-            //}
+            foreach (Assembly assembly in DataStorageManager.Assemblies.Where(a => !a.FullName.Contains("Reflection")))
+            {
+                foreach (Type type in assembly.GetTypes())
+                {
+                    if (typeof(IDataModelRegistrator).IsAssignableFrom(type) && type.GetTypeInfo().IsClass)
+                    {
+                        IDataModelRegistrator modelRegistrar = (IDataModelRegistrator)Activator.CreateInstance(type);
+                        modelRegistrar.RegisterModels(modelBuilder);
+                    }
+                }
+            }
 
             //Database.Migrate();
         }

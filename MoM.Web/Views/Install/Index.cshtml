@@ -1,18 +1,49 @@
-﻿<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <h1>Install MoM</h1>
-            <h2>Welcome to MoM.</h2>
-            <h3>It seems the website is not yet configured.</h3>
-            <p>Please follow the guide below in order to setup you new website.</p>
+﻿@{
+    ViewData["Title"] = "Welcome to MoM Install guide";
+}
 
-            <p>Note: If you have allready setup your site do not run this installer! You should instead check the connectionstring in the appsettings.json located in the root of your website. If this does not work please verify that the Database is running.</p>
-
-            <p>Step 1: Database connection</p>
-            <p>Step 2: Create admin account</p>
-            <p>Step 3: Configure Mail and SMS(optional)</p>
-            <p>Step 4: Select some modules or recipe</p>
-            <p>Step 5: Social logins (optional)</p>
+<app>
+    <div class="spinner-container" *ngIf="isLoading">
+        <div class="spinner-outer">
+            <div class="spinner-inner">
+                <p><img src="~/site/logo.png" srcset="~/site/logo.svg 1x" class="navbar-brand" alt="EasyModules.NET Logo" width="320" height="48"></p>
+                <p><i class="fa fa-cog fa-spin fa-5x"></i></p>
+                <p>Loading...</p>
+            </div>
         </div>
     </div>
-</div>
+</app>
+
+@section head {
+<environment names="Development">
+    <base href="~/" />
+    <!-- Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+    <script src="lib/core-js/client/shim.min.js"></script>
+    <script src="lib/zone.js/dist/zone.js"></script>
+    <script src="lib/reflect-metadata/Reflect.js"></script>
+    <script src="lib/systemjs/dist/system.src.js"></script>
+    <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
+    <!-- Configure SystemJS -->
+    <script src="app/install.config.js"></script>
+    <script>
+    System.import('app/install').catch(function (err) { console.error(err); });
+    </script>
+</environment>
+<!-- TODO: Libraries should be the minified versions but not all frameworks are working with min files -->
+<environment names="Staging,Production">
+    <base href="~/" />
+    <!-- Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+    <script src="lib/core-js/client/shim.min.js"></script>
+    <script src="lib/zone.js/dist/zone.js"></script>
+    <script src="lib/reflect-metadata/Reflect.js"></script>
+    <script src="lib/systemjs/dist/system.src.js"></script>
+    <script src="lib/extensions/ng2-bootstrap/bundles/ng2-bootstrap.js"></script>
+    <!-- Configure SystemJS -->
+    <script src="install.config.js"></script>
+    <script>
+    System.import('app/install').catch(function (err) { console.error(err); });
+    </script>
+</environment>
+}

@@ -6,9 +6,9 @@ import {ROUTER_PROVIDERS} from "@angular/router-deprecated";
 import {HTTP_PROVIDERS} from "@angular/http";
 import {Ng2BootstrapConfig, Ng2BootstrapTheme} from "ng2-bootstrap/ng2-bootstrap";
 
-import {MainComponent} from "./main.component";
+import {InstallComponent} from "./install.component";
 
 import { enableProdMode } from "@angular/core";
 Ng2BootstrapConfig.theme = Ng2BootstrapTheme.BS4;
 //enableProdMode();
-bootstrap(MainComponent, [ROUTER_PROVIDERS, HTTP_PROVIDERS]);
+bootstrap(InstallComponent, [ROUTER_PROVIDERS, HTTP_PROVIDERS]);

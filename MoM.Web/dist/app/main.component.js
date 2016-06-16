@@ -14,8 +14,8 @@ var core_1 = require("@angular/core");
 var router_deprecated_1 = require("@angular/router-deprecated");
 var common_1 = require("@angular/common");
 var ng2_bootstrap_1 = require("ng2-bootstrap/ng2-bootstrap");
-var AppComponent = (function () {
-    function AppComponent(router, location) {
+var MainComponent = (function () {
+    function MainComponent(router, location) {
         this.router = router;
         this.location = location;
         this.routes = null;
@@ -23,7 +23,7 @@ var AppComponent = (function () {
         this.isCollapsed = true;
         this.isAdminArea = false;
     }
-    AppComponent.prototype.ngOnInit = function () {
+    MainComponent.prototype.ngOnInit = function () {
         if (this.routes === null) {
             this.routes = [
                 // new AsyncRoute({
@@ -83,20 +83,20 @@ var AppComponent = (function () {
         }
     };
     // hide footer if the area is admin
-    AppComponent.prototype.ngDoCheck = function () {
+    MainComponent.prototype.ngDoCheck = function () {
         this.isAdminArea = this.location.path().startsWith("/admin");
     };
-    AppComponent.prototype.getLinkStyle = function (route) {
+    MainComponent.prototype.getLinkStyle = function (route) {
         return this.location.path().indexOf(route.path) > -1;
     };
-    AppComponent = __decorate([
+    MainComponent = __decorate([
         core_1.Component({
             selector: "app",
             templateUrl: "/pages/app",
             directives: [router_deprecated_1.RouterOutlet, router_deprecated_1.RouterLink, router_deprecated_1.ROUTER_DIRECTIVES, ng2_bootstrap_1.CollapseDirective]
         }), 
         __metadata('design:paramtypes', [router_deprecated_1.Router, common_1.Location])
-    ], AppComponent);
-    return AppComponent;
+    ], MainComponent);
+    return MainComponent;
 }());
-exports.AppComponent = AppComponent;
+exports.MainComponent = MainComponent;

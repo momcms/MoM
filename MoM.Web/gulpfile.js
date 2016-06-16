@@ -135,13 +135,13 @@ gulp.task('app-clean-dist', function (cb) {
     rimraf('./dist', cb);
 });
 
-gulp.task('app-copy', ['app-typescript-transpile', 'app-copy-systemjs.config'], function () {
+gulp.task('app-copy', ['app-typescript-transpile', 'app-copy-systemjs.configs'], function () {
     gulp.src(paths.scripDist + "/app/**/*.js")
     .pipe(gulp.dest(paths.scriptDestination))
 });
 
-gulp.task('app-copy-systemjs.config', function () {
-    gulp.src('app/systemjs.config.js')
+gulp.task('app-copy-systemjs.configs', ['app-clean-dist', 'app-clean-wwwroot'], function () {
+    gulp.src('app/*.config.js')
     .pipe(gulp.dest(paths.scriptDestination))
 })
 

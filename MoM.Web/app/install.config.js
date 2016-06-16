@@ -14,11 +14,11 @@
     'ng2-prism':                    'lib/extensions/ng2-prism',
     'prismjs':                      'lib/extensions/ng2-prism/node_modules/prismjs',
     'dragula':                      'lib/extensions/dragula/dragula.js',
-    'ng2-dragula':                  'lib/extensions/ng2-dragula'
+    'ng2-dragula':                  'lib/extensions/ng2-dragula/ng2-dragula.js'
   };
   // packages tells the System loader how to load when no filename and/or no extension
   var packages = {
-    'app':                          { main: 'main.dev.js',  defaultExtension: 'js' },
+    'app':                          { main: 'install.js',  defaultExtension: 'js' },
     'rxjs':                         { defaultExtension: 'js' },
     'ng2-dragula':                  { defaultExtension: 'js' },
     //'angular2-in-memory-web-api': { defaultExtension: 'js' },
