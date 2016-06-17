@@ -17,9 +17,9 @@ import "rxjs/add/operator/share";
 
 
 import {SiteSettingDto} from "../dtos/SiteSettingDto";
-import {any} from "../dtos/any";
 import {SiteSettingConnectionStringDto} from "../dtos/SiteSettingConnectionStringDto";
 import {SiteSettingInstallationStatusDto} from "../dtos/SiteSettingInstallationStatusDto";
+import {SiteSettingInputDto} from "../dtos/SiteSettingInputDto";
 
 @Injectable()
 export class SetupService {
@@ -27,27 +27,48 @@ constructor(private _http: Http) { }
 
 
     public isInstalled = () : Observable<SiteSettingDto> => {
-        return this._http.request(`isinstalled`, new RequestOptions({
+        return this._http.request("api/setup/isinstalled", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<SiteSettingDto>res.json()));
     }
-    public getConnectionString = () : Observable<any[]> => {
-        return this._http.request(`getconnectionstring`, new RequestOptions({
+    public getConnectionString = () : Observable<SiteSettingConnectionStringDto> => {
+        return this._http.request("api/setup/getconnectionstring", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
-        })).map(res => (<any[]>res.json()));
+        })).map(res => (<SiteSettingConnectionStringDto>res.json()));
+    }
+    public checkDatabaseConnection = () : Observable<SiteSettingInstallationStatusDto> => {
+        return this._http.request("api/setup/checkdatabaseconnection", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "get",
+            body: JSON.stringify(null)
+        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
     public saveConnectionstring = (connectionstring: SiteSettingConnectionStringDto) : Observable<SiteSettingInstallationStatusDto> => {
-        return this._http.request(`saveconnectionstring`, new RequestOptions({
+        return this._http.request("api/setup/saveconnectionstring", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "post",
             body: JSON.stringify(connectionstring)
         })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
-    public checkDatabaseConnection = () : Observable<SiteSettingInstallationStatusDto> => {
-        return this._http.request(`checkdatabaseconnection`, new RequestOptions({
-            method: "get",
-            body: JSON.stringify(null)
+    public saveSiteSetting = (siteSetting: SiteSettingInputDto) : Observable<SiteSettingInstallationStatusDto> => {
+        return this._http.request("api/setup/savesitesetting", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "post",
+            body: JSON.stringify(siteSetting)
         })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
 

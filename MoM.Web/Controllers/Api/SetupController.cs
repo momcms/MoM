@@ -11,7 +11,6 @@ using System.Data.SqlClient;
 
 namespace MoM.Web.Controllers.Api
 {
-    [Route("api/[controller]")]
     public class SetupController : Controller
     {
         IOptions<SiteSettingDto> SiteSetting;
@@ -32,7 +31,7 @@ namespace MoM.Web.Controllers.Api
         }
 
         [HttpGet]
-        [Route("isinstalled")]
+        [Route("api/setup/isinstalled")]
         public SiteSettingDto IsInstalled()
         {
             if(SiteSetting.Value.IsInstalled)
@@ -46,8 +45,8 @@ namespace MoM.Web.Controllers.Api
         }
 
         [HttpGet]
-        [Route("getconnectionstring")]
-        public SqlConnectionStringBuilder GetConnectionString()
+        [Route("api/setup/getconnectionstring")]
+        public SiteSettingConnectionStringDto GetConnectionString()
         {
             var filepath = Host.ContentRootPath + "\\" + "appsettings.json";
             var appsettingsFile = JsonConvert.DeserializeObject<dynamic>(System.IO.File.ReadAllText(filepath));
@@ -56,45 +55,74 @@ namespace MoM.Web.Controllers.Api
             {
                 builder = new SqlConnectionStringBuilder(appsettingsFile.ConnectionStrings.DefaultConnection.Value);
             }
+
+            var result = new SiteSettingConnectionStringDto
+            {
+                database = builder.InitialCatalog,
+                server = builder.DataSource,
+                useWindowsAuthentication = builder.IntegratedSecurity,
+                password = builder.Password,
+                username = builder.UserID
+            };
             
-            return builder;
+            return result;
+        }
+
+        [HttpGet]
+        [Route("api/setup/checkdatabaseconnection")]
+        public SiteSettingInstallationStatusDto CheckDatabaseConnection()
+        {
+            return new SiteSettingInstallationStatusDto
+            {
+                message = "The connection is working",
+                installationResultCode = Result.Success.ToString()
+            };
         }
 
         [HttpPost]
-        [Route("saveconnectionstring")]
+        [Route("api/setup/saveconnectionstring")]
         public SiteSettingInstallationStatusDto SaveConnectionstring([FromBody] SiteSettingConnectionStringDto connectionstring)
         {
-            if (InstallStatus == InstallationStatus.MissingConnectionString)
+            if (InstallStatus != InstallationStatus.Installed)
             {
                 var filepath = Host.ContentRootPath + "\\" + "appsettings.json";
                 var appsettingsFile = JsonConvert.DeserializeObject<dynamic>(System.IO.File.ReadAllText(filepath));
-                appsettingsFile.ConnectionStrings.DefaultConnection = connectionstring.Value;
+                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+                builder.DataSource = connectionstring.server;
+                builder.InitialCatalog = connectionstring.database;
+                builder.IntegratedSecurity = connectionstring.useWindowsAuthentication;
+                if(!connectionstring.useWindowsAuthentication)
+                {
+                    builder.Password = connectionstring.password;
+                    builder.UserID = connectionstring.username;
+                }
+                builder.MultipleActiveResultSets = true;
+                appsettingsFile.ConnectionStrings.DefaultConnection = builder.ConnectionString;
                 appsettingsFile.InstallStatusMoM = "1";
                 System.IO.File.WriteAllText(filepath, JsonConvert.SerializeObject(appsettingsFile));
 
                 CheckDatabaseConnection();
                 //Todo apply migrations to the database
                 return new SiteSettingInstallationStatusDto {
-                    CompletedSteps = new int[] { 1 },
-                    Message = "The connectionstring to the database have been saved",
-                    InstallationResultCode = Result.Success.ToString()};
+                    completedSteps = new int[] { 1 },
+                    message = "The connectionstring to the database have been saved",
+                    installationResultCode = Result.Success.ToString()};
             }
             return new SiteSettingInstallationStatusDto {
-                Message = "ConnectionString have allready been setup so you will need to reconfigure either using the admin interface or by manually editing appsettings.json",
-                InstallationResultCode = Result.Warning.ToString()
-            } ;
-        }
-
-        [HttpGet]
-        [Route("checkdatabaseconnection")]
-        public SiteSettingInstallationStatusDto CheckDatabaseConnection()
-        {
-            return new SiteSettingInstallationStatusDto
-            {
-                Message = "The connection is working",
-                InstallationResultCode = Result.Success.ToString()
+                message = "ConnectionString have allready been setup so you will need to reconfigure either using the admin interface or by manually editing appsettings.json",
+                installationResultCode = Result.Warning.ToString()
             };
         }
 
+        [HttpPost]
+        [Route("api/setup/savesitesetting")]
+        public SiteSettingInstallationStatusDto SaveSiteSetting(SiteSettingInputDto siteSetting)
+        {
+            return new SiteSettingInstallationStatusDto
+            {
+                message = "Sitesettings could not be saved. Most likely it is caused either because you have allready completed the installation or there is no connection to the database.",
+                installationResultCode = Result.Error.ToString()
+            };
+        }
     }
 }

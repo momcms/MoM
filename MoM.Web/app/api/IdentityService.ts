@@ -24,20 +24,29 @@ export class IdentityService {
 constructor(private _http: Http) { }
 
     public createRole = (roleName: string) : Observable<Response> => {
-        return this._http.request(`createrole`, new RequestOptions({
+        return this._http.request("createrole", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "post",
             body: JSON.stringify(roleName)
         }));
     }
 
     public getUsers = (pageNo: number, pageSize: number, sortColumn: string, sortByAscending: boolean) : Observable<UserDto[]> => {
-        return this._http.request(`users?pageNo=${pageNo}&pageSize=${pageSize}&sortColumn=${sortColumn}&sortByAscending=${sortByAscending}`, new RequestOptions({
+        return this._http.request("users", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<UserDto[]>res.json()));
     }
     public getRoles = (pageNo: number, pageSize: number, sortColumn: string, sortByAscending: boolean) : Observable<RoleDto[]> => {
-        return this._http.request(`roles?pageNo=${pageNo}&pageSize=${pageSize}&sortColumn=${sortColumn}&sortByAscending=${sortByAscending}`, new RequestOptions({
+        return this._http.request("roles", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<RoleDto[]>res.json()));

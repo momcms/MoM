@@ -16,7 +16,8 @@ var gulp = require("gulp"),
     rimraf = require('rimraf'),
     uglify = require('gulp-uglify'),
     cssmin = require('gulp-cssmin'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    builder = require('systemjs-builder');
 
 var paths = {
     npm: '../../node_modules/',
@@ -62,6 +63,10 @@ var moduleName = "MoM.CMS";
 gulp.task('libs-clean', function (cb) {
     rimraf('./wwwroot/lib', cb);
 });
+
+gulp.task('libs-bundle', function (cb) {
+    builder.bundle('./wwwroot/app/**/* - [./wwwroot/app/**/*]', './wwwroot/lib/libs.js', { minify: true, sourceMaps: true });
+})
 
 gulp.task('libs-copy', ['libs-clean', 'rxjs', 'angular2', 'core-js', 'zone.js', 'reflect-metadata', 'systemjs', 'ng2-prism', 'prismjs', 'ng2-bootstrap', 'ng2-dragula', 'dragula'], function () {
     return gulp.src(libs)

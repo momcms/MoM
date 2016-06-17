@@ -15,6 +15,7 @@
     // Custom extension methods can be used in the template by adding a $ prefix
     string RenameControllerToService(string name) => name.Replace("Controller", "Service");
     string ServiceName(Class c) => RenameControllerToService(c.Name);
+    string ServiceUrl(Class c) => c.Attributes.FirstOrDefault(x => x.Name.Equals("Route")).Value;
     Type[] CalculatedModelTypes(Class c)
     {
         var allTypes = c.Methods
@@ -63,21 +64,30 @@ export class $ServiceName {
 constructor(private _http: Http) { }
 $Methods(m => CalculatedTypeName(m.Type) == "void")[
     public $name = ($Parameters[$name: $Type][, ]) : Observable<Response> => {
-        return this._http.request(`$UrlTrimmed`, new RequestOptions({
+        return this._http.request("$Route", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "$HttpMethod",
             body: JSON.stringify($RequestData)
         }));
     }]
 $Methods(m => CalculatedTypeName(m.Type) != "void" && !CalculatedType(m.Type).IsPrimitive)[
     public $name = ($Parameters[$name: $Type][, ]) : Observable<$Type[$CalculatedTypeName]> => {
-        return this._http.request(`$UrlTrimmed`, new RequestOptions({
+        return this._http.request("$Route", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "$HttpMethod",
             body: JSON.stringify($RequestData)
         })).map(res => (<$Type[$CalculatedTypeName]>res.json()));
     }]
 $Methods(m => CalculatedTypeName(m.Type) != "void" && CalculatedType(m.Type).IsPrimitive)[
     public $name = ($Parameters[$name: $Type][, ]) : Observable<$Type[$CalculatedTypeName]> => {
-        return this._http.request(`$UrlTrimmed`, new RequestOptions({
+        return this._http.request("$Route", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "$HttpMethod",
             body: JSON.stringify($RequestData)
         })).map(res => (<$Type[$CalculatedTypeName]>res.json()));

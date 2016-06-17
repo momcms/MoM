@@ -4,9 +4,9 @@
     {
         MissingConnectionString,
         CreateAdminAccount,
+        SocialLogins,
         ConfigureMailAndSms,
         SelectModules,
-        SocialLogins,
         Installed
     }
 }

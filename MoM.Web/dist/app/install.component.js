@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 // add all operators to Observable
-require("rxjs/Rx");
+//import "rxjs/Rx";
 var core_1 = require("@angular/core");
 var router_deprecated_1 = require("@angular/router-deprecated");
 var common_1 = require("@angular/common");

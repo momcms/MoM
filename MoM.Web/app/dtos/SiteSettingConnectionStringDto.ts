@@ -1,5 +1,8 @@
 
 export interface SiteSettingConnectionStringDto {
-    name: string;
-    value: string;
+    server: string;
+    database: string;
+    useWindowsAuthentication: boolean;
+    username: string;
+    password: string;
 }

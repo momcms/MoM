@@ -24,20 +24,29 @@ constructor(private _http: Http) { }
 
 
     public get = () : Observable<SiteSettingDto> => {
-        return this._http.request(`getsitesettings`, new RequestOptions({
+        return this._http.request("getsitesettings", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<SiteSettingDto>res.json()));
     }
     public saveSiteSettings = (siteSettings: SiteSettingDto) : Observable<SiteSettingDto> => {
-        return this._http.request(`savesitesettings`, new RequestOptions({
+        return this._http.request("savesitesettings", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "post",
             body: JSON.stringify(siteSettings)
         })).map(res => (<SiteSettingDto>res.json()));
     }
 
     public getModulePath = () : Observable<string> => {
-        return this._http.request(`getmodulepath`, new RequestOptions({
+        return this._http.request("getmodulepath", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<string>res.json()));

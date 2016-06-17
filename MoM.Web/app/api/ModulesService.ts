@@ -24,7 +24,10 @@ constructor(private _http: Http) { }
 
 
     public getInstalledModules = () : Observable<ModuleInfoDto[]> => {
-        return this._http.request(`getinstalledmodules`, new RequestOptions({
+        return this._http.request("getinstalledmodules", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<ModuleInfoDto[]>res.json()));

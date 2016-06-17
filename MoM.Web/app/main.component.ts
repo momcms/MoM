@@ -1,5 +1,5 @@
 ﻿// add all operators to Observable
-import "rxjs/Rx";
+//import "rxjs/Rx";
 import {Component, OnInit} from "@angular/core";
 import {AsyncRoute, Router, RouterLink, RouteDefinition, ROUTER_DIRECTIVES, RouterOutlet} from "@angular/router-deprecated";
 import { Location } from "@angular/common";
