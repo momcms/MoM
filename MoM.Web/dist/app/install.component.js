@@ -28,7 +28,7 @@ var InstallComponent = (function () {
                     name: "Install",
                     useAsDefault: true,
                     data: { includeInMenu: true },
-                    loader: function () { return System.import("app/MoM.Install/install").then(function (c) { return c["InstallComponent"]; }); }
+                    loader: function () { return System.import("app/install/install").then(function (c) { return c["InstallComponent"]; }); }
                 })
             ];
             this.router.config(this.routes);

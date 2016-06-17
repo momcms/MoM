@@ -1,4 +1,4 @@
-import {RoleDto[]} from "./RoleDto";
+import {RoleDto} from "./RoleDto";
 
 export interface UserDto {
     id: string;

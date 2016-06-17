@@ -100,7 +100,7 @@ gulp.task('systemjs', ['libs-clean'], function () {
 
 // extensions
 gulp.task('ng2-bootstrap', ['libs-clean'], function () {
-    return gulp.src([paths.npm + 'ng2-bootstrap/**/*.js', paths.npm + 'ng2-bootstrap/**/*.map'])
+    return gulp.src([paths.npm + 'ng2-bootstrap/**/*.js', paths.npm + 'ng2-bootstrap/**/*.map', paths.npm + 'ng2-bootstrap/**/*.gz'])
         .pipe(gulp.dest(paths.lib + 'extensions/ng2-bootstrap/'));
 });
 

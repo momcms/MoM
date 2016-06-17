@@ -8,15 +8,16 @@
     <div class="row">
         <div class="col-md-12">
             <h1>Install MoM</h1>
-            <h2>Welcome to MoM.</h2>
-            <h3>It seems the website is not yet configured.</h3>
             <p>Please follow these steps below in order to setup you new website.</p>
-            <tabset>
-                <tab>
-                    <template tab-heading>
-                        Database
-                    </template>
-                    <form *ngIf="!isLoading" (ngSubmit)="onSaveDatabaseSettings()" #postForm="ngForm">
+            <progress class="progress progress-success" value="1" max="5">Setup database</progress>
+                <tabset type="pills">
+                    <tab>
+                        <template tabHeading>
+                            <i class="fa fa-database fa-2x mom-icon"></i>
+                            <span>Database</span>
+                        </template>
+                        test
+                        @*<form *ngIf="!isLoading" (ngSubmit)="onSaveDatabaseSettings()" #postForm="ngForm">
                         <div class="form-group row">
                             <label for="inputServer" class="col-sm-2 form-control-label">Server</label>
                             <div class="col-sm-10">
@@ -30,33 +31,37 @@
                                 <button type="submit" class="btn btn-success" [disabled]="!postForm.form.valid">Submit</button>
                             </div>
                         </div>
-                    </form>
-                </tab>
-                <tab>
-                    <template tab-heading>
-                        Admin account
-                    </template>
-                    Create admin account content
-                </tab>
-                <tab>
-                    <template tab-heading>
-                        Mail
-                    </template>
-                    Configure Mail and SMS(optional) content
-                </tab>
-                <tab>
-                    <template tab-heading>
-                        Modules
-                    </template>
-                    Select modules content
-                </tab>
-                <tab>
-                    <template tab-heading>
-                        Social accounts
-                    </template>
-                    Social accounts content
-                </tab>
-            </tabset>
-        </div>
+                    </form>*@
+                    </tab>
+                    <tab [disabled]="true">
+                        <template tabHeading>
+                            <i class="fa fa-user-secret fa-2x mom-icon"></i>
+                            <span>Admin account</span>
+                        </template>
+                        Create admin account content
+                    </tab>
+                    <tab>
+                        <template tabHeading>
+                            <i class="fa fa-envelope-o fa-2x mom-icon"></i>
+                            <span>Mail</span>
+                        </template>
+                        Configure Mail and SMS(optional) content
+                    </tab>
+                    <tab>
+                        <template tabHeading>
+                            <i class="fa fa-cubes fa-2x mom-icon"></i>
+                            <span>Modules</span>
+                        </template>
+                        Select modules content
+                    </tab>
+                    <tab>
+                        <template tabHeading>
+                            <i class="fa fa-users fa-2x mom-icon"></i>
+                            <span>Social accounts</span>
+                        </template>
+                        Social accounts content
+                    </tab>
+                </tabset>
+</div>
     </div>
 </div>

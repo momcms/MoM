@@ -17,49 +17,38 @@ import "rxjs/add/operator/share";
 
 
 import {SiteSettingDto} from "../dtos/SiteSettingDto";
-import {ConnectionString} from "../dtos/ConnectionString";
-import {InstallationResult} from "../dtos/InstallationResult";
+import {any} from "../dtos/any";
+import {SiteSettingConnectionStringDto} from "../dtos/SiteSettingConnectionStringDto";
+import {SiteSettingInstallationStatusDto} from "../dtos/SiteSettingInstallationStatusDto";
 
 @Injectable()
 export class SetupService {
 constructor(private _http: Http) { }
 
 
-    public get = () : Observable<SiteSettingDto> => {
-        return this._http.request(`getsitesettings`, new RequestOptions({
+    public isInstalled = () : Observable<SiteSettingDto> => {
+        return this._http.request(`isinstalled`, new RequestOptions({
             method: "get",
             body: JSON.stringify(null)
         })).map(res => (<SiteSettingDto>res.json()));
     }
-    public saveConnectionstring = (connectionstring: ConnectionString) : Observable<InstallationResult> => {
+    public getConnectionString = () : Observable<any[]> => {
+        return this._http.request(`getconnectionstring`, new RequestOptions({
+            method: "get",
+            body: JSON.stringify(null)
+        })).map(res => (<any[]>res.json()));
+    }
+    public saveConnectionstring = (connectionstring: SiteSettingConnectionStringDto) : Observable<SiteSettingInstallationStatusDto> => {
         return this._http.request(`saveconnectionstring`, new RequestOptions({
             method: "post",
             body: JSON.stringify(connectionstring)
-        })).map(res => (<InstallationResult>res.json()));
+        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
-
-    public checkDatabaseConnection = (connectionstring: ConnectionString) : Observable<boolean> => {
+    public checkDatabaseConnection = () : Observable<SiteSettingInstallationStatusDto> => {
         return this._http.request(`checkdatabaseconnection`, new RequestOptions({
-            method: "post",
-            body: JSON.stringify(connectionstring)
-        })).map(res => (<boolean>res.json()));
+            method: "get",
+            body: JSON.stringify(null)
+        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
-}
-
-
-@Injectable()
-export class ConnectionString {
-constructor(private _http: Http) { }
-
-
-
-}
-
-
-@Injectable()
-export class InstallationResult {
-constructor(private _http: Http) { }
-
-
 
 }

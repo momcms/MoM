@@ -28,7 +28,7 @@ export class InstallComponent implements OnInit {
                     name: "Install",
                     useAsDefault: true,
                     data: { includeInMenu: true },
-                    loader: () => System.import("app/MoM.Install/install").then(c => c["InstallComponent"])
+                    loader: () => System.import("app/install/install").then(c => c["InstallComponent"])
                 })
             ];
 

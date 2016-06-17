@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using MoM.Module.Enums;
 using MoM.Module.Dtos;
+using System.Data.SqlClient;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -31,22 +32,37 @@ namespace MoM.Web.Controllers.Api
         }
 
         [HttpGet]
-        [Route("getsitesettings")]
-        public SiteSettingDto Get()
+        [Route("isinstalled")]
+        public SiteSettingDto IsInstalled()
         {
             if(SiteSetting.Value.IsInstalled)
             {
-                return null;
+                return SiteSetting.Value;
             }
             else
             {
-                return SiteSetting.Value;
+                return new SiteSettingDto { IsInstalled=false };
             }            
+        }
+
+        [HttpGet]
+        [Route("getconnectionstring")]
+        public SqlConnectionStringBuilder GetConnectionString()
+        {
+            var filepath = Host.ContentRootPath + "\\" + "appsettings.json";
+            var appsettingsFile = JsonConvert.DeserializeObject<dynamic>(System.IO.File.ReadAllText(filepath));
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            if (appsettingsFile.InstallStatusMoM != InstallationStatus.Installed)
+            {
+                builder = new SqlConnectionStringBuilder(appsettingsFile.ConnectionStrings.DefaultConnection.Value);
+            }
+            
+            return builder;
         }
 
         [HttpPost]
         [Route("saveconnectionstring")]
-        public InstallationResult SaveConnectionstring([FromBody] ConnectionString connectionstring)
+        public SiteSettingInstallationStatusDto SaveConnectionstring([FromBody] SiteSettingConnectionStringDto connectionstring)
         {
             if (InstallStatus == InstallationStatus.MissingConnectionString)
             {
@@ -56,43 +72,29 @@ namespace MoM.Web.Controllers.Api
                 appsettingsFile.InstallStatusMoM = "1";
                 System.IO.File.WriteAllText(filepath, JsonConvert.SerializeObject(appsettingsFile));
 
-                CheckDatabaseConnection(connectionstring);
+                CheckDatabaseConnection();
                 //Todo apply migrations to the database
-                return new InstallationResult {
+                return new SiteSettingInstallationStatusDto {
+                    CompletedSteps = new int[] { 1 },
                     Message = "The connectionstring to the database have been saved",
-                    InstallationResultCode = InstallationResultCode.Success};
+                    InstallationResultCode = Result.Success.ToString()};
             }
-            return new InstallationResult {
+            return new SiteSettingInstallationStatusDto {
                 Message = "ConnectionString have allready been setup so you will need to reconfigure either using the admin interface or by manually editing appsettings.json",
-                InstallationResultCode = InstallationResultCode.Warning } ;
+                InstallationResultCode = Result.Warning.ToString()
+            } ;
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("checkdatabaseconnection")]
-        public bool CheckDatabaseConnection([FromBody] ConnectionString connectionstring)
+        public SiteSettingInstallationStatusDto CheckDatabaseConnection()
         {
-            return false;
+            return new SiteSettingInstallationStatusDto
+            {
+                Message = "The connection is working",
+                InstallationResultCode = Result.Success.ToString()
+            };
         }
 
-    }
-
-    public class ConnectionString
-    {
-        public string Name { get; set; }
-        public string Value { get; set; }
-    }
-
-    public class InstallationResult
-    {
-        public InstallationResultCode InstallationResultCode { get; set; }
-        public string Message { get; set; }
-    }
-
-    public enum InstallationResultCode
-    {
-        Success,
-        Information,
-        Warning,
-        Error
     }
 }
