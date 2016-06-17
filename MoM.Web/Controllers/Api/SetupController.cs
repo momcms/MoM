@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MoM.Module.Config;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using MoM.Module.Enums;
+using MoM.Module.Dtos;
 
 // For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -13,13 +13,13 @@ namespace MoM.Web.Controllers.Api
     [Route("api/[controller]")]
     public class SetupController : Controller
     {
-        IOptions<SiteSetting> SiteSetting;
+        IOptions<SiteSettingDto> SiteSetting;
         private IConfiguration Configuration { get; set; }
         IHostingEnvironment Host;
         private InstallationStatus InstallStatus { get; set; }
 
         public SetupController(
-            IOptions<SiteSetting> siteSetting, 
+            IOptions<SiteSettingDto> siteSetting, 
             IHostingEnvironment host, 
             IConfiguration configuration
             )
@@ -32,7 +32,7 @@ namespace MoM.Web.Controllers.Api
 
         [HttpGet]
         [Route("getsitesettings")]
-        public SiteSetting Get()
+        public SiteSettingDto Get()
         {
             if(SiteSetting.Value.IsInstalled)
             {

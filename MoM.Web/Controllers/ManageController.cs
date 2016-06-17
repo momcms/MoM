@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using MoM.Module.Interfaces;
 using MoM.Module.Models;
 using Microsoft.Extensions.Options;
-using MoM.Module.Config;
+using MoM.Module.Dtos;
 
 namespace MoM.Web.Controllers
 {
@@ -20,7 +20,7 @@ namespace MoM.Web.Controllers
         private readonly IEmailSender EmailSender;
         private readonly ISmsSender SmsSender;
         private readonly ILogger Logger;
-        IOptions<SiteSetting> SiteSetting;
+        IOptions<SiteSettingDto> SiteSetting;
 
         public ManageController(
         UserManager<ApplicationUser> userManager,
@@ -28,7 +28,7 @@ namespace MoM.Web.Controllers
         IEmailSender emailSender,
         ISmsSender smsSender,
         ILoggerFactory loggerFactory,
-        IOptions<SiteSetting> siteSetting
+        IOptions<SiteSettingDto> siteSetting
         )
         {
             UserManager = userManager;

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using MoM.Module.Config;
+using MoM.Module.Dtos;
 using MoM.Module.Interfaces;
-using MoM.Module.Models;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -45,7 +44,7 @@ namespace MoM.Module.Services
         {
             var read = File.ReadAllText(FileInfo.FullName);
             dynamic json = JsonConvert.DeserializeObject(read);
-            SiteSetting appSettingsJson = json.Site.ToObject<SiteSetting>();
+            SiteSettingDto appSettingsJson = json.Site.ToObject<SiteSettingDto>();
             var site = Config.GetSection("Site");
             var test = site.Value;
             //site.Value = appSettingsJson;

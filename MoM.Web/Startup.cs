@@ -23,6 +23,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using System;
 using MoM.Module.Managers;
+using MoM.Module.Dtos;
 
 namespace MoM.Web
 {
@@ -257,39 +258,39 @@ namespace MoM.Web
             // Use in method like:
             // var theme = SiteSettings.Value.Theme;
             var siteSetting = Configuration.GetSection("SiteSetting");
-            services.Configure<SiteSetting>(options =>
+            services.Configure<SiteSettingDto>(options =>
             {
                 options.IsInstalled = Convert.ToBoolean(Configuration["SiteIsInstalled"]);
                 options.ModulePath = Configuration["SiteModulePath"];
                 options.Title = Configuration["SiteTitle"];
                 
-                options.Theme = new Theme
+                options.Theme = new SiteSettingThemeDto
                 {
                     Module = Configuration["SiteThemeModule"],
                     Name = Configuration["SiteThemeName"]
                 };
 
-                options.Authentication = new Authentication
+                options.Authentication = new SiteSettingAuthenticationDto
                 {
-                    Facebook = new AuthenticationFacebook
+                    Facebook = new SiteSettingAuthenticationFacebookDto
                     {
                         AppId = Configuration["SiteFacebookAppId"],
                         AppSecret = Configuration["SiteFacebookAppSecret"],
                         Enabled = Convert.ToBoolean(Configuration["SiteFacebookEnabled"])
                     },
-                    Google = new AuthenticationGoogle
+                    Google = new SiteSettingAuthenticationGoogleDto
                     {
                         ClientId = Configuration["SiteGoogleClientAppId"],
                         ClientSecret = Configuration["SiteGoogleClientSecret"],
                         Enabled = Convert.ToBoolean(Configuration["SiteGoogleEnabled"])
                     },
-                    Microsoft = new AuthenticationMicrosoft
+                    Microsoft = new SiteSettingAuthenticationMicrosoftDto
                     {
                         ClientId = Configuration["SiteMicrosoftClientId"],
                         ClientSecret = Configuration["SiteMicrosoftClientSecret"],
                         Enabled = Convert.ToBoolean(Configuration["SiteMicrosoftEnabled"])
                     },
-                    Twitter = new AuthenticationTwitter
+                    Twitter = new SiteSettingAuthenticationTwitterDto
                     {
                         ConsumerKey = Configuration["SiteTwitterConsumerKey"],
                         ConsumerSecret = Configuration["SiteTwitterConsumerSecret"],
@@ -297,7 +298,7 @@ namespace MoM.Web
                     }
                 };
 
-                options.Email = new Email
+                options.Email = new SiteSettingEmailDto
                 {
                     HostName = Configuration["SiteEmailHostName"],
                     Password = Configuration["SiteEmailPassword"],
@@ -308,7 +309,7 @@ namespace MoM.Web
                     UseSSL = Convert.ToBoolean(Configuration["SiteEmailUseSSL"])
                 };
 
-                options.Logo = new Logo
+                options.Logo = new SiteSettingLogoDto
                 {
                     Height = Convert.ToInt32(Configuration["SiteLogoHeight"]),
                     ImagePath = Configuration["SiteLogoImagePath"],

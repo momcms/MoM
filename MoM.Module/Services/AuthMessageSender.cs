@@ -6,6 +6,7 @@ using MailKit.Net.Smtp;
 using MailKit;
 using MimeKit;
 using MoM.Module.Models;
+using MoM.Module.Dtos;
 
 namespace MoM.Module.Services
 {
@@ -14,8 +15,8 @@ namespace MoM.Module.Services
     // For more details see this link http://go.microsoft.com/fwlink/?LinkID=532713
     public class AuthMessageSender : IEmailSender, ISmsSender
     {
-        IOptions<SiteSetting> SiteSetting;
-        public AuthMessageSender(IOptions<SiteSetting> siteSetting)
+        IOptions<SiteSettingDto> SiteSetting;
+        public AuthMessageSender(IOptions<SiteSettingDto> siteSetting)
         {
             SiteSetting = siteSetting;
         }
