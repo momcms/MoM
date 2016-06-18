@@ -1,7 +1,7 @@
 # MoM (Mother of Modules)
 [![Gitter](https://badges.gitter.im/RolfVeinoeSorensen/MoM.svg)](https://gitter.im/RolfVeinoeSorensen/MoM?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-<p><img src="blob/dev/MoM.Web/assets/momlogo.png" srcset="blob/dev/MoM.Web/assets/momlogo.svg 1x" class="navbar-brand" alt="MoM Logo" width="152" height="150"></p>
+<p><img src="MoM.Web/assets/momlogo.png" srcset="MoM.Web/assets/momlogo.svg 1x" class="navbar-brand" alt="MoM Logo" width="152" height="150"></p>
 
 ### MoM loves all of her children.
 
