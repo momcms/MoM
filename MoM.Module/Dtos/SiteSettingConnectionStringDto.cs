@@ -1,4 +1,6 @@
-﻿namespace MoM.Module.Dtos
+﻿using MoM.Module.Enums;
+
+namespace MoM.Module.Dtos
 {
     public class SiteSettingConnectionStringDto
     {
@@ -7,5 +9,6 @@
         public bool useWindowsAuthentication { get; set; }
         public string username { get; set; }
         public string password { get; set; }
+        public InstallationStatus installationStatus { get; set; }
     }
 }

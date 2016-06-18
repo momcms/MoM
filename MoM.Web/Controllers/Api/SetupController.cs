@@ -51,7 +51,7 @@ namespace MoM.Web.Controllers.Api
             var filepath = Host.ContentRootPath + "\\" + "appsettings.json";
             var appsettingsFile = JsonConvert.DeserializeObject<dynamic>(System.IO.File.ReadAllText(filepath));
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-            if (appsettingsFile.InstallStatusMoM != InstallationStatus.Installed)
+            if (InstallStatus != InstallationStatus.MissingConnectionString && InstallStatus != InstallationStatus.Installed)
             {
                 builder = new SqlConnectionStringBuilder(appsettingsFile.ConnectionStrings.DefaultConnection.Value);
             }
@@ -62,7 +62,8 @@ namespace MoM.Web.Controllers.Api
                 server = builder.DataSource,
                 useWindowsAuthentication = builder.IntegratedSecurity,
                 password = builder.Password,
-                username = builder.UserID
+                username = builder.UserID,
+                installationStatus = appsettingsFile.InstallStatusMoM
             };
             
             return result;
@@ -83,35 +84,38 @@ namespace MoM.Web.Controllers.Api
         [Route("api/setup/saveconnectionstring")]
         public SiteSettingInstallationStatusDto SaveConnectionstring([FromBody] SiteSettingConnectionStringDto connectionstring)
         {
-            if (InstallStatus != InstallationStatus.Installed)
+            if(InstallStatus == InstallationStatus.Installed)
             {
-                var filepath = Host.ContentRootPath + "\\" + "appsettings.json";
-                var appsettingsFile = JsonConvert.DeserializeObject<dynamic>(System.IO.File.ReadAllText(filepath));
-                SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
-                builder.DataSource = connectionstring.server;
-                builder.InitialCatalog = connectionstring.database;
-                builder.IntegratedSecurity = connectionstring.useWindowsAuthentication;
-                if(!connectionstring.useWindowsAuthentication)
+                return new SiteSettingInstallationStatusDto
                 {
-                    builder.Password = connectionstring.password;
-                    builder.UserID = connectionstring.username;
-                }
-                builder.MultipleActiveResultSets = true;
-                appsettingsFile.ConnectionStrings.DefaultConnection = builder.ConnectionString;
-                appsettingsFile.InstallStatusMoM = "1";
-                System.IO.File.WriteAllText(filepath, JsonConvert.SerializeObject(appsettingsFile));
-
-                CheckDatabaseConnection();
-                //Todo apply migrations to the database
-                return new SiteSettingInstallationStatusDto {
-                    completedSteps = new int[] { 1 },
-                    message = "The connectionstring to the database have been saved",
-                    installationResultCode = Result.Success.ToString()};
+                    completedSteps = new int[] { 1, 2, 3, 4, 5 },
+                    message = "MoM is allready installed .Please use the admin interface ",
+                    installationResultCode = Result.Warning.ToString()
+                };
             }
+            var filepath = Host.ContentRootPath + "\\" + "appsettings.json";
+            var appsettingsFile = JsonConvert.DeserializeObject<dynamic>(System.IO.File.ReadAllText(filepath));
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder();
+            builder.DataSource = connectionstring.server;
+            builder.InitialCatalog = connectionstring.database;
+            builder.IntegratedSecurity = connectionstring.useWindowsAuthentication;
+            if(!connectionstring.useWindowsAuthentication)
+            {
+                builder.Password = connectionstring.password;
+                builder.UserID = connectionstring.username;
+            }
+            builder.MultipleActiveResultSets = true;
+            appsettingsFile.ConnectionStrings.DefaultConnection = builder.ConnectionString;
+            appsettingsFile.InstallStatusMoM = "1";
+            System.IO.File.WriteAllText(filepath, JsonConvert.SerializeObject(appsettingsFile));
+
+            CheckDatabaseConnection();
+            //Todo apply migrations to the database
             return new SiteSettingInstallationStatusDto {
-                message = "ConnectionString have allready been setup so you will need to reconfigure either using the admin interface or by manually editing appsettings.json",
-                installationResultCode = Result.Warning.ToString()
-            };
+                completedSteps = new int[] { 1 },
+                message = "The connectionstring to the database have been saved",
+                installationResultCode = Result.Success.ToString()};
+
         }
 
         [HttpPost]

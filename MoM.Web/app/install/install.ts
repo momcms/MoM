@@ -20,6 +20,10 @@ import { BUTTON_DIRECTIVES, TAB_DIRECTIVES, PROGRESSBAR_DIRECTIVES } from "ng2-b
 export class InstallComponent implements OnInit {
     installStepsCompleted: number = 0;
     stepOneComplete: boolean = false;
+    stepTwoComplete: boolean = false;
+    stepThreeComplete: boolean = false;
+    stepFourComplete: boolean = false;
+    stepFiveComplete: boolean = false;
     siteSetting: SiteSettingDto;
     connectionstring: SiteSettingConnectionStringDto;
     connectionAuthenticationModel: string = "sql";
@@ -43,6 +47,7 @@ export class InstallComponent implements OnInit {
             connectionstring => {
                 this.connectionstring = connectionstring;
                 this.connectionAuthenticationModel = this.connectionstring.useWindowsAuthentication === true ? "windows" : "sql";
+                this.checkCompletedSteps(this.status.completedSteps);
                 this.isLoading = false;
             },
             error => {
@@ -59,8 +64,7 @@ export class InstallComponent implements OnInit {
         this.service.saveConnectionstring(this.connectionstring).subscribe(
             status => {
                 this.status = status;
-                this.installStepsCompleted = Math.max.apply(Math, this.status.completedSteps);
-                this.stepOneComplete = true;
+                this.checkCompletedSteps(this.status.completedSteps);
                 this.isLoading = false;
             },
             error => {
@@ -81,8 +85,7 @@ export class InstallComponent implements OnInit {
         this.service.saveSiteSetting(setting).subscribe(
             status => {
                 this.status = status;
-                this.installStepsCompleted = Math.max.apply(Math, this.status.completedSteps);
-                this.stepOneComplete = true;
+                this.checkCompletedSteps(this.status.completedSteps);
                 this.isLoading = false;
             },
             error => {
@@ -90,5 +93,35 @@ export class InstallComponent implements OnInit {
                 this.errorMessage = <any>error;
                 this.isLoading = false;
             });
+    }
+
+    checkCompletedSteps(steps: number[]) {
+        var self = this;
+        self.installStepsCompleted = Math.max.apply(Math, self.status.completedSteps);
+        steps.forEach(function (step) {
+            self.setCompletedStep(step);
+        });
+    }
+
+    setCompletedStep(step: number) {
+        switch (step) {
+            case 1:
+                this.stepOneComplete = true;
+                return;
+            case 2:
+                this.stepTwoComplete = true;
+                return;
+            case 3:
+                this.stepThreeComplete = true;
+                return;
+            case 4:
+                this.stepFourComplete = true;
+                return;
+            case 5:
+                this.stepFiveComplete = true;
+                return;
+            default:
+                return;
+        }
     }
 }

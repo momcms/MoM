@@ -5,4 +5,5 @@ export interface SiteSettingConnectionStringDto {
     useWindowsAuthentication: boolean;
     username: string;
     password: string;
+    installationStatus: InstallationStatus;
 }
