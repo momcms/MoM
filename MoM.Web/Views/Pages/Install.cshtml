@@ -1,25 +1,33 @@
 ﻿@{
     ViewBag.Title = "Install MoM";
 }
-
-
-
-<div class="container-fluid margin-top-small">
+<div class="container-fluid margin-bottom">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-sm-2 col-sm-offset-1">
+            <img src="~/site/momlogo.png" srcset="~/site/momlogo.svg 1x" class="navbar-brand" alt="EasyModules.NET Logo" width="152" height="150">
+        </div>
+        <div class="col-sm-6">
             <h1>Install MoM</h1>
             <p>Please follow these steps below in order to setup you new website.</p>
-            <progress class="progress progress-success" [value]="installStepsCompleted" max="5">Setup database</progress>
+            <progress class="progress progress-success" [value]="installStepsCompleted" max="5"></progress>
+            <div class="text-sm-center"><span>Progress {{installStepsCompleted/5*100}}%</span></div>
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-11 col-sm-offset-1">
                 <tabset type="pills">
                     <tab>
                         <template tabHeading>
                             <i class="fa fa-database fa-2x mom-icon"></i>
                             <span>Database</span>
-                            <i *ngIf="stepOneComplete" class="fa fa-check-circle-o fa-2x mom-icon"></i>
+                            <i *ngIf="stepOneComplete" class="fa fa-check-circle-o fa-2x mom-icon" style="color:#5cb85c"></i>
                         </template>
-                        <div class="container-fluid margin-top-small">
+                        <div class="container-fluid margin-top">
                             <div class="row">
-                                <div class="col-md-11 col-md-offset-1">
+                                <div class="col-sm-8 col-sm-offset-1">
                                     <form *ngIf="!isLoading" (ngSubmit)="onSaveDatabaseSettings()" #postForm="ngForm">
                                         <div class="form-group row">
                                             <label for="inputServer" class="col-sm-2 form-control-label">Server</label>
@@ -36,7 +44,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-md-2">
+                                            <div class="col-sm-2">
                                                 <label>Authentication</label>
                                             </div>
                                             <div class="col-sm-10 col-sm-offset-2">
@@ -83,7 +91,7 @@
                         </template>
                         <div class="container-fluid margin-top-small">
                             <div class="row">
-                                <div class="col-md-11 col-md-offset-1">
+                                <div class="col-sm-11 col-sm-offset-1">
                                     @*<form *ngIf="!isLoading" (ngSubmit)="onAdminAccountSave()" #postForm="ngForm">
                                         <div class="form-group row">
                                             <label for="inputAdminUsername" class="col-sm-2 form-control-label">Username</label>
