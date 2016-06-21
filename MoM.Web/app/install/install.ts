@@ -6,6 +6,7 @@ import {SiteSettingDto} from "../dtos/SiteSettingDto";
 import {SiteSettingInputDto} from "../dtos/SiteSettingInputDto";
 import {SiteSettingConnectionStringDto} from "../dtos/SiteSettingConnectionStringDto";
 import {SiteSettingInstallationStatusDto} from "../dtos/SiteSettingInstallationStatusDto";
+import {UserCreateDto} from "../dtos/UserCreateDto";
 import { SetupService } from "../api/SetupService";
 
 import { BUTTON_DIRECTIVES, TAB_DIRECTIVES, PROGRESSBAR_DIRECTIVES } from "ng2-bootstrap/ng2-bootstrap";
@@ -19,6 +20,7 @@ import { BUTTON_DIRECTIVES, TAB_DIRECTIVES, PROGRESSBAR_DIRECTIVES } from "ng2-b
 })
 export class InstallComponent implements OnInit {
     installStepsCompleted: number = 0;
+    isAllreadyInstalled: boolean = false;
     stepOneComplete: boolean = false;
     stepTwoComplete: boolean = false;
     stepThreeComplete: boolean = false;
@@ -31,14 +33,32 @@ export class InstallComponent implements OnInit {
     isLoading: boolean = false;
     hasError: boolean = false;
     errorMessage: string;
+    admin: UserCreateDto;
     constructor(
         private service: SetupService
     ) {
-
+        this.admin = { username: "", email:"" , password:"" };
     }
 
     ngOnInit() {
-        this.getConnectionstring();
+        this.init();
+    }
+
+    init() {
+        this.isLoading = true;
+        this.service.init().subscribe(
+            status => {
+                this.siteSetting = status.siteSetting;
+                this.status = status;
+                this.checkCompletedSteps();
+                this.getConnectionstring();
+            },
+            error => {
+                this.hasError = true;
+                this.errorMessage = <any>error;
+                this.isLoading = false;
+            }
+        );
     }
 
     getConnectionstring() {
@@ -47,7 +67,6 @@ export class InstallComponent implements OnInit {
             connectionstring => {
                 this.connectionstring = connectionstring;
                 this.connectionAuthenticationModel = this.connectionstring.useWindowsAuthentication === true ? "windows" : "sql";
-                this.checkCompletedSteps(this.status.completedSteps);
                 this.isLoading = false;
             },
             error => {
@@ -64,7 +83,7 @@ export class InstallComponent implements OnInit {
         this.service.saveConnectionstring(this.connectionstring).subscribe(
             status => {
                 this.status = status;
-                this.checkCompletedSteps(this.status.completedSteps);
+                this.checkCompletedSteps();
                 this.isLoading = false;
             },
             error => {
@@ -75,36 +94,19 @@ export class InstallComponent implements OnInit {
     }
 
     onAdminAccountSave() {
-        var test = 0;
-    }
-
-    onSaveSettings(step:number) {
-        var setting: SiteSettingInputDto;
-        setting.siteSetting = this.siteSetting;
-        setting.step = step;
-        this.service.saveSiteSetting(setting).subscribe(
-            status => {
-                this.status = status;
-                this.checkCompletedSteps(this.status.completedSteps);
-                this.isLoading = false;
-            },
-            error => {
-                this.hasError = true;
-                this.errorMessage = <any>error;
-                this.isLoading = false;
-            });
-    }
-
-    checkCompletedSteps(steps: number[]) {
         var self = this;
-        self.installStepsCompleted = Math.max.apply(Math, self.status.completedSteps);
-        steps.forEach(function (step) {
-            self.setCompletedStep(step);
-        });
     }
 
-    setCompletedStep(step: number) {
-        switch (step) {
+    checkCompletedSteps() {
+        var self = this;
+        self.installStepsCompleted = self.status.installationStatus;
+        for (var i = 0; i < self.installStepsCompleted; i++) {
+            self.setCompletedStep(i);
+        };
+    }
+
+    setCompletedStep(status: number) {
+        switch (status) {
             case 1:
                 this.stepOneComplete = true;
                 return;
@@ -120,6 +122,8 @@ export class InstallComponent implements OnInit {
             case 5:
                 this.stepFiveComplete = true;
                 return;
+            case 6:
+                this.isAllreadyInstalled = true;
             default:
                 return;
         }

@@ -16,24 +16,24 @@ import "rxjs/add/operator/share";
 
 
 
-import {SiteSettingDto} from "../dtos/SiteSettingDto";
-import {SiteSettingConnectionStringDto} from "../dtos/SiteSettingConnectionStringDto";
 import {SiteSettingInstallationStatusDto} from "../dtos/SiteSettingInstallationStatusDto";
-import {SiteSettingInputDto} from "../dtos/SiteSettingInputDto";
+import {SiteSettingConnectionStringDto} from "../dtos/SiteSettingConnectionStringDto";
+import {UserCreateDto} from "../dtos/UserCreateDto";
+import {SiteSettingDto} from "../dtos/SiteSettingDto";
 
 @Injectable()
 export class SetupService {
 constructor(private _http: Http) { }
 
 
-    public isInstalled = () : Observable<SiteSettingDto> => {
-        return this._http.request("api/setup/isinstalled", new RequestOptions({
+    public init = () : Observable<SiteSettingInstallationStatusDto> => {
+        return this._http.request("api/setup/init", new RequestOptions({
             headers: {
                 "Content-Type": "application/json"
             },
             method: "get",
             body: JSON.stringify(null)
-        })).map(res => (<SiteSettingDto>res.json()));
+        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
     public getConnectionString = () : Observable<SiteSettingConnectionStringDto> => {
         return this._http.request("api/setup/getconnectionstring", new RequestOptions({
@@ -44,15 +44,6 @@ constructor(private _http: Http) { }
             body: JSON.stringify(null)
         })).map(res => (<SiteSettingConnectionStringDto>res.json()));
     }
-    public checkDatabaseConnection = () : Observable<SiteSettingInstallationStatusDto> => {
-        return this._http.request("api/setup/checkdatabaseconnection", new RequestOptions({
-            headers: {
-                "Content-Type": "application/json"
-            },
-            method: "get",
-            body: JSON.stringify(null)
-        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
-    }
     public saveConnectionstring = (connectionstring: SiteSettingConnectionStringDto) : Observable<SiteSettingInstallationStatusDto> => {
         return this._http.request("api/setup/saveconnectionstring", new RequestOptions({
             headers: {
@@ -62,13 +53,31 @@ constructor(private _http: Http) { }
             body: JSON.stringify(connectionstring)
         })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
-    public saveSiteSetting = (siteSetting: SiteSettingInputDto) : Observable<SiteSettingInstallationStatusDto> => {
-        return this._http.request("api/setup/savesitesetting", new RequestOptions({
+    public createAdmin = (user: UserCreateDto) : Observable<SiteSettingInstallationStatusDto> => {
+        return this._http.request("api/setup/createadmin", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "post",
+            body: JSON.stringify(user)
+        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
+    }
+    public setupSocial = (siteSetting: SiteSettingDto) : Observable<SiteSettingInstallationStatusDto> => {
+        return this._http.request("api/setup/setupsocial", new RequestOptions({
             headers: {
                 "Content-Type": "application/json"
             },
             method: "post",
             body: JSON.stringify(siteSetting)
+        })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
+    }
+    public installModules = () : Observable<SiteSettingInstallationStatusDto> => {
+        return this._http.request("api/setup/installmodules", new RequestOptions({
+            headers: {
+                "Content-Type": "application/json"
+            },
+            method: "post",
+            body: JSON.stringify(null)
         })).map(res => (<SiteSettingInstallationStatusDto>res.json()));
     }
 

@@ -125,5 +125,17 @@ namespace MoM.Module.Services
                 Logger.LogWarning(result.Errors.ToString());
             }
         }
+
+        public async Task<bool> AdminExist()
+        {
+            var admins = await UserManager.GetUsersInRoleAsync("Administrator");
+            return admins.Count() > 0;
+        }
+
+        public async Task<RoleDto> GetRole(string roleName)
+        {
+            var role = await RoleManager.FindByNameAsync(roleName);
+            return role.ToDTO();
+        }
     }
 }

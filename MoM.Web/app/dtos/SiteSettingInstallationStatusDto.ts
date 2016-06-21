@@ -1,6 +1,8 @@
+import {SiteSettingDto} from "./SiteSettingDto";
 
 export interface SiteSettingInstallationStatusDto {
+    siteSetting: SiteSettingDto;
     installationResultCode: string;
     message: string;
-    completedSteps: number[];
+    installationStatus: InstallationStatus;
 }

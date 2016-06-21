@@ -9,6 +9,5 @@ namespace MoM.Module.Dtos
         public bool useWindowsAuthentication { get; set; }
         public string username { get; set; }
         public string password { get; set; }
-        public InstallationStatus installationStatus { get; set; }
     }
 }

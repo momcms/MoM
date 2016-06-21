@@ -3,10 +3,11 @@
     public enum InstallationStatus
     {
         MissingConnectionString,
-        CreateAdminAccount,
-        SocialLogins,
-        ConfigureMailAndSms,
-        SelectModules,
+        DatabaseCreated,
+        AdminAccountCreated,
+        SocialLoginsConfigured,
+        MailConfigured,
+        ModulesSelected,
         Installed
     }
 }
