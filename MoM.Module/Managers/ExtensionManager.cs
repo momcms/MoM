@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using MoM.Module.Enums;
 
 namespace MoM.Module.Managers
 {
@@ -12,6 +13,7 @@ namespace MoM.Module.Managers
     {
         private static IEnumerable<Assembly> assemblies;
         private static IEnumerable<IModule> modules;
+        private static InstallationStatus InstallStatus { get; set; }
 
         public static IEnumerable<Assembly> Assemblies
         {
@@ -35,8 +37,9 @@ namespace MoM.Module.Managers
             }
         }
 
-        public static void SetAssemblies(IEnumerable<Assembly> assemblies)
+        public static void SetAssemblies(IEnumerable<Assembly> assemblies, InstallationStatus installStatus)
         {
+            InstallStatus = installStatus;
             ExtensionManager.assemblies = assemblies;
         }
 

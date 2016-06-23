@@ -127,38 +127,3 @@ gulp.task('dragula', ['libs-clean'], function () {
         .pipe(gulp.dest(paths.lib + 'extensions/dragula/'));
 });
 
-
-gulp.task('watch-web', function () {
-    gulp.watch('app/**/*.ts', ['app-copy']);
-});
-
-gulp.task('app-clean-wwwroot', function (cb) {
-    rimraf('./wwwroot/app', cb);
-});
-
-gulp.task('app-clean-dist', function (cb) {
-    rimraf('./dist', cb);
-});
-
-gulp.task('app-copy', ['app-typescript-transpile', 'app-copy-systemjs.configs'], function () {
-    gulp.src(paths.scripDist + "/app/**/*.js")
-    .pipe(gulp.dest(paths.scriptDestination))
-});
-
-gulp.task('app-copy-systemjs.configs', ['app-clean-dist', 'app-clean-wwwroot'], function () {
-    gulp.src('app/*.config.js')
-    .pipe(gulp.dest(paths.scriptDestination))
-})
-
-gulp.task('app-lint-typescript', ['app-clean-dist', 'app-clean-wwwroot'], function () {
-    gulp.src(['app/**/*.ts'])
-        .pipe(tslint({ configuration: "../../tslint.json" }))
-        .pipe(tslint.report('verbose'));
-});
-
-gulp.task('app-typescript-transpile', ['app-lint-typescript'], function () {
-    var tsResult = tsProject.src()
-        .pipe(typescript(tsProject));
-    return tsResult.js.pipe(gulp.dest(paths.scripDist + "/app/"));
-});
-

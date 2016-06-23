@@ -11,10 +11,11 @@ namespace MoM.Module.Dtos
         public ModuleType type { get; set; }
         public int versionMajor { get; set; }
         public int versionMinor { get; set; }
+        public int loadPriority { get; set; }
 
         public ModuleInfoDto() { }
 
-        public ModuleInfoDto(string Name, string Description, string Authors, string IconCss, ModuleType Type, int VersionMajor, int VersionMinor)
+        public ModuleInfoDto(string Name, string Description, string Authors, string IconCss, ModuleType Type, int VersionMajor, int VersionMinor, int LoadPriority)
         {
             name = Name;
             description = Description;
@@ -23,6 +24,7 @@ namespace MoM.Module.Dtos
             type = Type;
             versionMajor = VersionMajor;
             versionMinor = VersionMinor;
+            loadPriority = LoadPriority;
         }
     }
 }

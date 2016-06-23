@@ -24,13 +24,14 @@ using Microsoft.AspNetCore.Mvc.Razor.Compilation;
 using System;
 using MoM.Module.Managers;
 using MoM.Module.Dtos;
+using MoM.Module.Enums;
 
 namespace MoM.Web
 {
     public class Startup
     {
         protected IConfiguration Configuration;
-        //protected IConfigurationRoot ConfigurationRoot;
+        private InstallationStatus InstallStatus { get; set; }
 
         private string ApplicationBasePath;
 
@@ -69,7 +70,8 @@ namespace MoM.Web
                 .AddEntityFrameworkConfig(options =>
                     options.UseSqlServer(configurationConnectionString.GetConnectionString("DefaultConnection"))
                     );
-            Configuration = configurationSiteSettingsBuilder.Build();            
+            Configuration = configurationSiteSettingsBuilder.Build();
+            InstallStatus = (InstallationStatus)int.Parse(Configuration["InstallStatusMoM"]);
         }
 
         public virtual void ConfigureServices(IServiceCollection services)
@@ -179,16 +181,27 @@ namespace MoM.Web
             // Routes for MVC (note that Angular will also add routes)
             applicationBuilder.UseMvc(routeBuilder =>
             {
+                // Inject each module routebuilder methods
+                var modules = InstallStatus == InstallationStatus.Installed ?
+                    ExtensionManager.Extensions
+                    .Where(e => !e.Info.type.Equals(ModuleType.CoreInstaller))
+                        .OrderBy(x => x.Info.loadPriority)
+                    :
+                    ExtensionManager.Extensions
+                        .Where(e => e.Info.type.Equals(ModuleType.CoreInstaller))
+                        .OrderBy(x => x.Info.loadPriority);
+                foreach (IModule module in modules)
+                {
+                    module.RegisterRoutes(routeBuilder);
+                }
+                    
+
                 //Base routes for mvc and the angular 2 app
                 routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
-                // Inject each module routebuilder methods
-                foreach (IModule module in ExtensionManager.Extensions)
-                    module.RegisterRoutes(routeBuilder);
-
-                routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
+                //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
             });
 
             //todo add initial data and run migrations
@@ -199,7 +212,7 @@ namespace MoM.Web
             string extensionsPath = HostingEnvironment.ContentRootPath + "\\" + Configuration["SiteModulePath"];
             IEnumerable<Assembly> assemblies = Managers.AssemblyManager.GetAssemblies(extensionsPath);
 
-            ExtensionManager.SetAssemblies(assemblies);
+            ExtensionManager.SetAssemblies(assemblies, InstallStatus);
         }
 
         private void AddMvcServices(IServiceCollection services)

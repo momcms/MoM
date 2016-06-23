@@ -15,14 +15,5 @@ namespace MoM.Web.Controllers
             SiteSetting = siteSetting;
         }
         public IActionResult App() => PartialView();
-        public IActionResult AppInstall()
-        {
-            if (SiteSetting.Value.IsInstalled)
-            {
-                return PartialView("~/Views/Pages/App.cshtml");
-            }
-            return PartialView("~/Views/Pages/AppInstall.cshtml");
-        }
-        public IActionResult Install() => PartialView("~/Views/Pages/Install.cshtml");
     }
 }

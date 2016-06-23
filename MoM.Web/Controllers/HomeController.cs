@@ -24,7 +24,7 @@ namespace MoM.Web.Controllers
             {
                 return View();
             }
-            return View("~/Views/Install/Index.cshtml");            
+            return View("~/Views/MoM.Setup/App/Index.cshtml");            
         }
     }
 }
