@@ -2,8 +2,8 @@
 {
     public class SiteSettingAuthenticationFacebookDto
     {
-        public string AppId { get; set; }
-        public string AppSecret { get; set; }
-        public bool Enabled { get; set; }
+        public string appId { get; set; }
+        public string appSecret { get; set; }
+        public bool enabled { get; set; }
     }
 }

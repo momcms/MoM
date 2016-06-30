@@ -47,8 +47,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult Login(string returnUrl = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             ViewData["ReturnUrl"] = returnUrl;
             return View();
         }
@@ -60,8 +60,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
@@ -109,8 +109,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -121,8 +121,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
@@ -176,8 +176,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             var info = await SignInManager.GetExternalLoginInfoAsync();
             if (info == null)
             {
@@ -216,8 +216,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginConfirmationViewModel model, string returnUrl = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (ModelState.IsValid)
             {
                 // Get the information about the user from the external login provider
@@ -250,8 +250,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (userId == null || code == null)
             {
                 return View("Error");
@@ -271,8 +271,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -283,8 +283,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (ModelState.IsValid)
             {
                 var user = await UserManager.FindByNameAsync(model.Email);
@@ -313,8 +313,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPasswordConfirmation()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -324,8 +324,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string code = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return code == null ? View("Error") : View();
         }
 
@@ -336,8 +336,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -363,8 +363,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public IActionResult ResetPasswordConfirmation()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -374,8 +374,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> SendCode(string returnUrl = null, bool rememberMe = false)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
@@ -393,8 +393,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendCode(SendCodeViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View();
@@ -432,8 +432,8 @@ namespace MoM.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> VerifyCode(string provider, bool rememberMe, string returnUrl = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             // Require that the user has already logged in via username/password or external login
             var user = await SignInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
@@ -450,8 +450,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);

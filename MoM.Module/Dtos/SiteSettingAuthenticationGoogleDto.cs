@@ -2,8 +2,8 @@
 {
     public class SiteSettingAuthenticationGoogleDto
     {
-        public string ClientId { get; set; }
-        public string ClientSecret { get; set; }
-        public bool Enabled { get; set; }
+        public string clientId { get; set; }
+        public string clientSecret { get; set; }
+        public bool enabled { get; set; }
     }
 }

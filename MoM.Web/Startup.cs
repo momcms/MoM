@@ -164,7 +164,7 @@ namespace MoM.Web
             applicationBuilder.UseStaticFiles();
 
             // Add gzip compression
-            applicationBuilder.UseCompression();
+            //applicationBuilder.UseCompression();
 
             // Add cookie-based authentication to the request pipeline
             applicationBuilder.UseIdentity();
@@ -197,7 +197,11 @@ namespace MoM.Web
                     
 
                 //Base routes for mvc and the angular 2 app
-                routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                if(InstallStatus == InstallationStatus.Installed)
+                {
+                    routeBuilder.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
+                }
+                
                 routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
@@ -273,63 +277,63 @@ namespace MoM.Web
             var siteSetting = Configuration.GetSection("SiteSetting");
             services.Configure<SiteSettingDto>(options =>
             {
-                options.IsInstalled = Convert.ToBoolean(Configuration["SiteIsInstalled"]);
-                options.ModulePath = Configuration["SiteModulePath"];
-                options.Title = Configuration["SiteTitle"];
+                options.isInstalled = Convert.ToBoolean(Configuration["SiteIsInstalled"]);
+                options.modulePath = Configuration["SiteModulePath"];
+                options.title = Configuration["SiteTitle"];
                 
-                options.Theme = new SiteSettingThemeDto
+                options.theme = new SiteSettingThemeDto
                 {
-                    Module = Configuration["SiteThemeModule"],
-                    Name = Configuration["SiteThemeName"]
+                    module = Configuration["SiteThemeModule"],
+                    name = Configuration["SiteThemeName"]
                 };
 
-                options.Authentication = new SiteSettingAuthenticationDto
+                options.authentication = new SiteSettingAuthenticationDto
                 {
-                    Facebook = new SiteSettingAuthenticationFacebookDto
+                    facebook = new SiteSettingAuthenticationFacebookDto
                     {
-                        AppId = Configuration["SiteFacebookAppId"],
-                        AppSecret = Configuration["SiteFacebookAppSecret"],
-                        Enabled = Convert.ToBoolean(Configuration["SiteFacebookEnabled"])
+                        appId = Configuration["SiteFacebookAppId"],
+                        appSecret = Configuration["SiteFacebookAppSecret"],
+                        enabled = Convert.ToBoolean(Configuration["SiteFacebookEnabled"])
                     },
-                    Google = new SiteSettingAuthenticationGoogleDto
+                    google = new SiteSettingAuthenticationGoogleDto
                     {
-                        ClientId = Configuration["SiteGoogleClientAppId"],
-                        ClientSecret = Configuration["SiteGoogleClientSecret"],
-                        Enabled = Convert.ToBoolean(Configuration["SiteGoogleEnabled"])
+                        clientId = Configuration["SiteGoogleClientAppId"],
+                        clientSecret = Configuration["SiteGoogleClientSecret"],
+                        enabled = Convert.ToBoolean(Configuration["SiteGoogleEnabled"])
                     },
-                    Microsoft = new SiteSettingAuthenticationMicrosoftDto
+                    microsoft = new SiteSettingAuthenticationMicrosoftDto
                     {
-                        ClientId = Configuration["SiteMicrosoftClientId"],
-                        ClientSecret = Configuration["SiteMicrosoftClientSecret"],
-                        Enabled = Convert.ToBoolean(Configuration["SiteMicrosoftEnabled"])
+                        clientId = Configuration["SiteMicrosoftClientId"],
+                        clientSecret = Configuration["SiteMicrosoftClientSecret"],
+                        enabled = Convert.ToBoolean(Configuration["SiteMicrosoftEnabled"])
                     },
-                    Twitter = new SiteSettingAuthenticationTwitterDto
+                    twitter = new SiteSettingAuthenticationTwitterDto
                     {
-                        ConsumerKey = Configuration["SiteTwitterConsumerKey"],
-                        ConsumerSecret = Configuration["SiteTwitterConsumerSecret"],
-                        Enabled = Convert.ToBoolean(Configuration["SiteTwitterEnabled"])
+                        consumerKey = Configuration["SiteTwitterConsumerKey"],
+                        consumerSecret = Configuration["SiteTwitterConsumerSecret"],
+                        enabled = Convert.ToBoolean(Configuration["SiteTwitterEnabled"])
                     }
                 };
 
-                options.Email = new SiteSettingEmailDto
+                options.email = new SiteSettingEmailDto
                 {
-                    HostName = Configuration["SiteEmailHostName"],
-                    Password = Configuration["SiteEmailPassword"],
-                    Port = Convert.ToInt32(Configuration["SiteEmailPort"]),
-                    RequireCredentials = Convert.ToBoolean(Configuration["SiteEmailRequireCredentials"]),
-                    SenderEmailAdress = Configuration["SiteEmailSenderEmailAdress"],
-                    UserName = Configuration["SiteEmailUserName"],
-                    UseSSL = Convert.ToBoolean(Configuration["SiteEmailUseSSL"])
+                    hostName = Configuration["SiteEmailHostName"],
+                    password = Configuration["SiteEmailPassword"],
+                    port = Convert.ToInt32(Configuration["SiteEmailPort"]),
+                    requireCredentials = Convert.ToBoolean(Configuration["SiteEmailRequireCredentials"]),
+                    senderEmailAdress = Configuration["SiteEmailSenderEmailAdress"],
+                    userName = Configuration["SiteEmailUserName"],
+                    useSSL = Convert.ToBoolean(Configuration["SiteEmailUseSSL"])
                 };
 
-                options.Logo = new SiteSettingLogoDto
+                options.logo = new SiteSettingLogoDto
                 {
-                    Height = Convert.ToInt32(Configuration["SiteLogoHeight"]),
-                    ImagePath = Configuration["SiteLogoImagePath"],
-                    SvgPath = Configuration["SiteLogoSvgPath"],
-                    UseImageLogo = Convert.ToBoolean(Configuration["SiteLogoUseImageLogo"]),
-                    UseSvgLogo = Convert.ToBoolean(Configuration["SiteLogoUseSvgLogo"]),
-                    Width = Convert.ToInt32(Configuration["SiteLogoWidth"])
+                    height = Convert.ToInt32(Configuration["SiteLogoHeight"]),
+                    imagePath = Configuration["SiteLogoImagePath"],
+                    svgPath = Configuration["SiteLogoSvgPath"],
+                    useImageLogo = Convert.ToBoolean(Configuration["SiteLogoUseImageLogo"]),
+                    useSvgLogo = Convert.ToBoolean(Configuration["SiteLogoUseSvgLogo"]),
+                    width = Convert.ToInt32(Configuration["SiteLogoWidth"])
                 };
             });
         }

@@ -2,12 +2,12 @@
 {
     public class SiteSettingEmailDto
     {
-        public string HostName { get; set; }
-        public string Password { get; set; }
-        public int Port { get; set; }
-        public bool RequireCredentials { get; set; }
-        public string SenderEmailAdress { get; set; }
-        public string UserName { get; set; }
-        public bool UseSSL { get; set; }
+        public string hostName { get; set; }
+        public string password { get; set; }
+        public int port { get; set; }
+        public bool requireCredentials { get; set; }
+        public string senderEmailAdress { get; set; }
+        public string userName { get; set; }
+        public bool useSSL { get; set; }
     }
 }

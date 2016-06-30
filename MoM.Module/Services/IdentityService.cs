@@ -87,6 +87,12 @@ namespace MoM.Module.Services
             }
         }
 
+        public async Task<UserDto> GetUserByEmail(string email)
+        {
+            var result = await UserManager.FindByEmailAsync(email);
+            return result.ToDTO();
+        }
+
         public IEnumerable<RoleDto> GetRoles(int pageNo, int pageSize, string sortColumn, bool sortByAscending)
         {
             switch (sortColumn)

@@ -56,8 +56,6 @@ var libsExtToCopy = [
     "dragula"
 ]
 
-var tsProject = typescript.createProject('app/tsconfig.json');
-
 var moduleName = "MoM.CMS";
 
 gulp.task('libs-clean', function (cb) {

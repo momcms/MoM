@@ -2,8 +2,8 @@
 {
     public class SiteSettingAuthenticationTwitterDto
     {
-        public string ConsumerKey { get; set; }
-        public string ConsumerSecret { get; set; }
-        public bool Enabled { get; set; }
+        public string consumerKey { get; set; }
+        public string consumerSecret { get; set; }
+        public bool enabled { get; set; }
     }
 }

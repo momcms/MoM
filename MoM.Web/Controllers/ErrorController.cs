@@ -19,8 +19,8 @@ namespace MoM.Web.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
     }

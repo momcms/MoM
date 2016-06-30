@@ -12,6 +12,7 @@ namespace MoM.Module.Interfaces
         Task CreateUser(UserDto user, string password);
         Task UpdateUser(UserDto user);
         Task DeleteUser(UserDto user);
+        Task<UserDto> GetUserByEmail(string email);
 
         IEnumerable<RoleDto> GetRoles(int pageNo, int pageSize, string sortColumn, bool sortByAscending);
         Task<RoleDto> GetRole(string roleName);

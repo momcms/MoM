@@ -2,9 +2,9 @@
 {
     public class SiteSettingAuthenticationDto
     {
-        public SiteSettingAuthenticationFacebookDto Facebook { get; set; }
-        public SiteSettingAuthenticationGoogleDto Google { get; set; }
-        public SiteSettingAuthenticationMicrosoftDto Microsoft { get; set; }
-        public SiteSettingAuthenticationTwitterDto Twitter { get; set; }
+        public SiteSettingAuthenticationFacebookDto facebook { get; set; }
+        public SiteSettingAuthenticationGoogleDto google { get; set; }
+        public SiteSettingAuthenticationMicrosoftDto microsoft { get; set; }
+        public SiteSettingAuthenticationTwitterDto twitter { get; set; }
     }
 }

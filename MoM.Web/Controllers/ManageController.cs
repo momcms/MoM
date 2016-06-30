@@ -44,8 +44,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(ManageMessageId? message = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             ViewData["StatusMessage"] =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
@@ -91,8 +91,8 @@ namespace MoM.Web.Controllers
         // GET: /Manage/AddPhoneNumber
         public IActionResult AddPhoneNumber()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -102,8 +102,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -163,8 +163,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -208,8 +208,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public IActionResult ChangePassword()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -219,8 +219,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -246,8 +246,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public IActionResult SetPassword()
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             return View();
         }
 
@@ -257,8 +257,8 @@ namespace MoM.Web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -283,8 +283,8 @@ namespace MoM.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> ManageLogins(ManageMessageId? message = null)
         {
-            var theme = SiteSetting.Value.Theme;
-            ViewData["CssPath"] = "css/" + theme.Module + "/" + theme.Name + "/";
+            var theme = SiteSetting.Value.theme;
+            ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             ViewData["StatusMessage"] =
                 message == ManageMessageId.RemoveLoginSuccess ? "The external login was removed."
                 : message == ManageMessageId.AddLoginSuccess ? "The external login was added."

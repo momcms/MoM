@@ -25,21 +25,21 @@ namespace MoM.Module.Services
         {
             var mailMessage = new MimeMessage();
             mailMessage.To.Add(new MailboxAddress("Rolf", email));
-            mailMessage.From.Add(new MailboxAddress("", SiteSetting.Value.Email.SenderEmailAdress));
+            mailMessage.From.Add(new MailboxAddress("", SiteSetting.Value.email.senderEmailAdress));
             mailMessage.Subject = subject;
             mailMessage.Body = new TextPart("html") { Text = message };
             using (var client = new SmtpClient())
             {
-                var useSSL = SiteSetting.Value.Email.UseSSL ? MailKit.Security.SecureSocketOptions.SslOnConnect : MailKit.Security.SecureSocketOptions.None;
-                    await client.ConnectAsync(SiteSetting.Value.Email.HostName, SiteSetting.Value.Email.Port, useSSL);
+                var useSSL = SiteSetting.Value.email.useSSL ? MailKit.Security.SecureSocketOptions.SslOnConnect : MailKit.Security.SecureSocketOptions.None;
+                    await client.ConnectAsync(SiteSetting.Value.email.hostName, SiteSetting.Value.email.port, useSSL);
 
                     // Note: since we don't have an OAuth2 token, disable
                     // the XOAUTH2 authentication mechanism.
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
 
-                    if (SiteSetting.Value.Email.RequireCredentials)
+                    if (SiteSetting.Value.email.requireCredentials)
                     {
-                        await client.AuthenticateAsync(SiteSetting.Value.Email.UserName, SiteSetting.Value.Email.Password);
+                        await client.AuthenticateAsync(SiteSetting.Value.email.userName, SiteSetting.Value.email.password);
                     }                    
                     await client.SendAsync(mailMessage);
                     await client.DisconnectAsync(true);

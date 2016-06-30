@@ -2,12 +2,12 @@
 {
     public class SiteSettingDto
     {
-        public string Title { get; set; }
-        public SiteSettingThemeDto Theme { get; set; }
-        public SiteSettingAuthenticationDto Authentication { get; set; }
-        public bool IsInstalled { get; set; }
-        public SiteSettingLogoDto Logo { get; set; }
-        public string ModulePath { get; set; }
-        public SiteSettingEmailDto Email { get; set; }
+        public string title { get; set; }
+        public SiteSettingThemeDto theme { get; set; }
+        public SiteSettingAuthenticationDto authentication { get; set; }
+        public bool isInstalled { get; set; }
+        public SiteSettingLogoDto logo { get; set; }
+        public string modulePath { get; set; }
+        public SiteSettingEmailDto email { get; set; }
     }
 }
