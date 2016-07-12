@@ -33,8 +33,9 @@ namespace MoM.Web.Controllers.Api
             )
         {
             UserManager = userManager;
+            RoleManager = roleManager;
             Logger = loggerFactory.CreateLogger<AccountController>();
-            Service = new IdentityService(UserManager, roleManager, Logger);
+            Service = new IdentityService(UserManager, RoleManager, Logger);
             SignInManager = signInManager;
             EmailSender = emailSender;
             SmsSender = smsSender;

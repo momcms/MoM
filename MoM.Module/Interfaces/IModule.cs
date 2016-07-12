@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
@@ -17,5 +18,7 @@ namespace MoM.Module.Interfaces
         void ConfigureServices(IServiceCollection services);
         void Configure(IApplicationBuilder applicationBuilder);
         void RegisterRoutes(IRouteBuilder routeBuilder);
+
+        void CreatePolicies(AuthorizationOptions options);
     }
 }
