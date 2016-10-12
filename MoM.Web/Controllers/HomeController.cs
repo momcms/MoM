@@ -22,7 +22,7 @@ namespace MoM.Web.Controllers
             ViewData["CssPath"] = "css/" + theme.module + "/" + theme.name + "/";
             if (SiteSetting.Value.isInstalled)
             {
-                return View();
+                return View("~/Views/MoM.CMS/App/Index.cshtml");
             }
             return View("~/Views/MoM.Setup/App/Index.cshtml");            
         }
