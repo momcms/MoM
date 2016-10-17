@@ -125,3 +125,11 @@ gulp.task('dragula', ['libs-clean'], function () {
         .pipe(gulp.dest(paths.lib + 'extensions/dragula/'));
 });
 
+gulp.task('assets-copy', ['assets-clean'], function (cb) {
+    gulp.src(["../../assets/**/*.*"])
+    .pipe(gulp.dest("../../MoM/MoM.Web/wwwroot/assets"))
+});
+
+gulp.task('assets-clean', function (cb) {
+    rimraf('./wwwroot/assets', cb);
+});

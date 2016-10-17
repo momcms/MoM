@@ -205,7 +205,7 @@ namespace MoM.Web
                 routeBuilder.MapRoute("error", "{controller=Error}/{action=Index}");
                 routeBuilder.MapRoute("defaultApi", "api/{controller}/{id?}");
 
-                routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
+                //routeBuilder.MapRoute("spa-fallback", "{*anything}", new { controller = "Home", action = "Index" });
             });
 
             //todo add initial data and run migrations
